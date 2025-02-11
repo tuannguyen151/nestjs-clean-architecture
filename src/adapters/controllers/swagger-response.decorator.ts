@@ -8,15 +8,15 @@ import {
 
 class ResponseFormat<T> {
   @ApiProperty()
-  isArray: boolean
+  isArray!: boolean
   @ApiProperty()
-  path: string
+  path!: string
   @ApiProperty()
-  duration: string
+  duration!: string
   @ApiProperty()
-  method: string
+  method!: string
 
-  data: T
+  data!: T
 }
 
 export const ApiResponseType = <TModel extends Type>(

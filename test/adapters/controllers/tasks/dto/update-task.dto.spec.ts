@@ -56,7 +56,7 @@ describe('UpdateTaskDto', () => {
   })
 
   it('should be valid when description is not provided', async () => {
-    dto.description = null
+    dto.description = undefined
     const errors = await validate(dto)
     expect(errors.length).toEqual(0)
   })
@@ -68,13 +68,13 @@ describe('UpdateTaskDto', () => {
   })
 
   it('should be valid when dueDate is not provided', async () => {
-    dto.dueDate = null
+    dto.dueDate = undefined
     const errors = await validate(dto)
     expect(errors.length).toEqual(0)
   })
 
   it('should be valid if status is not provided', async () => {
-    dto.status = null
+    dto.status = undefined
     const errors = await validate(dto)
     expect(errors.length).toEqual(0)
   })

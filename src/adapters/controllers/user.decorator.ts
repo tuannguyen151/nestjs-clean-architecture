@@ -7,9 +7,9 @@ export interface IUser {
 export const userFactory = (
   data: keyof IUser | undefined,
   ctx: ExecutionContext,
-): IUser | unknown => {
-  const request = ctx.switchToHttp().getRequest()
-  const user: IUser = request.user
+): IUser | IUser[keyof IUser] => {
+  const request = ctx.switchToHttp().getRequest<{ user: IUser }>()
+  const user = request.user
 
   return data ? user?.[data] : user
 }

@@ -4,12 +4,12 @@ import { IsString, IsInt, Min, Max } from 'class-validator'
 
 class TestDto {
   @IsString()
-  name: string
+  name!: string
 
   @IsInt()
   @Min(0)
   @Max(100)
-  age: number
+  age!: number
 }
 
 describe('ValidationPipe', () => {
@@ -59,22 +59,24 @@ describe('ValidationPipe', () => {
       await pipe.transform(value, metadata)
     } catch (error) {
       expect(error).toBeInstanceOf(BadRequestException)
-      const response = error.getResponse().message
-      const expectedErrors: object[] = [
-        {
-          property: 'name',
-          errors: ['isString'],
-          constraints: { isString: 'name must be a string' },
-        },
-        {
-          property: 'age',
-          errors: ['max'],
-          constraints: {
-            max: 'age must not be greater than 100',
+      if (error instanceof BadRequestException) {
+        const response = (error.getResponse() as { message: string }).message
+        const expectedErrors: object[] = [
+          {
+            property: 'name',
+            errors: ['isString'],
+            constraints: { isString: 'name must be a string' },
           },
-        },
-      ]
-      expect(response).toEqual(expectedErrors)
+          {
+            property: 'age',
+            errors: ['max'],
+            constraints: {
+              max: 'age must not be greater than 100',
+            },
+          },
+        ]
+        expect(response).toEqual(expectedErrors)
+      }
     }
   })
 

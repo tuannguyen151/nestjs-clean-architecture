@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { validate } from 'src/infrastructure/config/environment/environment-config.validation'
 
-const config = {
+const config: { [key: string]: unknown } = {
   NODE_ENV: 'local',
   DATABASE_ENGINE: 'postgres',
   DATABASE_HOST: 'localhost',

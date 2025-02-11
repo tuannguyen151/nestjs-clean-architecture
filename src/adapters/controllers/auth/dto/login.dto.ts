@@ -5,7 +5,7 @@ export class LoginDto {
   @ApiProperty({ required: true, format: 'email' })
   @IsNotEmpty()
   @IsEmail()
-  email: string
+  email!: string
 
   @ApiProperty({
     required: true,
@@ -13,5 +13,5 @@ export class LoginDto {
   })
   @IsNotEmpty()
   @IsString()
-  password: string
+  password!: string
 }

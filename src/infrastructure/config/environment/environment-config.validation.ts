@@ -2,6 +2,7 @@ import { plainToClass } from 'class-transformer'
 import {
   IsBoolean,
   IsEnum,
+  IsNotEmpty,
   IsNumber,
   IsString,
   IsUrl,
@@ -16,33 +17,49 @@ enum EnvironmentEnum {
 
 class EnvironmentVariables {
   @IsEnum(EnvironmentEnum)
-  NODE_ENV: EnvironmentEnum
+  @IsNotEmpty()
+  NODE_ENV!: EnvironmentEnum
 
   @IsString()
-  DATABASE_ENGINE: string
+  @IsNotEmpty()
+  DATABASE_ENGINE!: string
+
   @IsString()
-  DATABASE_HOST: string
+  @IsNotEmpty()
+  DATABASE_HOST!: string
+
   @IsNumber()
-  DATABASE_PORT: number
-  @IsString()
-  DATABASE_USER: string
-  @IsString()
-  DATABASE_PASSWORD: string
-  @IsString()
-  DATABASE_NAME: string
-  @IsString()
-  DATABASE_SCHEMA: string
-  @IsBoolean()
-  DATABASE_SYNCHRONIZE: boolean
+  @IsNotEmpty()
+  DATABASE_PORT!: number
 
   @IsString()
-  AWS_COGNITO_USER_POOL_ID: string
+  @IsNotEmpty()
+  DATABASE_USER!: string
+
   @IsString()
-  AWS_COGNITO_CLIENT_ID: string
+  @IsNotEmpty()
+  DATABASE_PASSWORD!: string
+
+  @IsString()
+  @IsNotEmpty()
+  DATABASE_NAME!: string
+
+  @IsString()
+  @IsNotEmpty()
+  DATABASE_SCHEMA!: string
+
+  @IsBoolean()
+  @IsNotEmpty()
+  DATABASE_SYNCHRONIZE!: boolean
+
+  @IsString()
+  AWS_COGNITO_USER_POOL_ID?: string
+  @IsString()
+  AWS_COGNITO_CLIENT_ID?: string
   @IsUrl()
-  AWS_COGNITO_AUTHORITY_URL: string
+  AWS_COGNITO_AUTHORITY_URL?: string
   @IsString()
-  AWS_REGION: string
+  AWS_REGION?: string
 }
 
 export function validate(config: Record<string, unknown>) {

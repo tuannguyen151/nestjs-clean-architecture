@@ -8,54 +8,54 @@ export class EnvironmentConfigService implements IDatabaseConfig, IAwsConfig {
   constructor(private configService: ConfigService) {}
 
   getNodeEnv(): string {
-    return this.configService.get<string>('NODE_ENV')
+    return this.configService.get<string>('NODE_ENV') || ''
   }
 
   getDatabaseEngine(): string {
-    return this.configService.get<string>('DATABASE_ENGINE')
+    return this.configService.get<string>('DATABASE_ENGINE') || ''
   }
 
   getDatabaseHost(): string {
-    return this.configService.get<string>('DATABASE_HOST')
+    return this.configService.get<string>('DATABASE_HOST') || ''
   }
 
   getDatabasePort(): number {
-    return this.configService.get<number>('DATABASE_PORT')
+    return this.configService.get<number>('DATABASE_PORT') || 0
   }
 
   getDatabaseUser(): string {
-    return this.configService.get<string>('DATABASE_USER')
+    return this.configService.get<string>('DATABASE_USER') || ''
   }
 
   getDatabasePassword(): string {
-    return this.configService.get<string>('DATABASE_PASSWORD')
+    return this.configService.get<string>('DATABASE_PASSWORD') || ''
   }
 
   getDatabaseName(): string {
-    return this.configService.get<string>('DATABASE_NAME')
+    return this.configService.get<string>('DATABASE_NAME') || ''
   }
 
   getDatabaseSchema(): string {
-    return this.configService.get<string>('DATABASE_SCHEMA')
+    return this.configService.get<string>('DATABASE_SCHEMA') || 'public'
   }
 
   getDatabaseSync(): boolean {
-    return this.configService.get<boolean>('DATABASE_SYNCHRONIZE')
+    return this.configService.get<boolean>('DATABASE_SYNCHRONIZE') || false
   }
 
   getAwsCognitoUserPoolId(): string {
-    return this.configService.get<string>('AWS_COGNITO_USER_POOL_ID')
+    return this.configService.get<string>('AWS_COGNITO_USER_POOL_ID') || ''
   }
 
   getAwsCognitoClientId(): string {
-    return this.configService.get<string>('AWS_COGNITO_CLIENT_ID')
+    return this.configService.get<string>('AWS_COGNITO_CLIENT_ID') || ''
   }
 
   getAwsCognitoAuthorityUrl(): string {
-    return this.configService.get<string>('AWS_COGNITO_AUTHORITY_URL')
+    return this.configService.get<string>('AWS_COGNITO_AUTHORITY_URL') || ''
   }
 
   getAwsRegion(): string {
-    return this.configService.get<string>('AWS_REGION')
+    return this.configService.get<string>('AWS_REGION') || ''
   }
 }

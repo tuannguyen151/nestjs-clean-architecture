@@ -3,7 +3,6 @@ import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
 } from 'src/domain/repositories/task.repository.interface'
-import { TaskEntity } from 'src/domain/entities/task.entity'
 import {
   EXCEPTIONS,
   IException,
@@ -18,11 +17,11 @@ export class GetDetailTaskUseCase {
     private readonly exceptionsService: IException,
   ) {}
 
-  async execute(payload: { id: number; userId: string }): Promise<TaskEntity> {
+  async execute(payload: { id: number; userId: string }) {
     const task = await this.taskRepository.findOnTask(payload)
 
     if (!task) {
-      this.exceptionsService.notFoundException({
+      throw this.exceptionsService.notFoundException({
         type: 'TaskNotFoundException',
         message: 'Task not found',
       })

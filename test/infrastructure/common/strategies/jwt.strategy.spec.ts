@@ -24,9 +24,9 @@ describe('JwtStrategy', () => {
     expect(jwtStrategy).toBeDefined()
   })
 
-  it('should validate payload correctly', async () => {
+  it('should validate payload correctly', () => {
     const payload = { sub: 'user123' }
-    const validatedUser = await jwtStrategy.validate(payload)
+    const validatedUser = jwtStrategy.validate(payload)
     expect(validatedUser).toEqual({ userId: 'user123' })
   })
 })

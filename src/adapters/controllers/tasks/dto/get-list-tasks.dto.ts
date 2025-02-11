@@ -11,7 +11,7 @@ export class GetListTasksDto implements ISearchTasksParams {
     enum: TaskStatusEnum,
     description: '2: Completed, 3: OnGoing, empty: All',
   })
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }: { value: string }) => parseInt(value))
   @IsEnum(TaskStatusEnum)
   @IsOptional()
   status?: TaskStatusEnum
@@ -22,7 +22,7 @@ export class GetListTasksDto implements ISearchTasksParams {
     description: 'empty: All',
   })
   @IsNumber()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }: { value: string }) => parseInt(value))
   @IsOptional()
   @Min(1)
   size?: number

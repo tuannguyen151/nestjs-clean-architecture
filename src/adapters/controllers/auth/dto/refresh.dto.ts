@@ -8,5 +8,5 @@ export class RefreshDto {
   })
   @IsNotEmpty()
   @IsString()
-  refreshToken: string
+  refreshToken!: string
 }

@@ -14,9 +14,9 @@ import { EnvironmentConfigService } from 'src/infrastructure/config/environment/
 
 @Injectable()
 export class AwsCognitoService implements IAwsCognitoService {
-  private clientID: string
-  private cognitoProvider: CognitoIdentityServiceProvider
-  private userPool: CognitoUserPool
+  private readonly clientID: string
+  private readonly cognitoProvider: CognitoIdentityServiceProvider
+  private readonly userPool: CognitoUserPool
 
   constructor(configService: EnvironmentConfigService) {
     this.clientID = configService.getAwsCognitoClientId()
@@ -54,7 +54,11 @@ export class AwsCognitoService implements IAwsCognitoService {
           })
         },
         onFailure: (err) => {
-          reject(err)
+          reject(
+            new Error(
+              typeof err === 'string' ? err : JSON.stringify(err, null, 2),
+            ),
+          )
         },
       })
     })
@@ -71,7 +75,13 @@ export class AwsCognitoService implements IAwsCognitoService {
       })
       .promise()
 
+    if (!result.AuthenticationResult) {
+      throw new Error('AuthenticationResult is undefined')
+    }
     const { IdToken: idToken } = result.AuthenticationResult
+    if (!idToken) {
+      throw new Error('IdToken is undefined')
+    }
     return idToken
   }
 }

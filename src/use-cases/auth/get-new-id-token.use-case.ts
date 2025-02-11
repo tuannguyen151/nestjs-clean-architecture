@@ -16,11 +16,11 @@ export class GetNewIdTokenUseCase {
     private readonly exceptionsService: IException,
   ) {}
 
-  async execute(refreshToken: string): Promise<string> {
+  async execute(refreshToken: string) {
     try {
       return await this.awsCognitoService.getNewIdToken(refreshToken)
-    } catch (error: unknown) {
-      this.exceptionsService.unauthorizedException({
+    } catch (error) {
+      throw this.exceptionsService.unauthorizedException({
         type: (error as Error).name,
         message: (error as Error).message,
       })

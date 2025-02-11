@@ -10,7 +10,7 @@ import { validate, ValidationError } from 'class-validator'
 interface IValidationError {
   property: string
   errors: string[]
-  constraints: {
+  constraints?: {
     [type: string]: string
   }
 }
@@ -25,8 +25,8 @@ export class ValidationPipe implements PipeTransform<unknown> {
     if (!metatype || !this.toValidate(metatype)) {
       return value
     }
-    const object = plainToClass(metatype, value)
-    const errors = await validate(object)
+    const object = plainToClass(metatype as new () => unknown, value)
+    const errors = await validate(object as object)
     if (errors.length > 0) {
       throw new BadRequestException(this.formatErrors(errors))
     }
@@ -42,7 +42,7 @@ export class ValidationPipe implements PipeTransform<unknown> {
     return errors.map((err) => {
       return {
         property: err.property,
-        errors: Object.keys(err.constraints),
+        errors: err.constraints ? Object.keys(err.constraints) : [],
         constraints: err.constraints,
       }
     })

@@ -42,7 +42,7 @@ export class LoggingInterceptor implements NestInterceptor {
       const list = typeof ipAddr === 'string' ? ipAddr.split(',') : ipAddr
       ip = list[list.length - 1]
     } else {
-      ip = request.ip
+      ip = request.ip || ''
     }
     return ip.replace('::ffff:', '')
   }

@@ -5,20 +5,21 @@ import {
   CallHandler,
 } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
+import { Request } from 'express'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 export class ResponseFormat<T> {
   @ApiProperty()
-  isArray: boolean
+  isArray!: boolean
   @ApiProperty()
-  path: string
+  path!: string
   @ApiProperty()
-  duration: string
+  duration!: string
   @ApiProperty()
-  method: string
+  method!: string
 
-  data: T
+  data!: T
 }
 
 @Injectable()
@@ -31,10 +32,10 @@ export class ResponseInterceptor<T>
   ): Observable<ResponseFormat<T>> {
     const now = Date.now()
     const httpContext = context.switchToHttp()
-    const request = httpContext.getRequest()
+    const request = httpContext.getRequest<Request>()
 
     return next.handle().pipe(
-      map((data) => ({
+      map((data: T) => ({
         data,
         isArray: Array.isArray(data),
         path: request.path,

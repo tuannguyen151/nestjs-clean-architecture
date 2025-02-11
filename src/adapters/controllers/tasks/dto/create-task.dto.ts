@@ -16,7 +16,7 @@ export class CreateTaskDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(255)
-  title: string
+  title!: string
 
   @ApiProperty({
     required: false,

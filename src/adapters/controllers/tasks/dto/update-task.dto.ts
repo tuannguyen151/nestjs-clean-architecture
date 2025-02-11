@@ -10,7 +10,7 @@ export class UpdateTaskDto extends PartialType(CreateTaskDto) {
     enum: TaskStatusEnum,
     description: '2: Completed, 3: OnGoing',
   })
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }: { value: string }) => parseInt(value))
   @IsEnum(TaskStatusEnum)
   @IsOptional()
   status?: TaskStatusEnum

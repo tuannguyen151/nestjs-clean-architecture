@@ -5,9 +5,9 @@ export interface IFormatExceptionMessage {
 
 export const EXCEPTIONS = 'IException'
 export interface IException {
-  badRequestException(data: IFormatExceptionMessage): void
-  internalServerErrorException(data?: IFormatExceptionMessage): void
-  forbiddenException(data?: IFormatExceptionMessage): void
-  unauthorizedException(data?: IFormatExceptionMessage): void
-  notFoundException(data?: IFormatExceptionMessage): void
+  badRequestException(data: IFormatExceptionMessage): Error
+  internalServerErrorException(data?: IFormatExceptionMessage): Error
+  forbiddenException(data?: IFormatExceptionMessage): Error
+  unauthorizedException(data?: IFormatExceptionMessage): Error
+  notFoundException(data?: IFormatExceptionMessage): Error
 }

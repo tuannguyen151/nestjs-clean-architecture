@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { DataSource } from 'typeorm'
 import dotenv from 'dotenv'
 
@@ -6,7 +7,7 @@ dotenv.config({ path: '.env' })
 const dataSource = new DataSource({
   type: process.env.DATABASE_ENGINE as 'postgres',
   host: process.env.DATABASE_HOST,
-  port: parseInt(process.env.DATABASE_PORT),
+  port: parseInt(process.env.DATABASE_PORT || '5432'),
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
@@ -18,6 +19,13 @@ const dataSource = new DataSource({
   subscribers: ['src/migrations'],
 })
 
-dataSource.initialize()
+dataSource
+  .initialize()
+  .then(() => {
+    console.log('Database connected')
+  })
+  .catch((error) => {
+    console.log('Database connection error', error)
+  })
 
 export default dataSource

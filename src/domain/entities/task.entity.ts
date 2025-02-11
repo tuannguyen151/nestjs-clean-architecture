@@ -4,12 +4,12 @@ export enum TaskStatusEnum {
 }
 
 export class TaskEntity {
-  public readonly id: number
-  public userId: string // sub from cognito
-  public title: string
+  public readonly id!: number
+  public userId!: string // sub from cognito
+  public title!: string
   public description?: string
-  public status: TaskStatusEnum
+  public status!: TaskStatusEnum
   public dueDate?: Date
-  public readonly createdAt: Date
-  public readonly updatedAt: Date
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }

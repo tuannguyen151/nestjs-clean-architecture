@@ -59,7 +59,16 @@ describe('AwsCognitoService', () => {
 
     it('should authenticate user successfully', async () => {
       mockCognitoUser.authenticateUser.mockImplementation(
-        (authDetails, callbacks) => {
+        (
+          authDetails: AuthenticationDetails,
+          callbacks: {
+            onSuccess: (result: {
+              getIdToken: () => { getJwtToken: () => string }
+              getRefreshToken: () => { getToken: () => string }
+            }) => void
+            onFailure: (err: Error) => void
+          },
+        ) => {
           callbacks.onSuccess({
             getIdToken: () => ({ getJwtToken: () => ID_TOKEN_MOCK }),
             getRefreshToken: () => ({ getToken: () => REFRESH_TOKEN_MOCK }),
@@ -89,7 +98,16 @@ describe('AwsCognitoService', () => {
 
     it('should throw an error on authentication failure', async () => {
       mockCognitoUser.authenticateUser.mockImplementation(
-        (authDetails, callbacks) => {
+        (
+          authDetails: AuthenticationDetails,
+          callbacks: {
+            onSuccess: (result: {
+              getIdToken: () => { getJwtToken: () => string }
+              getRefreshToken: () => { getToken: () => string }
+            }) => void
+            onFailure: (err: Error) => void
+          },
+        ) => {
           callbacks.onFailure(new Error('Authentication failed'))
         },
       )
@@ -127,7 +145,7 @@ describe('AwsCognitoService', () => {
       expect(result).toBe(ID_TOKEN_MOCK)
       expect(mockInitiateAuth).toHaveBeenCalledWith({
         AuthFlow: 'REFRESH_TOKEN_AUTH',
-        ClientId: environmentConfigServiceMock.getAwsCognitoClientId(),
+        ClientId: environmentConfigServiceMock?.getAwsCognitoClientId?.(),
         AuthParameters: {
           REFRESH_TOKEN: REFRESH_TOKEN_MOCK,
         },
