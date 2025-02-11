@@ -2,7 +2,7 @@
 
 ## Required
 
-- Node.js node:20.18.0
+- Node.js node:22.14.0
 - Docker, Docker Compose
 
 ## Architecture Overview

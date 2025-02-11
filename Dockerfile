@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:20.18.0 AS development
+FROM node:22.14.0 AS development
 
 # Set the working directory
 WORKDIR /home
@@ -26,7 +26,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Create the production image
-FROM node:20.18.0-alpine AS production
+FROM node:22.14.0-alpine AS production
 
 # Set the working directory
 WORKDIR /home/app
