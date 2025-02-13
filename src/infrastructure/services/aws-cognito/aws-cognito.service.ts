@@ -54,11 +54,7 @@ export class AwsCognitoService implements IAwsCognitoService {
           })
         },
         onFailure: (err) => {
-          reject(
-            new Error(
-              typeof err === 'string' ? err : JSON.stringify(err, null, 2),
-            ),
-          )
+          reject(err as Error)
         },
       })
     })

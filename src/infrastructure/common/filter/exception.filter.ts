@@ -47,17 +47,38 @@ export class AllExceptionFilter implements ExceptionFilter {
     status: number,
     exception: HttpException,
   ) {
+    const ip = this.getIP(request)
+
     if (status === 500) {
       this.logger.error(
         `End Request for ${request.path}`,
-        `method=${request.method} status=${status} type=${error.type} message=${error.message}`,
+        {
+          method: request.method,
+          ip,
+          status,
+          error: error,
+        },
         exception.stack,
       )
     } else {
-      this.logger.warn(
-        `End Request for ${request.path}`,
-        `method=${request.method} status=${status} type=${error.type} message=${error.message}`,
-      )
+      this.logger.warn(`End Request for ${request.path}`, {
+        method: request.method,
+        ip,
+        status,
+        error: error,
+      })
     }
+  }
+
+  private getIP(request: Request): string {
+    let ip: string
+    const ipAddr = request.headers['x-forwarded-for']
+    if (ipAddr) {
+      const list = typeof ipAddr === 'string' ? ipAddr.split(',') : ipAddr
+      ip = list[list.length - 1]
+    } else {
+      ip = request.ip || ''
+    }
+    return ip.replace('::ffff:', '')
   }
 }
