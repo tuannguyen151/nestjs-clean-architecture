@@ -7,7 +7,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger'
 
-import { ApiResponseType } from '../swagger-response.decorator'
+import { ApiResponseType } from '../common/decorators/swagger-response.decorator'
 
 import { LoginDto } from './dto/login.dto'
 import { LoginUseCase } from 'src/use-cases/auth/login.use-case'

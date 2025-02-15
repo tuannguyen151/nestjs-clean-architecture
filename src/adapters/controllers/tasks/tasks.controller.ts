@@ -22,12 +22,12 @@ import {
 import {
   ApiCreatedResponseType,
   ApiResponseType,
-} from '../swagger-response.decorator'
+} from '../common/decorators/swagger-response.decorator'
 
 import { GetListTasksPresenter } from './presenters/get-list-tasks.presenter'
 import { GetListTasksDto } from './dto/get-list-tasks.dto'
 
-import { JwtAuthGuard } from '../jwt-auth.guard'
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard'
 import { GetListTasksUseCase } from 'src/use-cases/tasks/get-list-tasks.use-case'
 
 import { CreateTaskDto } from './dto/create-task.dto'
@@ -43,7 +43,7 @@ import { UpdateTaskDto } from './dto/update-task.dto'
 import { CountTasksUseCase } from 'src/use-cases/tasks/count-tasks.use-case'
 import { CountTasksPresenter } from './presenters/count-tasks.presenter'
 import { CountTasksDto } from './dto/count-tasks.dto'
-import { User } from '../user.decorator'
+import { User } from '../common/decorators/user.decorator'
 
 @Controller('tasks')
 @ApiTags('Tasks')

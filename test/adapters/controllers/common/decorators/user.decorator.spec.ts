@@ -1,6 +1,9 @@
 import { ExecutionContext } from '@nestjs/common'
 import { HttpArgumentsHost } from '@nestjs/common/interfaces'
-import { IUser, userFactory } from 'src/adapters/controllers/user.decorator'
+import {
+  IUser,
+  userFactory,
+} from 'src/adapters/controllers/common/decorators/user.decorator'
 
 describe('userFactory', () => {
   let mockExecutionContext: jest.Mocked<ExecutionContext>
