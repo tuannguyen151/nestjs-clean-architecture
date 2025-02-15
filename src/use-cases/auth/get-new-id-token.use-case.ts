@@ -1,12 +1,9 @@
 import { Inject } from '@nestjs/common'
-import {
-  EXCEPTIONS,
-  IException,
-} from 'src/domain/exceptions/exceptions.interface'
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 import {
   AWS_COGNITO_SERVICE,
   IAwsCognitoService,
-} from 'src/domain/services/aws-cognito.interface'
+} from '@domain/services/aws-cognito.interface'
 
 export class GetNewIdTokenUseCase {
   constructor(

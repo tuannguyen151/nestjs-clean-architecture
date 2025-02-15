@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { ExceptionsService } from 'src/infrastructure/exceptions/exceptions.service'
+import { ExceptionsService } from '@infrastructure/exceptions/exceptions.service'
 
 describe('ExceptionsService', () => {
   let service: ExceptionsService

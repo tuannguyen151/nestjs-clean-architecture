@@ -2,11 +2,8 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
-import {
-  EXCEPTIONS,
-  IException,
-} from 'src/domain/exceptions/exceptions.interface'
+} from '@domain/repositories/task.repository.interface'
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 
 @Injectable()
 export class GetDetailTaskUseCase {

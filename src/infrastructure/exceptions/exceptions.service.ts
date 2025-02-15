@@ -9,7 +9,7 @@ import {
 import {
   IException,
   IFormatExceptionMessage,
-} from '../../domain/exceptions/exceptions.interface'
+} from '@domain/exceptions/exceptions.interface'
 
 @Injectable()
 export class ExceptionsService implements IException {

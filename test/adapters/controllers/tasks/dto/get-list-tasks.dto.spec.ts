@@ -1,7 +1,7 @@
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
-import { GetListTasksDto } from 'src/adapters/controllers/tasks/dto/get-list-tasks.dto'
-import { TaskStatusEnum } from 'src/domain/entities/task.entity'
+import { GetListTasksDto } from '@adapters/controllers/tasks/dto/get-list-tasks.dto'
+import { TaskStatusEnum } from '@domain/entities/task.entity'
 
 describe('GetListTasksDto', () => {
   let dto: GetListTasksDto

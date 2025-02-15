@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { Repository, UpdateResult } from 'typeorm'
-import { Task } from 'src/infrastructure/databases/postgressql/entities/task.entity'
-import { TaskRepository } from 'src/infrastructure/databases/postgressql/repositories/task.repository'
+import { Task } from '@infrastructure/databases/postgressql/entities/task.entity'
+import { TaskRepository } from '@infrastructure/databases/postgressql/repositories/task.repository'
 import { createTaskStub } from 'test/stubs/task.stub'
-import { TaskStatusEnum } from 'src/domain/entities/task.entity'
+import { TaskStatusEnum } from '@domain/entities/task.entity'
 
 describe('TaskRepository', () => {
   let taskRepository: TaskRepository

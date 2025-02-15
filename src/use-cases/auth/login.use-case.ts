@@ -3,11 +3,8 @@ import {
   AWS_COGNITO_SERVICE,
   IAwsCognitoService,
   ILoginUser,
-} from 'src/domain/services/aws-cognito.interface'
-import {
-  EXCEPTIONS,
-  IException,
-} from 'src/domain/exceptions/exceptions.interface'
+} from '@domain/services/aws-cognito.interface'
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 
 @Injectable()
 export class LoginUseCase {

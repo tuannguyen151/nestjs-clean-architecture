@@ -2,14 +2,11 @@ import { Test } from '@nestjs/testing'
 import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
-import { TaskEntity } from 'src/domain/entities/task.entity'
-import {
-  IException,
-  EXCEPTIONS,
-} from 'src/domain/exceptions/exceptions.interface'
+} from '@domain/repositories/task.repository.interface'
+import { TaskEntity } from '@domain/entities/task.entity'
+import { IException, EXCEPTIONS } from '@domain/exceptions/exceptions.interface'
 
-import { UpdateTaskUseCase } from 'src/use-cases/tasks/update-task.use-case'
+import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
 
 describe('UpdateTaskUseCase', () => {
   let updateTaskUseCase: UpdateTaskUseCase

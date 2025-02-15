@@ -3,12 +3,9 @@ import {
   AWS_COGNITO_SERVICE,
   IAwsCognitoService,
   ILoginUser,
-} from 'src/domain/services/aws-cognito.interface'
-import {
-  EXCEPTIONS,
-  IException,
-} from 'src/domain/exceptions/exceptions.interface'
-import { LoginUseCase } from 'src/use-cases/auth/login.use-case'
+} from '@domain/services/aws-cognito.interface'
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
+import { LoginUseCase } from '@use-cases/auth/login.use-case'
 
 describe('LoginUseCase', () => {
   let useCase: LoginUseCase

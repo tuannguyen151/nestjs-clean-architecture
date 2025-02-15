@@ -1,4 +1,4 @@
-import { IAwsConfig } from 'src/domain/config/aws.interface'
+import { IAwsConfig } from '@domain/config/aws.interface'
 
 export const environmentConfigServiceMock: Partial<IAwsConfig> = {
   getAwsCognitoClientId: () => '1X2X3X4X5X6X7X8X9X0X',

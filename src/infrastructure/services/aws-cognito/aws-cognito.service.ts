@@ -9,8 +9,8 @@ import {
   IAwsCognitoService,
   ILoginResponse,
   ILoginUser,
-} from 'src/domain/services/aws-cognito.interface'
-import { EnvironmentConfigService } from 'src/infrastructure/config/environment/environment-config.service'
+} from '@domain/services/aws-cognito.interface'
+import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
 
 @Injectable()
 export class AwsCognitoService implements IAwsCognitoService {

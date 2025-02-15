@@ -10,11 +10,11 @@ import {
 import { ApiResponseType } from '../common/decorators/swagger-response.decorator'
 
 import { LoginDto } from './dto/login.dto'
-import { LoginUseCase } from 'src/use-cases/auth/login.use-case'
+import { LoginUseCase } from '@use-cases/auth/login.use-case'
 import { LoginPresenter } from './presenters/login.presenter'
 
 import { RefreshDto } from './dto/refresh.dto'
-import { GetNewIdTokenUseCase } from 'src/use-cases/auth/get-new-id-token.use-case'
+import { GetNewIdTokenUseCase } from '@use-cases/auth/get-new-id-token.use-case'
 import { RefreshPresenter } from './presenters/refresh.presenter'
 
 @Controller('auth')

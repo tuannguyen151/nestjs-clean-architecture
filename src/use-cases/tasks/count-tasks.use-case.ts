@@ -3,7 +3,7 @@ import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
   ICountTasksParams,
-} from 'src/domain/repositories/task.repository.interface'
+} from '@domain/repositories/task.repository.interface'
 
 @Injectable()
 export class CountTasksUseCase {

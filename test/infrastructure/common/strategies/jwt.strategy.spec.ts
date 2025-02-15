@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { JwtStrategy } from 'src/infrastructure/common/strategies/jwt.strategy'
-import { EnvironmentConfigService } from 'src/infrastructure/config/environment/environment-config.service'
+import { JwtStrategy } from '@infrastructure/common/strategies/jwt.strategy'
+import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
 import { environmentConfigServiceMock } from 'test/mocks/services/environment-config-service.mock'
 
 describe('JwtStrategy', () => {

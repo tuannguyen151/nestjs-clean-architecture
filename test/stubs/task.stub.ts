@@ -1,4 +1,4 @@
-import { TaskEntity, TaskStatusEnum } from 'src/domain/entities/task.entity'
+import { TaskEntity, TaskStatusEnum } from '@domain/entities/task.entity'
 
 export const createTaskStub = (): TaskEntity => {
   return {

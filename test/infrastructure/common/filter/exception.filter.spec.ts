@@ -1,7 +1,7 @@
 import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { AllExceptionFilter } from 'src/infrastructure/common/filter/exception.filter'
-import { LoggerService } from 'src/infrastructure/logger/logger.service'
+import { AllExceptionFilter } from '@infrastructure/common/filter/exception.filter'
+import { LoggerService } from '@infrastructure/logger/logger.service'
 
 describe('AllExceptionFilter', () => {
   let filter: AllExceptionFilter

@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing'
 import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
+} from '@domain/repositories/task.repository.interface'
 import { createTaskStub } from 'test/stubs/task.stub'
 
-import { CreateTaskUseCase } from 'src/use-cases/tasks/create-task.use-case'
+import { CreateTaskUseCase } from '@use-cases/tasks/create-task.use-case'
 
 describe('CreateTaskUseCase', () => {
   let useCase: CreateTaskUseCase

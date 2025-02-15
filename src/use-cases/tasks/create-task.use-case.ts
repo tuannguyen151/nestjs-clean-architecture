@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { TaskEntity } from 'src/domain/entities/task.entity'
+import { TaskEntity } from '@domain/entities/task.entity'
 import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
+} from '@domain/repositories/task.repository.interface'
 
 @Injectable()
 export class CreateTaskUseCase {

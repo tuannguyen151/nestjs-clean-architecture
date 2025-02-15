@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { TaskStatusEnum } from 'src/domain/entities/task.entity'
+import { TaskStatusEnum } from '@domain/entities/task.entity'
 
 export class GetListTasksPresenter {
   @ApiProperty()

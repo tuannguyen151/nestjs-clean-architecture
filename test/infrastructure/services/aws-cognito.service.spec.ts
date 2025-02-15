@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js'
-import { AwsCognitoService } from 'src/infrastructure/services/aws-cognito/aws-cognito.service'
-import { EnvironmentConfigService } from 'src/infrastructure/config/environment/environment-config.service'
+import { AwsCognitoService } from '@infrastructure/services/aws-cognito/aws-cognito.service'
+import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
 import { environmentConfigServiceMock } from 'test/mocks/services/environment-config-service.mock'
 import {
   ID_TOKEN_MOCK,

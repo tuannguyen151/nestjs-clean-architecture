@@ -3,8 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { of } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Request } from 'express'
-import { LoggerService } from 'src/infrastructure/logger/logger.service'
-import { LoggingInterceptor } from 'src/infrastructure/common/interceptors/logger.interceptor'
+import { LoggerService } from '@infrastructure/logger/logger.service'
+import { LoggingInterceptor } from '@infrastructure/common/interceptors/logger.interceptor'
 
 describe('LoggingInterceptor', () => {
   let interceptor: LoggingInterceptor

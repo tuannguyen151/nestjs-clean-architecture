@@ -1,5 +1,5 @@
 import { validate } from 'class-validator'
-import { CreateTaskDto } from 'src/adapters/controllers/tasks/dto/create-task.dto'
+import { CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
 
 describe('CreateTaskDto', () => {
   let dto = new CreateTaskDto()

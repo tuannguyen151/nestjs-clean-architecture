@@ -1,4 +1,4 @@
-import { IAwsCognitoService } from 'src/domain/services/aws-cognito.interface'
+import { IAwsCognitoService } from '@domain/services/aws-cognito.interface'
 
 export const ID_TOKEN_MOCK = 'id-token'
 export const REFRESH_TOKEN_MOCK = 'refresh-token'

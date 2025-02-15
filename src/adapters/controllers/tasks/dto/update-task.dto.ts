@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { CreateTaskDto } from './create-task.dto'
-import { TaskStatusEnum } from 'src/domain/entities/task.entity'
+import { TaskStatusEnum } from '@domain/entities/task.entity'
 import { IsEnum, IsOptional } from 'class-validator'
 import { Transform } from 'class-transformer'
 

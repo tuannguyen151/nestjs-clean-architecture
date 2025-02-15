@@ -2,10 +2,10 @@ import { Test } from '@nestjs/testing'
 import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
-import { TaskEntity } from 'src/domain/entities/task.entity'
+} from '@domain/repositories/task.repository.interface'
+import { TaskEntity } from '@domain/entities/task.entity'
 
-import { GetListTasksUseCase } from 'src/use-cases/tasks/get-list-tasks.use-case'
+import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
 import { createTaskStub } from 'test/stubs/task.stub'
 
 describe('GetListTasksUseCase', () => {

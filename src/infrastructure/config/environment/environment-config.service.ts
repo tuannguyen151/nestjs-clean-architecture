@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { IDatabaseConfig } from '../../../domain/config/database.interface'
-import { IAwsConfig } from 'src/domain/config/aws.interface'
+import { IDatabaseConfig } from '@domain/config/database.interface'
+import { IAwsConfig } from '@domain/config/aws.interface'
 
 @Injectable()
 export class EnvironmentConfigService implements IDatabaseConfig, IAwsConfig {

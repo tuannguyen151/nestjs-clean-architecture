@@ -1,4 +1,4 @@
-import { ValidationPipe } from 'src/infrastructure/common/pipes/validation.pipe'
+import { ValidationPipe } from '@infrastructure/common/pipes/validation.pipe'
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common'
 import { IsString, IsInt, Min, Max } from 'class-validator'
 

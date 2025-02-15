@@ -3,8 +3,8 @@ import {
   ISearchTasksParams,
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
-import { TaskEntity } from 'src/domain/entities/task.entity'
+} from '@domain/repositories/task.repository.interface'
+import { TaskEntity } from '@domain/entities/task.entity'
 
 @Injectable()
 export class GetListTasksUseCase {

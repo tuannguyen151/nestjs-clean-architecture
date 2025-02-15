@@ -6,7 +6,7 @@ import {
   ICountTasksParams,
   ISearchTasksParams,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
+} from '@domain/repositories/task.repository.interface'
 
 const DEFAULT_SELECT_FIELDS: (keyof Task)[] = [
   'id',

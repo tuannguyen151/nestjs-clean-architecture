@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AWS_COGNITO_SERVICE } from 'src/domain/services/aws-cognito.interface'
-import { EXCEPTIONS } from 'src/domain/exceptions/exceptions.interface'
+import { AWS_COGNITO_SERVICE } from '@domain/services/aws-cognito.interface'
+import { EXCEPTIONS } from '@domain/exceptions/exceptions.interface'
 
-import { LoginUseCase } from 'src/use-cases/auth/login.use-case'
-import { GetNewIdTokenUseCase } from 'src/use-cases/auth/get-new-id-token.use-case'
+import { LoginUseCase } from '@use-cases/auth/login.use-case'
+import { GetNewIdTokenUseCase } from '@use-cases/auth/get-new-id-token.use-case'
 
-import { LoginDto } from 'src/adapters/controllers/auth/dto/login.dto'
-import { RefreshDto } from 'src/adapters/controllers/auth/dto/refresh.dto'
+import { LoginDto } from '@adapters/controllers/auth/dto/login.dto'
+import { RefreshDto } from '@adapters/controllers/auth/dto/refresh.dto'
 
-import { LoginPresenter } from 'src/adapters/controllers/auth/presenters/login.presenter'
-import { RefreshPresenter } from 'src/adapters/controllers/auth/presenters/refresh.presenter'
-import { AuthController } from 'src/adapters/controllers/auth/auth.controller'
+import { LoginPresenter } from '@adapters/controllers/auth/presenters/login.presenter'
+import { RefreshPresenter } from '@adapters/controllers/auth/presenters/refresh.presenter'
+import { AuthController } from '@adapters/controllers/auth/auth.controller'
 import {
   ID_TOKEN_MOCK,
   REFRESH_TOKEN_MOCK,

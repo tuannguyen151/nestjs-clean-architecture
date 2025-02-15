@@ -4,7 +4,7 @@ import { of } from 'rxjs'
 import {
   ResponseFormat,
   ResponseInterceptor,
-} from 'src/infrastructure/common/interceptors/response.interceptor'
+} from '@infrastructure/common/interceptors/response.interceptor'
 
 describe('ResponseInterceptor', () => {
   let interceptor: ResponseInterceptor<unknown>

@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { validate } from 'src/infrastructure/config/environment/environment-config.validation'
+import { validate } from '@infrastructure/config/environment/environment-config.validation'
 
 const config: { [key: string]: unknown } = {
   NODE_ENV: 'local',

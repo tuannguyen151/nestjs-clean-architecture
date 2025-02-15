@@ -1,6 +1,6 @@
 import { validate } from 'class-validator'
-import { TaskStatusEnum } from 'src/domain/entities/task.entity'
-import { CountTasksDto } from 'src/adapters/controllers/tasks/dto/count-tasks.dto'
+import { TaskStatusEnum } from '@domain/entities/task.entity'
+import { CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
 import { plainToClass } from 'class-transformer'
 
 describe('CountTasksDto', () => {

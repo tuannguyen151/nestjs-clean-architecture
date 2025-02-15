@@ -1,7 +1,4 @@
-import {
-  TaskEntity,
-  TaskStatusEnum,
-} from '../../../../domain/entities/task.entity'
+import { TaskEntity, TaskStatusEnum } from '@domain/entities/task.entity'
 import {
   Entity,
   Column,

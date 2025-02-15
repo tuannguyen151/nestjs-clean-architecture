@@ -2,14 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing'
 import {
   TASK_REPOSITORY,
   ITaskRepositoryInterface,
-} from 'src/domain/repositories/task.repository.interface'
-import {
-  EXCEPTIONS,
-  IException,
-} from 'src/domain/exceptions/exceptions.interface'
+} from '@domain/repositories/task.repository.interface'
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 import { createTaskStub } from 'test/stubs/task.stub'
 
-import { GetDetailTaskUseCase } from 'src/use-cases/tasks/get-detail-task.use-case'
+import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
 
 describe('GetDetailTaskUseCase', () => {
   let useCase: GetDetailTaskUseCase
