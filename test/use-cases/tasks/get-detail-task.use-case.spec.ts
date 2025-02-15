@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import {
-  TASK_REPOSITORY,
-  ITaskRepositoryInterface,
-} from '@domain/repositories/task.repository.interface'
-import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
+
 import { createTaskStub } from 'test/stubs/task.stub'
+
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
+import {
+  ITaskRepositoryInterface,
+  TASK_REPOSITORY,
+} from '@domain/repositories/task.repository.interface'
 
 import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
 

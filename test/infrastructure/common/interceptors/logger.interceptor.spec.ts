@@ -1,10 +1,12 @@
 import { CallHandler, ExecutionContext } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+
+import { Request } from 'express'
 import { of } from 'rxjs'
 import { tap } from 'rxjs/operators'
-import { Request } from 'express'
-import { LoggerService } from '@infrastructure/logger/logger.service'
+
 import { LoggingInterceptor } from '@infrastructure/common/interceptors/logger.interceptor'
+import { LoggerService } from '@infrastructure/logger/logger.service'
 
 describe('LoggingInterceptor', () => {
   let interceptor: LoggingInterceptor

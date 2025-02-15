@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
+
 import { LoggerService } from '@infrastructure/logger/logger.service'
 
 describe('LoggerService', () => {

@@ -5,9 +5,12 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common'
+
 import { Request, Response } from 'express'
-import { LoggerService } from '@infrastructure/logger/logger.service'
+
 import { IFormatExceptionMessage } from '@domain/exceptions/exceptions.interface'
+
+import { LoggerService } from '@infrastructure/logger/logger.service'
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {

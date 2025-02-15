@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
+
 import { EnvironmentConfigModule } from '@infrastructure/config/environment/environment-config.module'
 import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
 

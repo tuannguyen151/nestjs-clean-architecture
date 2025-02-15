@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common'
+
 import { TaskEntity } from '@domain/entities/task.entity'
 import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 import {
-  TASK_REPOSITORY,
   ITaskRepositoryInterface,
+  TASK_REPOSITORY,
 } from '@domain/repositories/task.repository.interface'
 
 @Injectable()

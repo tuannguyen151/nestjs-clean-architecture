@@ -1,7 +1,9 @@
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
-import { UpdateTaskDto } from '@adapters/controllers/tasks/dto/update-task.dto'
+
 import { TaskStatusEnum } from '@domain/entities/task.entity'
+
+import { UpdateTaskDto } from '@adapters/controllers/tasks/dto/update-task.dto'
 
 describe('UpdateTaskDto', () => {
   let dto = new UpdateTaskDto()

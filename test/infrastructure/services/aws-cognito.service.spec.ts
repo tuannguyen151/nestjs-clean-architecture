@@ -1,12 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js'
-import { AwsCognitoService } from '@infrastructure/services/aws-cognito/aws-cognito.service'
-import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
-import { environmentConfigServiceMock } from 'test/mocks/services/environment-config-service.mock'
+
+import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js'
 import {
   ID_TOKEN_MOCK,
   REFRESH_TOKEN_MOCK,
 } from 'test/mocks/services/aws-cognito.service.mock'
+import { environmentConfigServiceMock } from 'test/mocks/services/environment-config-service.mock'
+
+import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
+import { AwsCognitoService } from '@infrastructure/services/aws-cognito/aws-cognito.service'
 
 jest.mock('amazon-cognito-identity-js', () => ({
   CognitoUserPool: jest.fn(),

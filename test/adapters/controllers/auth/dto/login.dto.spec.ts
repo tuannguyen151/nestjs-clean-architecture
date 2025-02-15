@@ -1,4 +1,5 @@
 import { validate } from 'class-validator'
+
 import { LoginDto } from '@adapters/controllers/auth/dto/login.dto'
 
 describe('LoginDto', () => {

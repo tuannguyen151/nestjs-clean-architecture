@@ -1,11 +1,12 @@
-import { TaskEntity, TaskStatusEnum } from '@domain/entities/task.entity'
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+
+import { TaskEntity, TaskStatusEnum } from '@domain/entities/task.entity'
 
 @Entity('tasks')
 export class Task implements TaskEntity {

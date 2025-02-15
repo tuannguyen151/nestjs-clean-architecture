@@ -1,8 +1,9 @@
-import { Injectable, Inject } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
+
 import {
-  TASK_REPOSITORY,
-  ITaskRepositoryInterface,
   ICountTasksParams,
+  ITaskRepositoryInterface,
+  TASK_REPOSITORY,
 } from '@domain/repositories/task.repository.interface'
 
 @Injectable()

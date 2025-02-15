@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+
 import { Repository } from 'typeorm'
-import { Task } from '../entities/task.entity'
+
 import {
   ICountTasksParams,
   ISearchTasksParams,
   ITaskRepositoryInterface,
 } from '@domain/repositories/task.repository.interface'
+
+import { Task } from '../entities/task.entity'
 
 const DEFAULT_SELECT_FIELDS: (keyof Task)[] = [
   'id',

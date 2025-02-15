@@ -1,6 +1,9 @@
+import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+
 import cookieParser from 'cookie-parser'
+
 import { AppModule } from './app.module'
 import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter'
 import { LoggingInterceptor } from './infrastructure/common/interceptors/logger.interceptor'
@@ -8,9 +11,8 @@ import {
   ResponseFormat,
   ResponseInterceptor,
 } from './infrastructure/common/interceptors/response.interceptor'
-import { LoggerService } from './infrastructure/logger/logger.service'
-import { ValidationPipe } from '@nestjs/common'
 import { ValidationPipe as CustomValidationPipe } from './infrastructure/common/pipes/validation.pipe'
+import { LoggerService } from './infrastructure/logger/logger.service'
 
 async function bootstrap() {
   const env = process.env.NODE_ENV

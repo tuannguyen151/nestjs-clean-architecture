@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common'
+
+import { TaskEntity } from '@domain/entities/task.entity'
 import {
   ISearchTasksParams,
-  TASK_REPOSITORY,
   ITaskRepositoryInterface,
+  TASK_REPOSITORY,
 } from '@domain/repositories/task.repository.interface'
-import { TaskEntity } from '@domain/entities/task.entity'
 
 @Injectable()
 export class GetListTasksUseCase {

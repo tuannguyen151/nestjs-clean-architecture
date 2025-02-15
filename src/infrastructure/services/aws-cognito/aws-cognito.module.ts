@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common'
-import { AwsCognitoService } from './aws-cognito.service'
+
 import { EnvironmentConfigModule } from '@infrastructure/config/environment/environment-config.module'
+
+import { AwsCognitoService } from './aws-cognito.service'
 
 @Module({
   imports: [EnvironmentConfigModule],

@@ -1,7 +1,9 @@
-import { validate } from 'class-validator'
-import { TaskStatusEnum } from '@domain/entities/task.entity'
-import { CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
 import { plainToClass } from 'class-transformer'
+import { validate } from 'class-validator'
+
+import { TaskStatusEnum } from '@domain/entities/task.entity'
+
+import { CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
 
 describe('CountTasksDto', () => {
   let dto = new CountTasksDto()

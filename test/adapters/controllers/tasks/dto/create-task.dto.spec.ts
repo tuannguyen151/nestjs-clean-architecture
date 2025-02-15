@@ -1,4 +1,5 @@
 import { validate } from 'class-validator'
+
 import { CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
 
 describe('CreateTaskDto', () => {

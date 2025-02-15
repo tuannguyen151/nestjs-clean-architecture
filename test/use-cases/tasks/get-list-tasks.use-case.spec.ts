@@ -1,12 +1,14 @@
 import { Test } from '@nestjs/testing'
-import {
-  TASK_REPOSITORY,
-  ITaskRepositoryInterface,
-} from '@domain/repositories/task.repository.interface'
+
+import { createTaskStub } from 'test/stubs/task.stub'
+
 import { TaskEntity } from '@domain/entities/task.entity'
+import {
+  ITaskRepositoryInterface,
+  TASK_REPOSITORY,
+} from '@domain/repositories/task.repository.interface'
 
 import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
-import { createTaskStub } from 'test/stubs/task.stub'
 
 describe('GetListTasksUseCase', () => {
   let getListTasksUseCase: GetListTasksUseCase

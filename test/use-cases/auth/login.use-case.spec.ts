@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing'
+
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 import {
   AWS_COGNITO_SERVICE,
   IAwsCognitoService,
   ILoginUser,
 } from '@domain/services/aws-cognito.interface'
-import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
+
 import { LoginUseCase } from '@use-cases/auth/login.use-case'
 
 describe('LoginUseCase', () => {

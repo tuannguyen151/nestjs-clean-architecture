@@ -1,9 +1,11 @@
 import { Test } from '@nestjs/testing'
-import { IException, EXCEPTIONS } from '@domain/exceptions/exceptions.interface'
+
+import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 import {
-  IAwsCognitoService,
   AWS_COGNITO_SERVICE,
+  IAwsCognitoService,
 } from '@domain/services/aws-cognito.interface'
+
 import { GetNewIdTokenUseCase } from '@use-cases/auth/get-new-id-token.use-case'
 
 describe('GetNewIdTokenUseCase', () => {

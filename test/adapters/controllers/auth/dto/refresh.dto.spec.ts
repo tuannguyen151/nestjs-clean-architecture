@@ -1,4 +1,5 @@
 import { validate } from 'class-validator'
+
 import { RefreshDto } from '@adapters/controllers/auth/dto/refresh.dto'
 
 describe('RefreshDto', () => {

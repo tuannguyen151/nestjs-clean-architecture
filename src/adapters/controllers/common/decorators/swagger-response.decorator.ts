@@ -1,7 +1,7 @@
-import { applyDecorators, Type } from '@nestjs/common'
+import { Type, applyDecorators } from '@nestjs/common'
 import {
-  ApiOkResponse,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiProperty,
   getSchemaPath,
 } from '@nestjs/swagger'

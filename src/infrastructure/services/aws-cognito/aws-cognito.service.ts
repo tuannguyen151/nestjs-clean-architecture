@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common'
+
 import {
   AuthenticationDetails,
   CognitoUser,
   CognitoUserPool,
 } from 'amazon-cognito-identity-js'
 import { CognitoIdentityServiceProvider } from 'aws-sdk'
+
 import {
   IAwsCognitoService,
   ILoginResponse,
   ILoginUser,
 } from '@domain/services/aws-cognito.interface'
+
 import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
 
 @Injectable()

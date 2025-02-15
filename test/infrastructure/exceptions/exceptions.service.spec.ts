@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
+
 import { ExceptionsService } from '@infrastructure/exceptions/exceptions.service'
 
 describe('ExceptionsService', () => {

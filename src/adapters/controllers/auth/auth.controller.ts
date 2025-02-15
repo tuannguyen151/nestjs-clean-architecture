@@ -7,14 +7,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger'
 
-import { ApiResponseType } from '../common/decorators/swagger-response.decorator'
-
-import { LoginDto } from './dto/login.dto'
-import { LoginUseCase } from '@use-cases/auth/login.use-case'
-import { LoginPresenter } from './presenters/login.presenter'
-
-import { RefreshDto } from './dto/refresh.dto'
 import { GetNewIdTokenUseCase } from '@use-cases/auth/get-new-id-token.use-case'
+import { LoginUseCase } from '@use-cases/auth/login.use-case'
+
+import { ApiResponseType } from '../common/decorators/swagger-response.decorator'
+import { LoginDto } from './dto/login.dto'
+import { RefreshDto } from './dto/refresh.dto'
+import { LoginPresenter } from './presenters/login.presenter'
 import { RefreshPresenter } from './presenters/refresh.presenter'
 
 @Controller('auth')

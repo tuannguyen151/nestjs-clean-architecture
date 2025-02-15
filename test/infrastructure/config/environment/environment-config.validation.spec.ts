@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+
 import { validate } from '@infrastructure/config/environment/environment-config.validation'
 
 const config: { [key: string]: unknown } = {

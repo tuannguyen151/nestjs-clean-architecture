@@ -1,8 +1,11 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { CreateTaskDto } from './create-task.dto'
-import { TaskStatusEnum } from '@domain/entities/task.entity'
-import { IsEnum, IsOptional } from 'class-validator'
+
 import { Transform } from 'class-transformer'
+import { IsEnum, IsOptional } from 'class-validator'
+
+import { TaskStatusEnum } from '@domain/entities/task.entity'
+
+import { CreateTaskDto } from './create-task.dto'
 
 export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @ApiProperty({

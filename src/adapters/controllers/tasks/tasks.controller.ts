@@ -19,31 +19,26 @@ import {
   ApiTags,
 } from '@nestjs/swagger'
 
+import { CountTasksUseCase } from '@use-cases/tasks/count-tasks.use-case'
+import { CreateTaskUseCase } from '@use-cases/tasks/create-task.use-case'
+import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
+import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
+import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
+
 import {
   ApiCreatedResponseType,
   ApiResponseType,
 } from '../common/decorators/swagger-response.decorator'
-
-import { GetListTasksPresenter } from './presenters/get-list-tasks.presenter'
-import { GetListTasksDto } from './dto/get-list-tasks.dto'
-
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard'
-import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
-
-import { CreateTaskDto } from './dto/create-task.dto'
-import { CreateTaskUseCase } from '@use-cases/tasks/create-task.use-case'
-import { CreateTaskPresenter } from './presenters/create-tasks.presenter'
-
-import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
-import { GetDetailTaskPresenter } from './presenters/get-detail-task.presenter'
-
-import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
-import { UpdateTaskDto } from './dto/update-task.dto'
-
-import { CountTasksUseCase } from '@use-cases/tasks/count-tasks.use-case'
-import { CountTasksPresenter } from './presenters/count-tasks.presenter'
-import { CountTasksDto } from './dto/count-tasks.dto'
 import { User } from '../common/decorators/user.decorator'
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard'
+import { CountTasksDto } from './dto/count-tasks.dto'
+import { CreateTaskDto } from './dto/create-task.dto'
+import { GetListTasksDto } from './dto/get-list-tasks.dto'
+import { UpdateTaskDto } from './dto/update-task.dto'
+import { CountTasksPresenter } from './presenters/count-tasks.presenter'
+import { CreateTaskPresenter } from './presenters/create-tasks.presenter'
+import { GetDetailTaskPresenter } from './presenters/get-detail-task.presenter'
+import { GetListTasksPresenter } from './presenters/get-list-tasks.presenter'
 
 @Controller('tasks')
 @ApiTags('Tasks')

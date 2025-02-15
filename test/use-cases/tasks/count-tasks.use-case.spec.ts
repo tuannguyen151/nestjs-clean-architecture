@@ -1,8 +1,10 @@
 import { Test } from '@nestjs/testing'
+
 import {
-  TASK_REPOSITORY,
   ITaskRepositoryInterface,
+  TASK_REPOSITORY,
 } from '@domain/repositories/task.repository.interface'
+
 import { CountTasksUseCase } from '@use-cases/tasks/count-tasks.use-case'
 
 describe('CountTasksUseCase', () => {

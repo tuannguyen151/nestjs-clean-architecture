@@ -1,4 +1,5 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common'
+
 import { ILogger } from '@domain/logger/logger.interface'
 
 @Injectable()

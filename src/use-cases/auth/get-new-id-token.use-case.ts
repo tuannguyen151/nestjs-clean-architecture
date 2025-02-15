@@ -1,4 +1,5 @@
 import { Inject } from '@nestjs/common'
+
 import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
 import {
   AWS_COGNITO_SERVICE,

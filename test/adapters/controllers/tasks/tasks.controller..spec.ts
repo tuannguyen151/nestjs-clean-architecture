@@ -1,10 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { TasksController } from '@adapters/controllers/tasks/tasks.controller'
-import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
+
+import { createTaskStub } from 'test/stubs/task.stub'
+
+import { TaskStatusEnum } from '@domain/entities/task.entity'
+
+import { CountTasksUseCase } from '@use-cases/tasks/count-tasks.use-case'
 import { CreateTaskUseCase } from '@use-cases/tasks/create-task.use-case'
 import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
+import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
 import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
-import { CountTasksUseCase } from '@use-cases/tasks/count-tasks.use-case'
+
 import { CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
 import { CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
 import { GetListTasksDto } from '@adapters/controllers/tasks/dto/get-list-tasks.dto'
@@ -13,8 +18,7 @@ import { CountTasksPresenter } from '@adapters/controllers/tasks/presenters/coun
 import { CreateTaskPresenter } from '@adapters/controllers/tasks/presenters/create-tasks.presenter'
 import { GetDetailTaskPresenter } from '@adapters/controllers/tasks/presenters/get-detail-task.presenter'
 import { GetListTasksPresenter } from '@adapters/controllers/tasks/presenters/get-list-tasks.presenter'
-import { TaskStatusEnum } from '@domain/entities/task.entity'
-import { createTaskStub } from 'test/stubs/task.stub'
+import { TasksController } from '@adapters/controllers/tasks/tasks.controller'
 
 describe('TasksController', () => {
   let controller: TasksController
