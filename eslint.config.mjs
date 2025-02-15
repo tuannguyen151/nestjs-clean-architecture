@@ -4,6 +4,8 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
+import { flatConfigs } from 'eslint-plugin-import'
+
 export default tseslint.config(
   {
     ignores: [
@@ -16,6 +18,7 @@ export default tseslint.config(
     ],
   },
   eslint.configs.recommended,
+  flatConfigs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   eslintPluginPrettierRecommended,
   {
@@ -35,6 +38,18 @@ export default tseslint.config(
 
     rules: {
       'no-console': 2,
+      'import/no-unresolved': [
+        'error',
+        {
+          ignore: ['^@', '^./', '^../', '^test'],
+        },
+      ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: ['../../*'],
+        },
+      ],
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',

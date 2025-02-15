@@ -11,6 +11,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@domain/*": ["src/domain/*"],
+      "@use-cases/*": ["src/use-cases/*"],
+      "@adapters/*": ["src/adapters/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@modules/*": ["src/modules/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,5 +26,7 @@
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "include": ["src/**/*.ts", "database/**/*.ts", "test/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
