@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core'
+import { NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 import serverlessExpress from '@codegenie/serverless-express'
 import { Callback, Context, Handler } from 'aws-lambda'
 import cookieParser from 'cookie-parser'
+import { RequestListener } from 'http'
 
 import { AppModule } from './app.module'
 import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter'
@@ -15,11 +17,11 @@ import {
 import { ValidationPipe } from './infrastructure/common/pipes/validation.pipe'
 import { LoggerService } from './infrastructure/logger/logger.service'
 
-let server: Handler
+let server: Handler | undefined
 
 async function bootstrap() {
   const env = process.env.NODE_ENV
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   app.use(cookieParser())
 
@@ -52,14 +54,14 @@ async function bootstrap() {
   await app.init()
 
   const expressApp = app.getHttpAdapter().getInstance()
-  return serverlessExpress({ app: expressApp })
+  return serverlessExpress({ app: expressApp as RequestListener })
 }
 
 export const handler: Handler = async (
   event: unknown,
   context: Context,
   callback: Callback,
-) => {
+): Promise<Handler> => {
   server = server ?? (await bootstrap())
   return server(event, context, callback)
 }

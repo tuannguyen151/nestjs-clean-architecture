@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
+import { NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 import cookieParser from 'cookie-parser'
@@ -16,7 +17,7 @@ import { LoggerService } from './infrastructure/logger/logger.service'
 
 async function bootstrap() {
   const env = process.env.NODE_ENV
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   app.use(cookieParser())
 
