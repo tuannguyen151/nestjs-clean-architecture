@@ -1,0 +1,50 @@
+npx lint-staged
+
+echo '\n🏗️👷 Styling your project before committing👷‍♂️🏗️'
+echo 'please be patient, this may take a while...'
+
+GREEN='\033[0;32m'
+GREEN_BLUE='\033[38;2;64;142;145m'
+RED='\033[0;31m'
+RESET='\033[0m'
+
+# Function to print files
+print_files() {
+    echo "${GREEN_BLUE}$1${RESET}"
+}
+
+# Function to run checks
+run_check() {
+    echo "\n✨ $1 check:"
+    if [ -n "$2" ]; then
+        print_files "$3"
+        eval "$4" ||
+        (
+            echo "🔨❌ Failed $1 check. 🔨❌";
+            echo "$5";
+            false;
+        )
+    else
+        echo "$1: No change files found 🎉"
+    fi
+}
+
+# Get all staged files without deleted files
+stagedFiles=$(git diff --cached --name-status | grep -E '^[AMR]' | awk '{if ($1 ~ /^R/) print $3; else print $2}')
+
+# Format check
+formatCheckFiles=$(echo "$stagedFiles" | grep -E '\.(ts|md|json)$' | tr '\n' ' ')
+formatFixCmd="${GREEN}npm run format${RESET}"
+run_check "Format" "$formatCheckFiles" "$formatCheckFiles" "npx prettier -c $formatCheckFiles" "Run the following command to fix Format issues:\n$formatFixCmd\nAdd changes and try commit again."
+
+# Lint check
+lintCheckFiles=$(echo "$stagedFiles" | grep -E '\.ts$' | tr '\n' ' ')
+lintFixCmd="Run ${GREEN}npm run lint${RESET}, add changes and try commit again."
+run_check "Lint" "$lintCheckFiles" "$lintCheckFiles" "npx eslint $lintCheckFiles" "$lintFixCmd"
+
+# TypeScript check
+tsCheckCmd="npx tsc --pretty --noEmit"
+tsFixCmd="Are you seriously trying to write that? Make the changes required above."
+run_check "TypeScript" "true" "All files" "$tsCheckCmd" "$tsFixCmd"
+
+echo '\n🎉 No error found: committing this now.... ✨🚀🏄‍♂️🍻'
