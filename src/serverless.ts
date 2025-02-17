@@ -26,24 +26,24 @@ async function bootstrap() {
 
   app.use(cookieParser())
 
-  // Filter
+  // Register global exception filter
   app.useGlobalFilters(new AllExceptionFilter(new LoggerService()))
 
-  // pipes
+  // Register global pipes
   app.useGlobalPipes(new ValidationPipe())
 
-  // interceptors
+  // Register global interceptors
   app.useGlobalInterceptors(new LoggingInterceptor(new LoggerService()))
   app.useGlobalInterceptors(new ResponseInterceptor())
 
-  // base routing
+  // Enable API versioning
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: ['1'],
     prefix: 'api/v',
   })
 
-  // swagger config
+  // Configure Swagger for API documentation
   if (env !== 'production') {
     const config = new DocumentBuilder()
       .addBearerAuth()
@@ -62,6 +62,7 @@ async function bootstrap() {
   return serverlessExpress({ app: expressApp as RequestListener })
 }
 
+// AWS Lambda handler
 export const handler: Handler = async (
   event: unknown,
   context: Context,

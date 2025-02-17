@@ -21,10 +21,10 @@ async function bootstrap() {
 
   app.use(cookieParser())
 
-  // Filter
+  // Register global exception filter
   app.useGlobalFilters(new AllExceptionFilter(new LoggerService()))
 
-  // pipes
+  // Register global pipes
   app.useGlobalPipes(new CustomValidationPipe())
   app.useGlobalPipes(
     new ValidationPipe({
@@ -32,18 +32,18 @@ async function bootstrap() {
     }),
   )
 
-  // interceptors
+  // Register global interceptors
   app.useGlobalInterceptors(new LoggingInterceptor(new LoggerService()))
   app.useGlobalInterceptors(new ResponseInterceptor())
 
-  // base routing
+  // Enable API versioning
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: ['1'],
     prefix: 'api/v',
   })
 
-  // swagger config
+  // Configure Swagger for API documentation
   if (env !== 'production') {
     const config = new DocumentBuilder()
       .addBearerAuth()
@@ -59,6 +59,7 @@ async function bootstrap() {
   await app.listen(3000)
 }
 
+// Bootstrap the application
 bootstrap().catch((error) => {
   // eslint-disable-next-line no-console
   console.error('Error during bootstrap:', error)
