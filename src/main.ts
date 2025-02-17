@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common'
+import { ValidationPipe, VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
@@ -37,7 +37,11 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor())
 
   // base routing
-  app.setGlobalPrefix('api/v1')
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: ['1'],
+    prefix: 'api/v',
+  })
 
   // swagger config
   if (env !== 'production') {
