@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
 
+import { MaintenanceMiddleware } from './infrastructure/common/middlewares/maintenance.middleware'
 import { JwtStrategy } from './infrastructure/common/strategies/jwt.strategy'
 import { EnvironmentConfigModule } from './infrastructure/config/environment/environment-config.module'
 import { TypeOrmConfigModule } from './infrastructure/databases/postgressql/typeorm.module'
@@ -24,4 +25,10 @@ import { TasksModule } from './modules/task.module'
   ],
   providers: [JwtStrategy],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(MaintenanceMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
+  }
+}

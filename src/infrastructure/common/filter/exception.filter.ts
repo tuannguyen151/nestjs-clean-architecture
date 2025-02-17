@@ -8,7 +8,10 @@ import {
 
 import { Request, Response } from 'express'
 
-import { IFormatExceptionMessage } from '@domain/exceptions/exceptions.interface'
+import {
+  IFormatExceptionMessage,
+  IFormatExceptionResponse,
+} from '@domain/exceptions/exceptions.interface'
 
 import { LoggerService } from '@infrastructure/logger/logger.service'
 
@@ -32,7 +35,7 @@ export class AllExceptionFilter implements ExceptionFilter {
             message: (exception as Error).message,
           }
 
-    const responseData = {
+    const responseData: IFormatExceptionResponse = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,

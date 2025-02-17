@@ -110,6 +110,16 @@ Open http://localhost:3000
 
 Open http://localhost:3000/api
 
+## Maintenance Mode
+
+To enable maintenance mode, set the `MAINTENANCE_MODE` environment variable to `true` and set the `MAINTENANCE_MESSAGE` environment variable to the message you want to display.
+
+```env
+MAINTENANCE_MODE=true
+```
+
+When maintenance mode is enabled, all incoming requests will receive a `503 Service Unavailable` response with a maintenance message.
+
 ### Commands
 
 #### Execute in the container

@@ -3,6 +3,16 @@ export interface IFormatExceptionMessage {
   message: string
 }
 
+export interface IFormatExceptionResponse {
+  statusCode: number
+  timestamp: string // ISO date string
+  path: string
+  error: {
+    type: string
+    message: string
+  }
+}
+
 export const EXCEPTIONS = 'IException'
 export interface IException {
   badRequestException(data: IFormatExceptionMessage): Error

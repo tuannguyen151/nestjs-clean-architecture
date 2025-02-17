@@ -1,11 +1,14 @@
 import { plainToClass } from 'class-transformer'
 import {
   IsBoolean,
+  IsBooleanString,
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   IsUrl,
+  ValidateIf,
   validateSync,
 } from 'class-validator'
 
@@ -51,6 +54,14 @@ class EnvironmentVariables {
   @IsBoolean()
   @IsNotEmpty()
   DATABASE_SYNCHRONIZE!: boolean
+
+  @IsOptional()
+  @IsBooleanString()
+  MAINTENANCE_MODE?: string
+
+  @ValidateIf((env: EnvironmentVariables) => env.MAINTENANCE_MODE === 'true')
+  @IsString()
+  MAINTENANCE_MESSAGE?: string
 
   @IsString()
   AWS_COGNITO_USER_POOL_ID?: string
