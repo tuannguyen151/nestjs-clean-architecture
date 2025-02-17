@@ -8,6 +8,7 @@ import { TypeOrmConfigModule } from './infrastructure/databases/postgressql/type
 import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
 import { LoggerModule } from './infrastructure/logger/logger.module'
 import { AuthModule } from './modules/auth.module'
+import { HealthModule } from './modules/health.module'
 import { TasksModule } from './modules/task.module'
 
 @Module({
@@ -20,6 +21,7 @@ import { TasksModule } from './modules/task.module'
     ExceptionsModule,
     TypeOrmConfigModule,
 
+    HealthModule,
     AuthModule,
     TasksModule,
   ],
@@ -29,6 +31,11 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(MaintenanceMiddleware)
+      .exclude({
+        version: ['1'],
+        path: 'health',
+        method: RequestMethod.GET,
+      })
       .forRoutes({ path: '*', method: RequestMethod.ALL })
   }
 }
