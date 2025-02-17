@@ -120,21 +120,21 @@ MAINTENANCE_MODE=true
 
 When maintenance mode is enabled, all incoming requests will receive a `503 Service Unavailable` response with a maintenance message.
 
-### Commands
+## Commands
 
-#### Execute in the container
+### Execute in the container
 
 ```console
 docker exec -it app-api bash
 ```
 
-#### Install package
+### Install package
 
 ```console
 docker exec -it app-api npm install <package-name>
 ```
 
-#### Run test
+### Run test
 
 ```console
 # Run coverage test
