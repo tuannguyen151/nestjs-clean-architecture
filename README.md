@@ -102,6 +102,14 @@ docker-compose build
 docker-compose up
 ```
 
+### Initialize Husky (only Local Environment)
+
+The first time after running `docker-compose up`, initialize Husky by running:
+
+```console
+npx husky
+```
+
 ## App Server
 
 Open http://localhost:3000
