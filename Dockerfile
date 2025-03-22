@@ -35,8 +35,11 @@ WORKDIR /home/app
 COPY --from=development /home/app/dist ./dist
 COPY --from=development /home/app/package*.json ./
 
+# Copy file .env
+COPY --from=development /home/app/.env ./
+
 # Install only production dependencies
-RUN npm install --production
+RUN npm ci --production && npm cache clean --force
 
 # Expose the port the application will run on
 EXPOSE 3000
