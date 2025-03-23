@@ -14,12 +14,12 @@ export const getTypeOrmModuleOptions = (
     username: config.getDatabaseUser(),
     password: config.getDatabasePassword(),
     database: config.getDatabaseName(),
-    entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    synchronize: config.getNodeEnv() !== 'production',
+    entities: [__dirname + '/entities/**/*.entity{.ts,.js}'],
+    synchronize: false,
     schema: process.env.DATABASE_SCHEMA,
     migrationsRun: false,
-    migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-    subscribers: ['src/migrations'],
+    migrations: [__dirname + '/../../../../database/migrations/**/*{.ts,.js}'],
+    subscribers: [__dirname + '/subscribers/**/*{.ts,.js}'],
     logging: config.getNodeEnv() !== 'production',
   }) as TypeOrmModuleOptions
 

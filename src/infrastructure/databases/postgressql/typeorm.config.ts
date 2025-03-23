@@ -11,12 +11,12 @@ const dataSource = new DataSource({
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: process.env.NODE_ENV !== 'production',
+  entities: [__dirname + '/entities/**/*.entity{.ts,.js}'],
+  synchronize: false,
   schema: process.env.DATABASE_SCHEMA,
   migrationsRun: false,
-  migrations: ['database/migrations/**/*{.ts,.js}'],
-  subscribers: ['src/migrations'],
+  migrations: [__dirname + '/../../../../database/migrations/**/*{.ts,.js}'],
+  subscribers: [__dirname + '/subscribers/**/*{.ts,.js}'],
 })
 
 dataSource
