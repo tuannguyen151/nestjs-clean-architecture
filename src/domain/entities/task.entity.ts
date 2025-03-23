@@ -5,7 +5,7 @@ export enum TaskStatusEnum {
 
 export class TaskEntity {
   public readonly id!: number
-  public userId!: string // sub from cognito
+  public userId!: number
   public title!: string
   public description?: string
   public status!: TaskStatusEnum

@@ -1,7 +1,8 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common'
 
 export interface IUser {
-  userId: string
+  id: number
+  refreshToken?: string
 }
 
 export const userFactory = (

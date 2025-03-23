@@ -7,7 +7,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
   ValidateIf,
   validateSync,
 } from 'class-validator'
@@ -64,13 +63,20 @@ class EnvironmentVariables {
   MAINTENANCE_MESSAGE?: string
 
   @IsString()
-  AWS_COGNITO_USER_POOL_ID?: string
+  @IsNotEmpty()
+  JWT_SECRET!: string
+
   @IsString()
-  AWS_COGNITO_CLIENT_ID?: string
-  @IsUrl()
-  AWS_COGNITO_AUTHORITY_URL?: string
+  @IsNotEmpty()
+  JWT_EXPIRATION_TIME!: string
+
   @IsString()
-  AWS_REGION?: string
+  @IsNotEmpty()
+  JWT_REFRESH_SECRET!: string
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_REFRESH_EXPIRATION_TIME!: string
 }
 
 export function validate(config: Record<string, unknown>) {

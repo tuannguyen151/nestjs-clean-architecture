@@ -117,45 +117,4 @@ describe('EnvironmentConfigService', () => {
     expect(result).toBe(expectedValue)
     expect(configService.get).toHaveBeenCalledWith('DATABASE_SYNCHRONIZE')
   })
-
-  it('should return the correct AWS_COGNITO_USER_POOL_ID value', () => {
-    const expectedValue = 'us-east-1_123456789'
-    jest.spyOn(configService, 'get').mockReturnValueOnce(expectedValue)
-
-    const result = service.getAwsCognitoUserPoolId()
-
-    expect(result).toBe(expectedValue)
-    expect(configService.get).toHaveBeenCalledWith('AWS_COGNITO_USER_POOL_ID')
-  })
-
-  it('should return the correct AWS_COGNITO_CLIENT_ID value', () => {
-    const expectedValue = '123456789'
-    jest.spyOn(configService, 'get').mockReturnValueOnce(expectedValue)
-
-    const result = service.getAwsCognitoClientId()
-
-    expect(result).toBe(expectedValue)
-    expect(configService.get).toHaveBeenCalledWith('AWS_COGNITO_CLIENT_ID')
-  })
-
-  it('should return the correct AWS_COGNITO_AUTHORITY_URL value', () => {
-    const expectedValue =
-      'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_123456789'
-    jest.spyOn(configService, 'get').mockReturnValueOnce(expectedValue)
-
-    const result = service.getAwsCognitoAuthorityUrl()
-
-    expect(result).toBe(expectedValue)
-    expect(configService.get).toHaveBeenCalledWith('AWS_COGNITO_AUTHORITY_URL')
-  })
-
-  it('should return the correct AWS_REGION value', () => {
-    const expectedValue = 'us-east-1'
-    jest.spyOn(configService, 'get').mockReturnValueOnce(expectedValue)
-
-    const result = service.getAwsRegion()
-
-    expect(result).toBe(expectedValue)
-    expect(configService.get).toHaveBeenCalledWith('AWS_REGION')
-  })
 })

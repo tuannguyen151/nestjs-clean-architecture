@@ -2,13 +2,12 @@ import { ApiProperty } from '@nestjs/swagger'
 
 export class LoginPresenter {
   @ApiProperty({ required: true })
-  accessToken: string
+  accessToken!: string
 
   @ApiProperty({ required: true })
-  refreshToken: string
+  refreshToken!: string
 
-  constructor({ accessToken, refreshToken }: LoginPresenter) {
-    this.accessToken = accessToken
-    this.refreshToken = refreshToken
+  constructor(loginPresenter: LoginPresenter) {
+    Object.assign(this, loginPresenter)
   }
 }

@@ -30,7 +30,7 @@ export class TaskRepository implements ITaskRepositoryInterface {
     size,
     status,
     userId,
-  }: ISearchTasksParams & { userId: string }): Promise<Task[]> {
+  }: ISearchTasksParams & { userId: number }): Promise<Task[]> {
     const tasks = await this.taskRepository.find({
       where: {
         userId: userId,
@@ -58,7 +58,7 @@ export class TaskRepository implements ITaskRepositoryInterface {
     userId,
   }: {
     id: number
-    userId: string
+    userId: number
   }): Promise<Task | null> {
     return await this.taskRepository.findOne({
       where: {
@@ -74,7 +74,7 @@ export class TaskRepository implements ITaskRepositoryInterface {
       userId,
     }: {
       id: number
-      userId: string
+      userId: number
     },
     task: Partial<Task>,
   ): Promise<boolean> {
@@ -94,7 +94,7 @@ export class TaskRepository implements ITaskRepositoryInterface {
   async countTasks({
     userId,
     status,
-  }: ICountTasksParams & { userId: string }): Promise<number> {
+  }: ICountTasksParams & { userId: number }): Promise<number> {
     return await this.taskRepository.count({
       where: {
         userId: userId,

@@ -9,22 +9,22 @@ export interface ICountTasksParams {
   status?: TaskStatusEnum
 }
 
-export const TASK_REPOSITORY = 'TaskRepositoryInterface'
+export const TASK_REPOSITORY = 'TASK_REPOSITORY_INTERFACE'
 export interface ITaskRepositoryInterface {
   findTasks(
-    payload: ISearchTasksParams & { userId: string },
+    payload: ISearchTasksParams & { userId: number },
   ): Promise<TaskEntity[]>
   createTask(task: Partial<TaskEntity>): Promise<TaskEntity>
   findOnTask(payload: {
     id: number
-    userId: string
+    userId: number
   }): Promise<TaskEntity | null>
   updateTask(
     params: {
       id: number
-      userId: string
+      userId: number
     },
     task: Partial<TaskEntity>,
   ): Promise<boolean>
-  countTasks(params: ICountTasksParams & { userId: string }): Promise<number>
+  countTasks(params: ICountTasksParams & { userId: number }): Promise<number>
 }

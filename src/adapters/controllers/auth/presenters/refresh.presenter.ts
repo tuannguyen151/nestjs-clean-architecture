@@ -1,10 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger'
+import { LoginPresenter } from './login.presenter'
 
-export class RefreshPresenter {
-  @ApiProperty({ required: true })
-  accessToken: string
-
-  constructor({ accessToken }: RefreshPresenter) {
-    this.accessToken = accessToken
-  }
-}
+export class RefreshPresenter extends LoginPresenter {}

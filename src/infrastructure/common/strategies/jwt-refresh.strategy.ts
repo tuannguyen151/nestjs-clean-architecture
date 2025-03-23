@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 
+import { Request } from 'express'
 import { ExtractJwt, Strategy } from 'passport-jwt'
 
 import { IJwtServicePayload } from '@domain/services/jwt.interface'
@@ -11,23 +12,29 @@ import { ExceptionsService } from '@infrastructure/exceptions/exceptions.service
 import { LoggerService } from '@infrastructure/logger/logger.service'
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtRefreshStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
   constructor(
+    private readonly environmentConfigService: EnvironmentConfigService,
     private readonly logger: LoggerService,
     private readonly exceptionService: ExceptionsService,
-    private readonly environmentConfigService: EnvironmentConfigService,
     private readonly userRepository: UserRepository,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: environmentConfigService.getJwtSecret(),
+      secretOrKey: environmentConfigService.getJwtRefreshSecret(),
+      passReqToCallback: true,
     })
   }
 
-  async validate(payload: IJwtServicePayload) {
-    const user = await this.userRepository.getUserById(payload.id)
+  async validate(request: Request, payload: IJwtServicePayload) {
+    const refreshToken = request.headers['authorization']
+      ?.replace('Bearer', '')
+      .trim()
 
+    const user = await this.userRepository.getUserById(payload.id)
     if (!user) {
       this.logger.warn('JwtStrategy', 'User not found')
       this.exceptionService.unauthorizedException({
@@ -36,6 +43,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       })
     }
 
-    return user
+    return { ...user, refreshToken }
   }
 }

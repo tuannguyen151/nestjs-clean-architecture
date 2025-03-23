@@ -15,7 +15,7 @@ export class GetDetailTaskUseCase {
     private readonly exceptionsService: IException,
   ) {}
 
-  async execute(payload: { id: number; userId: string }) {
+  async execute(payload: { id: number; userId: number }) {
     const task = await this.taskRepository.findOnTask(payload)
 
     if (!task) {

@@ -17,7 +17,7 @@ export class UpdateTaskUseCase {
   ) {}
 
   async execute(
-    params: { id: number; userId: string },
+    params: { id: number; userId: number },
     taskPayload: Partial<TaskEntity>,
   ): Promise<boolean> {
     await this.checkTaskExistence(params)
@@ -27,7 +27,7 @@ export class UpdateTaskUseCase {
 
   private async checkTaskExistence(params: {
     id: number
-    userId: string
+    userId: number
   }): Promise<void> {
     const task = await this.taskRepository.findOnTask(params)
 

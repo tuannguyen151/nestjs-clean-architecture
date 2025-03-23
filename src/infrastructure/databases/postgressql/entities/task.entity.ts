@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -9,12 +10,16 @@ import {
 import { TaskEntity, TaskStatusEnum } from '@domain/entities/task.entity'
 
 @Entity('tasks')
+@Index('IDX_tasks_user_id', ['userId'])
 export class Task implements TaskEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'bigint',
+    primaryKeyConstraintName: 'PK_tasks_id',
+  })
   public readonly id!: number
 
-  @Column('varchar', { name: 'user_id', length: 255 })
-  public userId!: string
+  @Column('bigint', { name: 'user_id' })
+  public userId!: number
 
   @Column('varchar', { length: 255 })
   public title!: string

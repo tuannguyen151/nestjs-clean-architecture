@@ -65,7 +65,7 @@ export class TasksController {
   @ApiResponseType(CountTasksPresenter, false)
   async count(
     @Query() countTaskDto: CountTasksDto,
-    @User('userId') userId: string,
+    @User('id') userId: number,
   ) {
     const count = await this.countTasksUseCase.execute({
       userId: userId,
@@ -82,7 +82,7 @@ export class TasksController {
   @ApiResponseType(GetListTasksPresenter, true)
   async findAll(
     @Query() querySearchParams: GetListTasksDto,
-    @User('userId') userId: string,
+    @User('id') userId: number,
   ) {
     const tasks = await this.getListTasksUseCase.execute({
       ...querySearchParams,
@@ -104,7 +104,7 @@ export class TasksController {
   })
   async create(
     @Body() createTaskDto: CreateTaskDto,
-    @User('userId') userId: string,
+    @User('id') userId: number,
   ) {
     const task = await this.createTaskUseCase.execute({
       ...createTaskDto,
@@ -122,7 +122,7 @@ export class TasksController {
   @ApiNotFoundResponse({ description: 'Task not found' })
   @ApiResponseType(GetDetailTaskPresenter, false)
   async findOne(
-    @User('userId') userId: string,
+    @User('id') userId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
     const task = await this.getDetailTaskUseCase.execute({
@@ -140,7 +140,7 @@ export class TasksController {
   @ApiNotFoundResponse({ description: 'Task not found' })
   @ApiOkResponse({ description: 'Task updated' })
   async update(
-    @User('userId') userId: string,
+    @User('id') userId: number,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTaskDto: UpdateTaskDto,
   ) {

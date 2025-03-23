@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import { IAwsConfig } from '@domain/config/aws.interface'
 import { IDatabaseConfig } from '@domain/config/database.interface'
+import { IJwtConfig } from '@domain/config/jwt.interface'
 
 @Injectable()
-export class EnvironmentConfigService implements IDatabaseConfig, IAwsConfig {
-  constructor(private configService: ConfigService) {}
+export class EnvironmentConfigService implements IDatabaseConfig, IJwtConfig {
+  constructor(private readonly configService: ConfigService) {}
 
   getNodeEnv(): string {
     return this.configService.get<string>('NODE_ENV') || ''
@@ -44,19 +44,19 @@ export class EnvironmentConfigService implements IDatabaseConfig, IAwsConfig {
     return this.configService.get<boolean>('DATABASE_SYNCHRONIZE') || false
   }
 
-  getAwsCognitoUserPoolId(): string {
-    return this.configService.get<string>('AWS_COGNITO_USER_POOL_ID') || ''
+  getJwtSecret(): string {
+    return this.configService.get<string>('JWT_SECRET') || ''
   }
 
-  getAwsCognitoClientId(): string {
-    return this.configService.get<string>('AWS_COGNITO_CLIENT_ID') || ''
+  getJwtExpirationTime(): string {
+    return this.configService.get<string>('JWT_EXPIRATION_TIME') || ''
   }
 
-  getAwsCognitoAuthorityUrl(): string {
-    return this.configService.get<string>('AWS_COGNITO_AUTHORITY_URL') || ''
+  getJwtRefreshSecret(): string {
+    return this.configService.get<string>('JWT_REFRESH_SECRET') || ''
   }
 
-  getAwsRegion(): string {
-    return this.configService.get<string>('AWS_REGION') || ''
+  getJwtRefreshExpirationTime(): string {
+    return this.configService.get<string>('JWT_REFRESH_EXPIRATION_TIME') || ''
   }
 }

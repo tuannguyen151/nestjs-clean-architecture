@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Post, UseGuards } from '@nestjs/common'
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
   ApiOperation,
@@ -7,12 +8,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger'
 
-import { GetNewIdTokenUseCase } from '@use-cases/auth/get-new-id-token.use-case'
 import { LoginUseCase } from '@use-cases/auth/login.use-case'
+import { RefreshUseCase } from '@use-cases/auth/refresh.use-case'
 
 import { ApiResponseType } from '../common/decorators/swagger-response.decorator'
+import { User } from '../common/decorators/user.decorator'
+import JwtRefreshGuard from '../common/guards/jwt-refresh.guard'
 import { LoginDto } from './dto/login.dto'
-import { RefreshDto } from './dto/refresh.dto'
 import { LoginPresenter } from './presenters/login.presenter'
 import { RefreshPresenter } from './presenters/refresh.presenter'
 
@@ -24,38 +26,34 @@ import { RefreshPresenter } from './presenters/refresh.presenter'
   description: 'No authorization token was found',
 })
 @ApiResponse({ status: 500, description: 'Internal error' })
-@ApiExtraModels(LoginPresenter)
 export class AuthController {
   constructor(
     private readonly loginUseCase: LoginUseCase,
-    private readonly getNewIdTokenUseCase: GetNewIdTokenUseCase,
+    private readonly refreshUseCase: RefreshUseCase,
   ) {}
 
   @Post('login')
   @ApiBody({ type: LoginDto })
   @ApiOperation({ summary: 'Login', description: 'Login a user' })
+  @ApiExtraModels(LoginPresenter)
   @ApiResponseType(LoginPresenter, false)
   async login(@Body() loginDto: LoginDto) {
-    const data = await this.loginUseCase.execute(loginDto)
-    if (!data) return
-
-    const { idToken, refreshToken } = data
-    return new LoginPresenter({ accessToken: idToken, refreshToken })
+    const tokens = await this.loginUseCase.execute(loginDto)
+    return new LoginPresenter(tokens)
   }
 
   @Post('refresh')
+  @UseGuards(JwtRefreshGuard)
+  @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get new access token',
-    description: 'Get new access token using refresh token',
+    summary: 'Get new tokens',
+    description: 'Get new access and refresh tokens using refresh token',
   })
-  @ApiBody({ type: RefreshDto })
   @ApiExtraModels(RefreshPresenter)
   @ApiResponseType(RefreshPresenter, false)
-  async refresh(@Body() body: RefreshDto) {
-    const accessToken = await this.getNewIdTokenUseCase.execute(
-      body.refreshToken,
-    )
+  async refresh(@User('id') userId: number) {
+    const tokens = await this.refreshUseCase.execute({ userId })
 
-    return new RefreshPresenter({ accessToken })
+    return new RefreshPresenter(tokens)
   }
 }
