@@ -1,3 +1,4 @@
+export const LOGGER = 'LOGGER_INTERFACE'
 export interface ILogger {
   debug(context: string, message: string): void
   log(context: string, message: string): void

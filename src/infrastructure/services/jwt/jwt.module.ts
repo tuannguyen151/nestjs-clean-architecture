@@ -4,13 +4,21 @@ import {
   JwtService as JwtBaseService,
 } from '@nestjs/jwt'
 
+import { JWT_SERVICE } from '@domain/services/jwt.interface'
+
 import { EnvironmentConfigModule } from '@infrastructure/config/environment/environment-config.module'
 
 import { JwtService } from './jwt.service'
 
 @Module({
   imports: [JwtBaseModule.register({}), EnvironmentConfigModule],
-  providers: [JwtBaseService, JwtService],
-  exports: [JwtBaseService, JwtService],
+  providers: [
+    JwtBaseService,
+    {
+      provide: JWT_SERVICE,
+      useClass: JwtService,
+    },
+  ],
+  exports: [JWT_SERVICE],
 })
 export class JwtModule {}

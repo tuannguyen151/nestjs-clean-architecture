@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { EXCEPTIONS } from '@domain/exceptions/exceptions.interface'
 import { USER_REPOSITORY } from '@domain/repositories/user.repository.interface'
-import { BCRYPT_SERVICE } from '@domain/services/bcrypt.interface'
-import { JWT_SERVICE } from '@domain/services/jwt.interface'
 
 import { LoginUseCase } from '@use-cases/auth/login.use-case'
 import { RefreshUseCase } from '@use-cases/auth/refresh.use-case'
@@ -14,31 +11,20 @@ import { AuthController } from '@adapters/controllers/auth/auth.controller'
 import { EnvironmentConfigModule } from '@infrastructure/config/environment/environment-config.module'
 import { User } from '@infrastructure/databases/postgressql/entities/user.entity'
 import { UserRepository } from '@infrastructure/databases/postgressql/repositories/user.repository'
-import { ExceptionsService } from '@infrastructure/exceptions/exceptions.service'
-import { BcryptService } from '@infrastructure/services/bcrypt/bcrypt.service'
+import { ExceptionsModule } from '@infrastructure/exceptions/exceptions.module'
+import { BcryptModule } from '@infrastructure/services/bcrypt/bcrypt.module'
 import { JwtModule } from '@infrastructure/services/jwt/jwt.module'
-import { JwtService } from '@infrastructure/services/jwt/jwt.service'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     EnvironmentConfigModule,
     JwtModule,
+    BcryptModule,
+    ExceptionsModule,
   ],
   controllers: [AuthController],
   providers: [
-    {
-      provide: EXCEPTIONS,
-      useClass: ExceptionsService,
-    },
-    {
-      provide: BCRYPT_SERVICE,
-      useClass: BcryptService,
-    },
-    {
-      provide: JWT_SERVICE,
-      useClass: JwtService,
-    },
     {
       provide: USER_REPOSITORY,
       useClass: UserRepository,
