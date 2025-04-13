@@ -1,15 +1,12 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common'
 
-export interface IUser {
-  id: number
-  refreshToken?: string
-}
+import { UserEntity } from '@domain/entities/user.entity'
 
-export const userFactory = (
-  data: keyof IUser | undefined,
+export const USER_FACTORY_DATA = (
+  data: keyof UserEntity | undefined,
   ctx: ExecutionContext,
-): IUser | IUser[keyof IUser] => {
-  const request = ctx.switchToHttp().getRequest<{ user: IUser }>()
+): UserEntity | UserEntity[keyof UserEntity] => {
+  const request = ctx.switchToHttp().getRequest<{ user: UserEntity }>()
   const user = request.user
 
   return data ? user?.[data] : user
@@ -21,4 +18,4 @@ export const userFactory = (
  * @param ctx - The execution context of the request.
  * @returns The user object or a specific property of the user object.
  */
-export const User = createParamDecorator(userFactory)
+export const User = createParamDecorator(USER_FACTORY_DATA)
