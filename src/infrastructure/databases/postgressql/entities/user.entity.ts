@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
+import { RoleEnum } from '@domain/entities/role.entity'
 import { UserEntity } from '@domain/entities/user.entity'
 
 @Entity('users')
@@ -23,6 +24,9 @@ export class User implements UserEntity {
 
   @Column('text')
   password!: string
+
+  @Column('smallint', { default: RoleEnum.User })
+  public role!: RoleEnum
 
   @Column('timestamp', { name: 'last_login', nullable: true })
   public lastLogin?: Date

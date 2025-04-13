@@ -12,12 +12,13 @@ import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
 
 import { TaskRepository } from '@infrastructure/databases/postgressql/repositories/task.repository'
 import { ExceptionsService } from '@infrastructure/exceptions/exceptions.service'
+import { CaslModule } from '@infrastructure/services/casl/casl.module'
 
 import { TasksController } from '../adapters/controllers/tasks/tasks.controller'
 import { Task } from '../infrastructure/databases/postgressql/entities/task.entity'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task])],
+  imports: [TypeOrmModule.forFeature([Task]), CaslModule],
   controllers: [TasksController],
   providers: [
     {

@@ -25,12 +25,14 @@ import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
 import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
 import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
 
+import { CheckPolicies } from '../common/decorators/check-policies.decorator'
 import {
   ApiCreatedResponseType,
   ApiResponseType,
 } from '../common/decorators/swagger-response.decorator'
 import { User } from '../common/decorators/user.decorator'
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard'
+import { PoliciesGuard } from '../common/guards/policies.guard'
 import { CountTasksDto } from './dto/count-tasks.dto'
 import { CreateTaskDto } from './dto/create-task.dto'
 import { GetListTasksDto } from './dto/get-list-tasks.dto'
@@ -47,7 +49,9 @@ import { GetListTasksPresenter } from './presenters/get-list-tasks.presenter'
   description: 'No authorization token was found',
 })
 @ApiResponse({ status: 500, description: 'Internal error' })
+@ApiResponse({ status: 403, description: 'Forbidden access' })
 @ApiExtraModels(GetListTasksPresenter)
+@UseGuards(JwtAuthGuard, PoliciesGuard)
 export class TasksController {
   constructor(
     private readonly getListTasksUseCase: GetListTasksUseCase,
@@ -58,11 +62,11 @@ export class TasksController {
   ) {}
 
   @Get('count')
-  @UseGuards(JwtAuthGuard)
   @ApiExtraModels(CountTasksPresenter)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Count', description: 'Count tasks' })
   @ApiResponseType(CountTasksPresenter, false)
+  @CheckPolicies({ action: 'read', subject: 'Task' })
   async count(
     @Query() countTaskDto: CountTasksDto,
     @User('id') userId: number,
@@ -76,10 +80,10 @@ export class TasksController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List', description: 'List tasks' })
   @ApiResponseType(GetListTasksPresenter, true)
+  @CheckPolicies({ action: 'read', subject: 'Task' })
   async findAll(
     @Query() querySearchParams: GetListTasksDto,
     @User('id') userId: number,
@@ -93,7 +97,6 @@ export class TasksController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @ApiExtraModels(CreateTaskPresenter)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create', description: 'Create a task' })
@@ -102,6 +105,7 @@ export class TasksController {
     status: 400,
     description: 'Bad request',
   })
+  @CheckPolicies({ action: 'create', subject: 'Task' })
   async create(
     @Body() createTaskDto: CreateTaskDto,
     @User('id') userId: number,
@@ -115,12 +119,12 @@ export class TasksController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
   @ApiExtraModels(GetDetailTaskPresenter)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Detail', description: 'Detail task' })
   @ApiNotFoundResponse({ description: 'Task not found' })
   @ApiResponseType(GetDetailTaskPresenter, false)
+  @CheckPolicies({ action: 'read', subject: 'Task' })
   async findOne(
     @User('id') userId: number,
     @Param('id', ParseIntPipe) id: number,
@@ -134,11 +138,11 @@ export class TasksController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update', description: 'Update a task' })
   @ApiNotFoundResponse({ description: 'Task not found' })
   @ApiOkResponse({ description: 'Task updated' })
+  @CheckPolicies({ action: 'update', subject: 'Task' })
   async update(
     @User('id') userId: number,
     @Param('id', ParseIntPipe) id: number,
