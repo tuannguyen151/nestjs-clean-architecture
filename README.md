@@ -70,6 +70,7 @@ Current Package Structure and Future Ideal Structure
 ├── database - Contains database-related files, such as migrations, seeders, and scripts.
 |
 ├── test - Contains testing-related files, including unit and integration tests.
+│   └── stubs - Contains reusable mock data and stub objects for testing purposes.
 |
 ├── docker-compose.yml - A Docker Compose configuration file for defining and running multi-container Docker applications.
 ├── Dockerfile - Contains instructions for Docker to build an image of the application.
