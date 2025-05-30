@@ -1,0 +1,619 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Project Security Best Practices
+
+## Domain Layer Security
+
+### Domain Entities Protection
+- Keep entities simple with public readonly fields for IDs
+- Use enums for controlled values (status, roles)
+- Avoid complex business logic in entities
+- Use proper typing for all entity fields
+- Keep entities focused on data structure only
+
+```typescript
+// Good: Simple domain entity (src/domain/entities)
+import { RoleEnum } from './role.entity'
+
+export class UserEntity {
+  public readonly id!: number
+  public username!: string
+  password!: string // Will be hashed by infrastructure
+  public role!: RoleEnum
+  public lastLogin?: Date
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
+}
+```
+
+### Domain Services Security
+- Keep sensitive business logic in domain services (src/domain/services)
+- Implement domain events for audit trails
+- Use domain exceptions for business rule violations (src/domain/exceptions)
+- Never let infrastructure concerns leak into domain layer
+
+### Repository Interfaces Security
+- Define clear contracts for data access in domain layer (src/domain/repositories)
+- Include security requirements in repository interfaces
+- Use domain-specific types and entities
+- Define proper method signatures with security in mind
+- Never include implementation details
+
+```typescript
+// Good: Secure repository interface (src/domain/repositories)
+export const USER_REPOSITORY = 'USER_REPOSITORY_INTERFACE'
+export interface IUserRepository {
+  getUserByUsername(username: string): Promise<UserEntity | null>
+  getUserById(id: number): Promise<UserEntity | null>
+  updateLastLogin(id: number): Promise<void>
+  // No direct password access methods - handled through auth services
+}
+```
+
+### Service Interfaces Security
+- Define security service contracts in domain layer (src/domain/services)
+- Never expose sensitive implementation details
+- Use proper typing for security operations
+- Define clear contracts for authentication and authorization
+
+```typescript
+// Good: Secure service interfaces (src/domain/services)
+export const BCRYPT_SERVICE = 'BCRYPT_SERVICE_INTERFACE'
+export interface IBcryptService {
+  hash(hashString: string): Promise<string>
+  compare(password: string, hashPassword: string): Promise<boolean>
+  // Simple contract, no salt exposure or implementation details
+}
+```
+
+### Configuration Interfaces Security
+- Define configuration contracts in domain layer (src/domain/config)
+- Never include default values or sensitive information
+- Use proper typing for configuration parameters
+- Keep interfaces focused and minimal
+
+```typescript
+// Good: Secure configuration interfaces (src/domain/config)
+export interface IDatabaseConfig {
+  getDatabaseEngine(): string
+  getDatabaseHost(): string
+  getDatabasePort(): number
+  getDatabaseUser(): string
+  getDatabasePassword(): string
+  getDatabaseName(): string
+  getDatabaseSchema(): string
+  getDatabaseSync(): boolean
+  // Only method signatures, no implementations or defaults
+}
+
+export interface IJwtConfig {
+  getJwtSecret(): string
+  getJwtExpirationTime(): string
+  getJwtRefreshSecret(): string
+  getJwtRefreshExpirationTime(): string
+  // Separate secrets for access and refresh tokens
+}
+```
+
+### Logger Interface Security
+- Define logging contracts in domain layer (src/domain/logger)
+- Never expose sensitive data in logging interfaces
+- Use structured logging with context separation
+- Define clear log levels and purposes
+
+```typescript
+// Good: Secure logger interface (src/domain/logger)
+export const LOGGER = 'LOGGER_INTERFACE'
+export interface ILogger {
+  debug(context: string, message: string): void
+  log(context: string, message: string): void
+  error(context: string, message: string, trace?: string): void
+  warn(context: string, message: string): void
+  verbose(context: string, message: string): void
+  // Context-based logging, no sensitive data exposure
+}
+```
+
+### Exception Interfaces Security
+- Define exception contracts in domain layer (src/domain/exceptions)
+- Never expose internal system details
+- Use structured error responses
+- Implement proper error categorization
+
+```typescript
+// Good: Secure exception interfaces (src/domain/exceptions)
+export interface IFormatExceptionMessage {
+  type: string
+  message: string
+  // No sensitive data in exception messages
+}
+
+export interface IFormatExceptionResponse {
+  statusCode: number
+  timestamp: string // ISO date string
+  path: string
+  error: {
+    type: string
+    message: string
+  }
+  // Structured, safe error responses
+}
+
+export const EXCEPTIONS = 'IException'
+export interface IException {
+  badRequestException(data: IFormatExceptionMessage): Error
+  internalServerErrorException(data?: IFormatExceptionMessage): Error
+  forbiddenException(data?: IFormatExceptionMessage): Error
+  unauthorizedException(data?: IFormatExceptionMessage): Error
+  notFoundException(data?: IFormatExceptionMessage): Error
+  // Clear error categorization without implementation details
+}
+```
+
+### Domain Utils Security
+- Keep utils pure and stateless (src/domain/utils)
+- Never include sensitive operations in utils
+- Use static methods for utility functions
+- Avoid external dependencies
+
+```typescript
+// Good: Secure domain utils (src/domain/utils)
+export class StringUtils {
+  static capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  }
+
+  static removeSpaces(str: string): string {
+    return str.replace(/\s+/g, '')
+  }
+  // Pure functions only, no sensitive operations
+}
+```
+
+### Permission and Authorization Types
+- Define clear permission types and enums
+- Use type-safe permission systems
+- Avoid magic strings for permissions
+- Keep authorization logic abstract
+
+```typescript
+// Good: Secure permission types (src/domain/entities)
+export type TAction = 'manage' | 'create' | 'read' | 'update' | 'delete'
+export type TSubject = 'all' | 'Task'
+
+export interface IPolicyHandler {
+  action: TAction
+  subject: TSubject
+  field?: string
+}
+// Type-safe permissions without implementation details
+```
+
+### Domain Layer Security Principles
+1. **Interface-Only Approach**: Domain layer only defines contracts, never implementations
+2. **No Infrastructure Dependencies**: Domain interfaces should not depend on external libraries
+3. **Security by Design**: All interfaces should consider security requirements from the start
+4. **Type Safety**: Use TypeScript's type system to enforce security constraints
+5. **Separation of Concerns**: Keep business rules separate from security implementations
+6. **Clean Contracts**: Interfaces should be minimal and focused
+7. **No Sensitive Defaults**: Never include default values or sensitive information in interfaces
+8. **Error Handling**: Define clear error contracts without exposing internal details
+
+### Domain Entity Security Guidelines
+- Use readonly for ID fields to prevent modification
+- Use enums for controlled values (status, roles, etc.)
+- Keep password fields typed but leave hashing to infrastructure
+- Include audit fields (createdAt, updatedAt) for security tracking
+- Use optional fields appropriately for data validation
+- Avoid complex business logic in entity definitions
+
+### Domain Interface Design Security
+- Always include user context in repository methods for data isolation
+- Separate concerns between different service interfaces
+- Use token types to distinguish between access and refresh tokens
+- Include proper error handling in all interface definitions
+- Design interfaces to prevent data leakage between users
+- Use dependency injection tokens for loose coupling
+
+## Infrastructure Layer Security
+
+### Database Security (src/infrastructure/databases/postgresql)
+- Use parameterized queries always (TypeORM handles this)
+- Implement connection pooling with authentication
+- Use database-level encryption for sensitive fields
+- Implement audit logging at repository level
+- Use transactions for consistency and security
+
+```typescript
+// Good: Secure repository implementation (src/infrastructure/databases/postgresql/repositories)
+@Injectable()
+export class UserRepository implements IUserRepository {
+  constructor(
+    @InjectRepository(User)
+    private readonly userEntityRepository: Repository<User>,
+  ) {}
+
+  async getUserByUsername(username: string) {
+    return await this.userEntityRepository.findOne({
+      where: {
+        username,
+      },
+    })
+  }
+}
+```
+
+### Infrastructure Configuration Security (src/infrastructure/config)
+- Use environment-specific configurations
+- Implement configuration validation with class-validator
+- Never hardcode secrets in configuration files
+- Use ConfigService for all configuration access
+- Implement configuration encryption for sensitive values
+
+```typescript
+// Good: Secure configuration (src/infrastructure/config)
+@Injectable()
+export class DatabaseConfig {
+  @IsString()
+  @IsNotEmpty()
+  host: string;
+
+  @IsNumber()
+  @Min(1024)
+  @Max(65535)
+  port: number;
+
+  @IsString()
+  @MinLength(8)
+  password: string;
+}
+```
+
+### Infrastructure Logger Security (src/infrastructure/logger)
+- Never log sensitive information (passwords, tokens, PII)
+- Implement structured logging with correlation IDs
+- Use log levels appropriately (DEBUG should not contain secrets)
+- Implement log sanitization for user inputs
+- Store logs securely with proper retention policies
+
+### Infrastructure Services Security (src/infrastructure/services)
+- Implement secure external API clients
+- Use proper authentication for third-party services
+- Validate responses from external services
+- Implement circuit breaker patterns for resilience
+- Log security events from external integrations
+
+## Adapters Layer Security
+
+### Controllers Security (src/adapters/controllers)
+- Validate all inputs using DTOs with class-validator
+- Implement proper error handling without information leakage
+- Use Guards for authentication and authorization
+- Implement rate limiting per endpoint
+- Sanitize outputs in Presenters
+
+```typescript
+// Good: Secure controller (src/adapters/controllers/[feature])
+@Controller('users')
+@UseGuards(JwtAuthGuard, RolesGuard)
+export class UserController {
+  @Post()
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  @UseInterceptors(LoggingInterceptor)
+  async createUser(@Body() dto: CreateUserDto): Promise<UserPresenter> {
+    // Secure implementation
+  }
+}
+```
+
+### DTOs Validation (src/adapters/controllers/[feature]/dto)
+- Use class-validator for all input validation
+- Implement sanitization decorators
+- Use whitelist: true to strip unknown properties
+- Validate nested objects properly
+- Implement custom validators for business rules
+
+```typescript
+// Good: Secure DTO (src/adapters/controllers/[feature]/dto)
+export class CreateUserDto {
+  @IsEmail()
+  @IsNotEmpty()
+  @Sanitize()
+  email: string;
+
+  @IsString()
+  @MinLength(8)
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+  password: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  @Sanitize()
+  name?: string;
+}
+```
+
+### Presenters Security (src/adapters/controllers/[feature]/presenters)
+- Never expose sensitive domain data
+- Implement data masking for PII
+- Use explicit field mapping, not object spreading
+- Implement role-based data filtering
+- Sanitize all output data
+
+```typescript
+// Good: Secure presenter (src/adapters/controllers/[feature]/presenters)
+export class UserPresenter {
+  id: string;
+  email: string;
+  name?: string;
+  // Never include password, tokens, etc.
+
+  static fromDomain(user: User, viewerRole: Role): UserPresenter {
+    return {
+      id: user.id.value,
+      email: viewerRole.canViewEmail() ? user.email.value : '***@***.***',
+      name: user.name?.value
+    };
+  }
+}
+```
+
+### Gateways Security (src/adapters/gateways)
+- Implement authentication for WebSocket connections
+- Validate all incoming real-time data
+- Use rate limiting for WebSocket events
+- Implement proper error handling for real-time communication
+- Audit all real-time events
+
+```typescript
+// Good: Secure gateway (src/adapters/gateways/[feature])
+@WebSocketGateway({
+  cors: {
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || [],
+    credentials: true
+  }
+})
+@UseGuards(WsAuthGuard)
+export class ChatGateway {
+  @SubscribeMessage('sendMessage')
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  async handleMessage(
+    @MessageBody() dto: SendMessageDto,
+    @ConnectedSocket() client: AuthenticatedSocket
+  ): Promise<void> {
+    // Secure implementation with user validation
+  }
+}
+```
+
+## Use Cases Security (src/use-cases)
+
+### Business Logic Protection
+- Implement authorization checks in use cases
+- Use domain events for security auditing
+- Validate business rules before persistence
+- Implement idempotency for critical operations
+- Use saga pattern for distributed transactions
+
+```typescript
+// Good: Secure use case (src/use-cases)
+@Injectable()
+export class CreateTaskUseCase {
+  constructor(
+    @Inject(TASK_REPOSITORY)
+    private readonly taskRepository: ITaskRepositoryInterface,
+  ) {}
+
+  async execute(task: Partial<TaskEntity>): Promise<TaskEntity> {
+    return await this.taskRepository.createTask(task)
+  }
+}
+```
+
+## Infrastructure Common Security (src/infrastructure/common)
+
+### Guards Security (src/infrastructure/common/guards)
+- Implement JWT authentication guards
+- Create role-based authorization guards
+- Implement resource-based authorization guards
+- Use dependency injection for guard dependencies
+- Handle guard failures gracefully
+
+```typescript
+// Good: Secure guard (src/infrastructure/common/guards)
+@Injectable()
+export class ResourceOwnerGuard implements CanActivate {
+  constructor(private readonly userService: UserService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const user = request.user;
+    const resourceId = request.params.id;
+
+    if (!user || !resourceId) {
+      return false;
+    }
+
+    return await this.userService.isResourceOwner(user.id, resourceId);
+  }
+}
+```
+
+### Interceptors Security (src/infrastructure/common/interceptors)
+- Implement request/response logging interceptors
+- Create security headers interceptor
+- Implement timeout interceptors for DoS protection
+- Add correlation ID interceptors for tracing
+- Implement response sanitization interceptors
+
+### Middleware Security (src/infrastructure/common/middlewares)
+- Implement CORS properly for your domain
+- Use helmet for security headers
+- Implement request size limits
+- Add request ID middleware for tracing
+- Implement IP whitelisting if needed
+
+### Pipes Security (src/infrastructure/common/pipes)
+- Use ValidationPipe with whitelist: true
+- Implement custom transformation pipes carefully
+- Add input sanitization pipes
+- Implement file upload validation pipes
+- Use ParseIntPipe, ParseUUIDPipe for type safety
+
+### Filters Security (src/infrastructure/common/filter)
+- Implement global exception filters
+- Never expose internal error details
+- Log security-related exceptions properly
+- Implement rate limiting for repeated errors
+- Return consistent error formats
+
+### Strategies Security (src/infrastructure/common/strategies)
+- Implement secure authentication strategies
+- Validate JWT tokens properly
+- Implement refresh token strategies
+- Use secure session management
+- Implement proper logout mechanisms
+
+## Modules Security (src/modules)
+
+### Module Organization Security
+- Separate public and private module APIs
+- Implement proper dependency injection
+- Use module-level guards and interceptors
+- Implement feature-specific security policies
+- Isolate sensitive modules from public access
+
+```typescript
+// Good: Secure module (src/modules)
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    EnvironmentConfigModule,
+    JwtModule,
+    BcryptModule,
+    ExceptionsModule,
+  ],
+  controllers: [AuthController],
+  providers: [
+    {
+      provide: USER_REPOSITORY,
+      useClass: UserRepository,
+    },
+
+    LoginUseCase,
+    RefreshUseCase,
+  ],
+})
+```
+
+## Application Entry Security (src/main.ts & src/app.module.ts)
+
+### Application Bootstrap Security
+- Configure CORS properly
+- Set up security headers with helmet
+- Implement global validation pipes
+- Configure rate limiting
+- Set up global exception filters
+
+```typescript
+// Good: Secure main.ts
+async function bootstrap(): Promise<void> {
+  const app = await NestFactory.create(AppModule);
+
+  // Security headers
+  app.use(helmet());
+
+  // CORS configuration
+  app.enableCors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || [],
+    credentials: true
+  });
+
+  // Global validation
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true
+  }));
+
+  // Global exception filter
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  await app.listen(process.env.PORT || 3000);
+}
+```
+
+## Testing Security (test directory)
+
+### Security Testing
+- Test authentication and authorization flows
+- Test input validation and sanitization
+- Test rate limiting and DoS protection
+- Test error handling without information leakage
+- Test with malicious inputs (SQL injection, XSS)
+
+### Test Data Security (test/stubs)
+- Use fake/mock data for tests, never real user data
+- Implement test database isolation
+- Clean up test data properly
+- Use test-specific configurations
+- Mock external services in tests
+
+## Environment & Deployment Security
+
+### Environment Variables
+- Use different .env files for different environments
+- Validate environment variables at startup
+- Use strong typing for environment configurations
+- Never commit .env files to version control
+- Use secrets management for production
+
+### Docker Security
+- Use non-root user in Docker containers
+- Update .dockerignore to exclude sensitive files
+- Use multi-stage builds to minimize image size
+- Scan Docker images for vulnerabilities
+- Use specific base image versions, not 'latest'
+
+### Serverless Security
+- Implement proper IAM roles and policies
+- Use environment-specific serverless configurations
+- Monitor function execution and costs
+- Implement cold start security considerations
+- Use VPC for database connections
+
+## Monitoring & Compliance
+
+### Security Monitoring
+- Log all authentication attempts
+- Monitor failed authorization attempts
+- Track unusual access patterns
+- Monitor configuration changes
+- Implement real-time alerting for security events
+
+### Compliance Requirements
+- Implement GDPR data handling (right to deletion, data portability)
+- Add audit trails for all data modifications
+- Implement data retention policies
+- Provide user consent management
+- Regular security assessments and penetration testing
+
+## Emergency Response
+
+### Security Incident Response
+- Implement graceful degradation for security incidents
+- Have rollback procedures for compromised deployments
+- Implement emergency access controls
+- Document incident response procedures
+- Regular security drills and training
+
+### Data Breach Response
+- Implement immediate containment procedures
+- Have user notification templates ready
+- Document all security events for compliance
+- Implement forensic logging for investigation
+- Regular backup and recovery testing
