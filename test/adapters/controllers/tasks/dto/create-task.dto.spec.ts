@@ -1,5 +1,7 @@
 import { validate } from 'class-validator'
 
+import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+
 import { CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
 
 describe('CreateTaskDto', () => {
@@ -64,5 +66,42 @@ describe('CreateTaskDto', () => {
     dto.dueDate = undefined
     const errors = await validate(dto)
     expect(errors.length).toEqual(0)
+  })
+
+  // Priority validation tests
+  it('should be valid when priority is not provided', async () => {
+    dto.priority = undefined
+    const errors = await validate(dto)
+    expect(errors.length).toEqual(0)
+  })
+
+  it('should be valid when priority is Low', async () => {
+    dto.priority = TaskPriorityEnum.Low
+    const errors = await validate(dto)
+    expect(errors.length).toEqual(0)
+  })
+
+  it('should be valid when priority is Medium', async () => {
+    dto.priority = TaskPriorityEnum.Medium
+    const errors = await validate(dto)
+    expect(errors.length).toEqual(0)
+  })
+
+  it('should be valid when priority is High', async () => {
+    dto.priority = TaskPriorityEnum.High
+    const errors = await validate(dto)
+    expect(errors.length).toEqual(0)
+  })
+
+  it('should be valid when priority is Urgent', async () => {
+    dto.priority = TaskPriorityEnum.Urgent
+    const errors = await validate(dto)
+    expect(errors.length).toEqual(0)
+  })
+
+  it('should fail when priority is not a valid enum value', async () => {
+    dto.priority = 999 as TaskPriorityEnum
+    const errors = await validate(dto)
+    expect(errors.length).toBeGreaterThan(0)
   })
 })

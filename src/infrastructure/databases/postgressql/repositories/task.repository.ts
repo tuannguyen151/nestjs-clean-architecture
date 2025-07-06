@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 
 import {
   ICountTasksParams,
@@ -15,9 +15,16 @@ const DEFAULT_SELECT_FIELDS: (keyof Task)[] = [
   'id',
   'title',
   'status',
+  'priority',
   'description',
   'dueDate',
 ]
+
+interface ITaskWhereCondition {
+  userId: number
+  status?: Task['status']
+  priority?: Task['priority'] | ReturnType<typeof In>
+}
 
 @Injectable()
 export class TaskRepository implements ITaskRepositoryInterface {
@@ -29,13 +36,28 @@ export class TaskRepository implements ITaskRepositoryInterface {
   async findTasks({
     size,
     status,
+    priority,
     userId,
   }: ISearchTasksParams & { userId: number }): Promise<Task[]> {
+    const whereCondition: ITaskWhereCondition = {
+      userId: userId,
+    }
+
+    if (status !== undefined) {
+      whereCondition.status = status
+    }
+
+    if (priority !== undefined) {
+      // Handle both single priority value and array of priorities
+      if (Array.isArray(priority)) {
+        whereCondition.priority = In(priority)
+      } else {
+        whereCondition.priority = priority
+      }
+    }
+
     const tasks = await this.taskRepository.find({
-      where: {
-        userId: userId,
-        status: status,
-      },
+      where: whereCondition,
       select: DEFAULT_SELECT_FIELDS,
       take: size,
       order: {
@@ -94,12 +116,27 @@ export class TaskRepository implements ITaskRepositoryInterface {
   async countTasks({
     userId,
     status,
+    priority,
   }: ICountTasksParams & { userId: number }): Promise<number> {
+    const whereCondition: ITaskWhereCondition = {
+      userId: userId,
+    }
+
+    if (status !== undefined) {
+      whereCondition.status = status
+    }
+
+    if (priority !== undefined) {
+      // Handle both single priority value and array of priorities
+      if (Array.isArray(priority)) {
+        whereCondition.priority = In(priority)
+      } else {
+        whereCondition.priority = priority
+      }
+    }
+
     return await this.taskRepository.count({
-      where: {
-        userId: userId,
-        status: status,
-      },
+      where: whereCondition,
     })
   }
 }

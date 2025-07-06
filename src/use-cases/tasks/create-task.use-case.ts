@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 
 import { TaskEntity } from '@domain/entities/task.entity'
+import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
 import {
   ITaskRepositoryInterface,
   TASK_REPOSITORY,
@@ -14,6 +15,12 @@ export class CreateTaskUseCase {
   ) {}
 
   async execute(task: Partial<TaskEntity>): Promise<TaskEntity> {
-    return await this.taskRepository.createTask(task)
+    // Set default priority to Medium if not provided
+    const taskWithDefaults = {
+      ...task,
+      priority: task.priority ?? TaskPriorityEnum.Medium,
+    }
+
+    return await this.taskRepository.createTask(taskWithDefaults)
   }
 }

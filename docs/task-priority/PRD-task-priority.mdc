@@ -1,0 +1,138 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Product Requirements Document: Task Priority Management
+
+## Introduction/Overview
+
+Tính năng Task Priority Management cho phép người dùng gán và quản lý mức độ ưu tiên cho các task, giúp tổ chức và xử lý công việc hiệu quả hơn. Tính năng này giải quyết vấn đề người dùng khó phân biệt và ưu tiên các task quan trọng trong danh sách công việc dài.
+
+**Goal**: Cung cấp hệ thống phân loại priority cho tasks để người dùng có thể tập trung vào những việc quan trọng nhất.
+
+## Goals
+
+1. Cho phép người dùng gán 4 mức độ ưu tiên (low, medium, high, urgent) cho mỗi task
+2. Cung cấp khả năng lọc và tìm kiếm task theo mức độ ưu tiên
+3. Hiển thị priority một cách trực quan và dễ nhận biết trong UI
+4. Đảm bảo data integrity thông qua validation chặt chẽ
+5. Hỗ trợ việc tạo và cập nhật task với priority information
+
+## User Stories
+
+1. **Tạo task với priority**: Là một user, tôi muốn có thể chỉ định mức độ ưu tiên khi tạo task mới để phân loại tầm quan trọng của công việc.
+
+2. **Cập nhật priority**: Là một user, tôi muốn có thể thay đổi mức độ ưu tiên của task hiện có khi tình huống thay đổi.
+
+3. **Lọc theo priority**: Là một user, tôi muốn có thể xem chỉ những task có mức độ ưu tiên cụ thể để tập trung vào những việc quan trọng.
+
+4. **Nhận diện priority nhanh**: Là một user, tôi muốn có thể nhận biết ngay mức độ ưu tiên của task thông qua giao diện trực quan (màu sắc, nhãn).
+
+## Functional Requirements
+
+1. **Data Model**: Thêm trường `priority` vào task entity với kiểu dữ liệu enum chứa 4 giá trị: `low`, `medium`, `high`, `urgent`.
+
+2. **Default Priority**: Khi tạo task mới mà không chỉ định priority, hệ thống phải tự động gán giá trị `medium`.
+
+3. **API Create/Update**:
+   - POST `/tasks` endpoint phải chấp nhận optional `priority` field
+   - PUT/PATCH `/tasks/:id` endpoint phải cho phép cập nhật `priority` field
+
+4. **API Filtering**: GET `/tasks` endpoint phải hỗ trợ query parameter `priority` cho phép:
+   - Lọc theo một priority: `?priority=high`
+   - Lọc theo nhiều priority: `?priority=high,urgent`
+
+5. **Data Validation**: Hệ thống phải validate giá trị priority và trả về error response với status code 400 khi nhận giá trị không hợp lệ.
+
+6. **Response Format**: Priority field phải được trả về trong tất cả API responses liên quan đến task data.
+
+7. **UI Display**: Giao diện phải hiển thị priority với system nhãn và màu sắc phân biệt rõ ràng cho từng mức độ.
+
+## Non-Goals (Out of Scope)
+
+1. **Auto Priority Assignment**: Hệ thống sẽ không tự động gán priority dựa trên deadline hoặc các factors khác.
+
+2. **Priority Inheritance**: Task con sẽ không tự động kế thừa priority từ task cha.
+
+3. **Priority-based Notifications**: Thông báo dựa trên priority sẽ được implement trong phase sau.
+
+4. **Priority History Tracking**: Việc theo dõi lịch sử thay đổi priority không nằm trong scope hiện tại.
+
+5. **Custom Priority Levels**: Người dùng không thể tạo custom priority levels ngoài 4 mức đã định sẵn.
+
+## Design Considerations
+
+1. **Color Coding System**:
+   - `urgent`: Đỏ (danger/critical)
+   - `high`: Cam (warning)
+   - `medium`: Xanh lam (info/default)
+   - `low`: Xám (muted/secondary)
+
+2. **UI Components**: Sử dụng badges/tags để hiển thị priority trong danh sách task.
+
+3. **Form Controls**: Dropdown/select component cho việc chọn priority khi tạo/edit task.
+
+## Technical Considerations
+
+1. **Database Schema**:
+   - Đã implement `priority` column trong tasks table với enum type (`TaskPriorityEnum`)
+   - Priority values được map với numeric values: Low=1, Medium=2, High=3, Urgent=4
+   - Default value là 'medium' (2) được set ở cả database level và application level
+   - Migration `1748624619778-add-priority-to-tasks.ts` đã update existing tasks với priority = medium
+
+2. **API Integration**:
+   - Đã cập nhật tất cả DTOs để include priority field với proper validation
+   - `CreateTaskDto` và `UpdateTaskDto` có optional priority field với `@IsEnum(TaskPriorityEnum)` validation
+   - `GetListTasksDto` và `CountTasksDto` hỗ trợ priority filtering với custom `@Transform` decorator
+   - Priority filtering hỗ trợ cả single value và comma-separated multiple values
+
+3. **Validation**:
+   - Enum validation implemented ở DTO level với decorators
+   - Custom transform logic cho comma-separated priority filtering
+   - Error handling với `BadRequestException` cho proper HTTP 400 responses
+   - Comprehensive unit tests cover all validation scenarios
+
+4. **Backward Compatibility**:
+   - Tất cả priority fields là optional trong APIs
+   - Existing tasks đã được migrated với priority = 'medium'
+   - Repository methods handle undefined priority values correctly
+   - Existing API calls work without priority parameters
+
+5. **Architecture**:
+   - Clean architecture principles maintained across all layers
+   - Domain layer: `TaskPriorityEnum` và `TaskEntity` với priority field
+   - Use cases layer: `CreateTaskUseCase`, `UpdateTaskUseCase`, `GetListTasksUseCase` hỗ trợ priority
+   - Adapters layer: DTOs và controllers với priority validation
+   - Infrastructure layer: Repository với priority filtering logic
+
+## Success Metrics
+
+1. **Adoption Rate**: 80% người dùng sử dụng priority feature trong vòng 1 tháng sau release.
+
+2. **Filter Usage**: 60% lượt truy cập tasks list sử dụng priority filter.
+
+3. **Data Quality**: 95% tasks có priority khác 'medium' (cho thấy user actively sử dụng feature).
+
+4. **Performance**: API response time không tăng quá 10% khi add priority filtering.
+
+## Implementation Status
+
+✅ **COMPLETED**: Tất cả technical requirements đã được implement và tested:
+- Database schema với migration
+- Domain entities và enums
+- Use cases với priority support
+- API endpoints với validation
+- Repository layer với filtering
+- Comprehensive unit tests
+- Backward compatibility ensured
+
+## Open Questions
+
+1. **Sorting Behavior**: Có nên implement auto-sort theo priority không? (urgent > high > medium > low)
+
+2. **Bulk Operations**: Có cần tính năng bulk update priority cho nhiều task cùng lúc không?
+
+3. **Task Dependencies**: Priority của task có ảnh hưởng đến dependent tasks không?
+
+4. **Mobile UX**: Priority display sẽ được optimize như thế nào cho mobile interface?

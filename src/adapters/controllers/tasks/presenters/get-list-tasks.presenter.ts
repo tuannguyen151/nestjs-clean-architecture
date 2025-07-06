@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 import { TaskStatusEnum } from '@domain/entities/task.entity'
+import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
 
 export class GetListTasksPresenter {
   @ApiProperty()
@@ -16,6 +17,13 @@ export class GetListTasksPresenter {
   })
   status: TaskStatusEnum
 
+  @ApiProperty({
+    required: true,
+    enum: TaskPriorityEnum,
+    description: 'Task priority: 1: Low, 2: Medium, 3: High, 4: Urgent',
+  })
+  priority: TaskPriorityEnum
+
   @ApiProperty({ required: false })
   description?: string
 
@@ -26,12 +34,14 @@ export class GetListTasksPresenter {
     id,
     title,
     status,
+    priority,
     description,
     dueDate,
   }: GetListTasksPresenter) {
     this.id = id
     this.title = title
     this.status = status
+    this.priority = priority
     this.description = description
     this.dueDate = dueDate
   }

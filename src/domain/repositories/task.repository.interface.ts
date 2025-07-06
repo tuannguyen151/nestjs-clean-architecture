@@ -1,12 +1,15 @@
 import { TaskEntity, TaskStatusEnum } from '../entities/task.entity'
+import { TaskPriorityEnum } from '../enums/task-priority.enum'
 
 export interface ISearchTasksParams {
   status?: TaskStatusEnum
+  priority?: TaskPriorityEnum | TaskPriorityEnum[]
   size?: number
 }
 
 export interface ICountTasksParams {
   status?: TaskStatusEnum
+  priority?: TaskPriorityEnum | TaskPriorityEnum[]
 }
 
 export const TASK_REPOSITORY = 'TASK_REPOSITORY_INTERFACE'

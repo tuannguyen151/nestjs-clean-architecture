@@ -1,11 +1,14 @@
+import { BadRequestException } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 
 import { Transform } from 'class-transformer'
 import { IsEnum, IsOptional } from 'class-validator'
 
 import { TaskStatusEnum } from '@domain/entities/task.entity'
+import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { ICountTasksParams } from '@domain/repositories/task.repository.interface'
 
-export class CountTasksDto {
+export class CountTasksDto implements ICountTasksParams {
   @ApiProperty({
     required: false,
     enum: TaskStatusEnum,
@@ -15,4 +18,35 @@ export class CountTasksDto {
   @IsEnum(TaskStatusEnum)
   @IsOptional()
   status?: TaskStatusEnum
+
+  @ApiProperty({
+    required: false,
+    enum: TaskPriorityEnum,
+    description:
+      'Priority filter: single value or comma-separated values (Low, Medium, High, Urgent)',
+    example: 'Medium,High',
+  })
+  @IsOptional()
+  @Transform(({ value }: { value: string }) => {
+    if (!value) return undefined
+
+    const values = value
+      .toString()
+      .split(',')
+      .map((v) => parseInt(v.trim()))
+
+    // Validate each value is a valid priority
+    const validPriorities = Object.values(TaskPriorityEnum)
+    for (const val of values) {
+      if (!validPriorities.includes(val)) {
+        throw new BadRequestException({
+          type: 'InvalidPriorityException',
+          message: `Invalid priority value: ${val}. Valid values are: ${validPriorities.join(', ')}`,
+        })
+      }
+    }
+
+    return values.length === 1 ? values[0] : values
+  })
+  priority?: TaskPriorityEnum | TaskPriorityEnum[]
 }

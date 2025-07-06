@@ -2,11 +2,14 @@ import { ApiProperty } from '@nestjs/swagger'
 
 import {
   IsDateString,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator'
+
+import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
 
 export class CreateTaskDto {
   @ApiProperty({
@@ -28,6 +31,15 @@ export class CreateTaskDto {
   @IsString()
   @MaxLength(20000)
   description?: string
+
+  @ApiProperty({
+    required: false,
+    enum: TaskPriorityEnum,
+    description: 'Task priority (Low, Medium, High, Urgent)',
+  })
+  @IsOptional()
+  @IsEnum(TaskPriorityEnum)
+  priority?: TaskPriorityEnum
 
   @ApiProperty({
     required: false,
