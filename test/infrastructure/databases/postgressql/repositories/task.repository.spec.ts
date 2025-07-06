@@ -36,7 +36,7 @@ describe('TaskRepository', () => {
       const mockParams = {
         size: 10,
         status: TaskStatusEnum.Completed,
-        userId: 'user123',
+        userId: 123,
       }
 
       jest.spyOn(taskEntityRepository, 'find').mockResolvedValueOnce(mockTasks)
@@ -49,7 +49,7 @@ describe('TaskRepository', () => {
           userId: mockParams.userId,
           status: mockParams.status,
         },
-        select: ['id', 'title', 'status', 'description', 'dueDate'],
+        select: ['id', 'title', 'status', 'priority', 'description', 'dueDate'],
         take: mockParams.size,
         order: {
           id: 'DESC',
@@ -88,7 +88,7 @@ describe('TaskRepository', () => {
       const mockTask: Task = createTaskStub()
       const mockParams = {
         id: 1,
-        userId: 'user123',
+        userId: 123,
       }
 
       jest
@@ -111,7 +111,7 @@ describe('TaskRepository', () => {
     it('should update a task', async () => {
       const mockParams = {
         id: 1,
-        userId: 'user123',
+        userId: 123,
       }
       const mockTask: Partial<Task> = {
         description: 'Test description',
@@ -136,7 +136,7 @@ describe('TaskRepository', () => {
     it('should return false if task is not found', async () => {
       const mockParams = {
         id: 1,
-        userId: 'user123',
+        userId: 123,
       }
       const mockTask: Partial<Task> = {
         description: 'Test description',
@@ -162,7 +162,7 @@ describe('TaskRepository', () => {
   describe('countTasks', () => {
     it('should return the number of tasks', async () => {
       const mockParams = {
-        userId: 'user123',
+        userId: 123,
         status: TaskStatusEnum.Completed,
       }
 

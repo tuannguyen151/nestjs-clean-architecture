@@ -31,7 +31,7 @@ describe('CountTasksUseCase', () => {
   describe('execute', () => {
     it('should call taskRepository.countTasks with the correct params', async () => {
       const params = {
-        userId: 'testUserId',
+        userId: 1,
       }
 
       await countTasksUseCase.execute(params)
@@ -41,7 +41,7 @@ describe('CountTasksUseCase', () => {
 
     it('should return the result from taskRepository.countTasks', async () => {
       const params = {
-        userId: 'testUserId',
+        userId: 1,
       }
       const expectedResult = 5
       ;(taskRepository.countTasks as jest.Mock).mockResolvedValue(
@@ -50,7 +50,7 @@ describe('CountTasksUseCase', () => {
 
       const result = await countTasksUseCase.execute(params)
 
-      expect(result).toBe(expectedResult)
+      expect(result).toEqual(expectedResult)
     })
   })
 })

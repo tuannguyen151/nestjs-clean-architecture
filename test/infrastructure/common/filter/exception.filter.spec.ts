@@ -47,6 +47,8 @@ describe('AllExceptionFilter', () => {
         url: '/test-url',
         path: '/test-url',
         method: 'GET',
+        headers: {},
+        ip: '127.0.0.1',
       }
       const mockArgumentsHost = {
         switchToHttp: jest.fn().mockReturnThis(),
@@ -84,6 +86,8 @@ describe('AllExceptionFilter', () => {
         url: '/test-url',
         path: '/test-url',
         method: 'GET',
+        headers: {},
+        ip: '127.0.0.1',
       }
       const mockArgumentsHost = {
         switchToHttp: jest.fn().mockReturnThis(),

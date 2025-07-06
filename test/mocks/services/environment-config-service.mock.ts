@@ -1,8 +1,8 @@
-import { IAwsConfig } from '@domain/config/aws.interface'
+import { IJwtConfig } from '@domain/config/jwt.interface'
 
-export const environmentConfigServiceMock: Partial<IAwsConfig> = {
-  getAwsCognitoClientId: () => '1X2X3X4X5X6X7X8X9X0X',
-  getAwsCognitoUserPoolId: () => 'us-east-1_1X2X3X4X5X6',
-  getAwsRegion: () => 'us-east-1',
-  getAwsCognitoAuthorityUrl: () => 'https://example.com',
+export const environmentConfigServiceMock: Partial<IJwtConfig> = {
+  getJwtSecret: () => 'test-secret',
+  getJwtExpirationTime: () => '1h',
+  getJwtRefreshSecret: () => 'test-refresh-secret',
+  getJwtRefreshExpirationTime: () => '7d',
 }

@@ -37,28 +37,32 @@ describe('GetDetailTaskUseCase', () => {
     useCase = module.get<GetDetailTaskUseCase>(GetDetailTaskUseCase)
     taskRepository = module.get<ITaskRepositoryInterface>(TASK_REPOSITORY)
     exceptionsService = module.get<IException>(EXCEPTIONS)
+    ;(exceptionsService.notFoundException as jest.Mock).mockImplementation(
+      (data: { message: string }) => {
+        throw new Error(data.message)
+      },
+    )
   })
 
   describe('execute', () => {
     it('should return the task when found', async () => {
-      const payload = { id: 1, userId: 'user123' }
+      const payload = { id: 1, userId: 1 }
       const task = createTaskStub()
-
       jest.spyOn(taskRepository, 'findOnTask').mockResolvedValue(task)
 
       const result = await useCase.execute(payload)
 
-      expect(result).toEqual(task)
       expect(taskRepository.findOnTask).toHaveBeenCalledWith(payload)
+      expect(result).toEqual(task)
       expect(exceptionsService.notFoundException).not.toHaveBeenCalled()
     })
 
     it('should throw an exception when task is not found', async () => {
-      const payload = { id: 1, userId: 'user123' }
+      const payload = { id: 1, userId: 123 }
 
       jest.spyOn(taskRepository, 'findOnTask').mockResolvedValue(null)
 
-      expect(await useCase.execute(payload)).toBeNull()
+      await expect(useCase.execute(payload)).rejects.toThrow('Task not found')
       expect(taskRepository.findOnTask).toHaveBeenCalledWith(payload)
       expect(exceptionsService.notFoundException).toHaveBeenCalledWith({
         type: 'TaskNotFoundException',

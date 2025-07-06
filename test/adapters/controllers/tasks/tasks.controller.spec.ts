@@ -10,6 +10,7 @@ import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
 import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
 import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
 
+import { PoliciesGuard } from '@adapters/controllers/common/guards/policies.guard'
 import { CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
 import { CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
 import { GetListTasksDto } from '@adapters/controllers/tasks/dto/get-list-tasks.dto'
@@ -62,8 +63,15 @@ describe('TasksController', () => {
             execute: jest.fn(),
           },
         },
+        {
+          provide: 'ABILITY_FACTORY_INTERFACE',
+          useValue: {},
+        },
       ],
-    }).compile()
+    })
+      .overrideGuard(PoliciesGuard)
+      .useValue({ canActivate: () => true })
+      .compile()
 
     controller = module.get<TasksController>(TasksController)
     getListTasksUseCase = module.get<GetListTasksUseCase>(GetListTasksUseCase)
@@ -79,7 +87,7 @@ describe('TasksController', () => {
       const countTasksDto: CountTasksDto = {
         status: TaskStatusEnum.Completed,
       }
-      const userId = 'user-id'
+      const userId = 1
 
       const count = 10
       jest.spyOn(countTasksUseCase, 'execute').mockResolvedValue(count)
@@ -100,7 +108,7 @@ describe('TasksController', () => {
         status: TaskStatusEnum.Completed,
         size: 10,
       }
-      const userId = 'user-id'
+      const userId = 1
 
       const tasks = [createTaskStub()]
       jest.spyOn(getListTasksUseCase, 'execute').mockResolvedValue(tasks)
@@ -122,7 +130,7 @@ describe('TasksController', () => {
       const createTaskDto: CreateTaskDto = {
         title: 'Task title',
       }
-      const userId = 'user-id'
+      const userId = 1
 
       const task = createTaskStub()
       jest.spyOn(createTaskUseCase, 'execute').mockResolvedValue(task)
@@ -140,7 +148,7 @@ describe('TasksController', () => {
 
   describe('findOne', () => {
     it('should call getDetailTaskUseCase.execute and return the result', async () => {
-      const userId = 'user-id'
+      const userId = 1
       const id = 1
 
       const task = createTaskStub()
@@ -158,7 +166,7 @@ describe('TasksController', () => {
 
   describe('update', () => {
     it('should call updateTaskUseCase.execute and return the result', async () => {
-      const userId = 'user-id'
+      const userId = 1
       const id = 1
       const updateTaskDto: UpdateTaskDto = {
         description: 'Test description',

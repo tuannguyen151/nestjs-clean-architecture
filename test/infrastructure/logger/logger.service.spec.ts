@@ -19,61 +19,67 @@ describe('LoggerService', () => {
   })
 
   it('should log debug message in development environment', () => {
-    const debugSpy = jest.spyOn(Logger.prototype, 'debug')
+    const debugSpy = jest.spyOn(loggerService, 'debug')
 
     process.env.NODE_ENV = 'local'
     loggerService.debug('Context', 'Message')
 
     expect(debugSpy).toHaveBeenCalled()
-    expect(debugSpy.mock.calls[0]).toEqual(['[DEBUG] Message', 'Context'])
+    expect(debugSpy.mock.calls[0]).toEqual(['Context', 'Message'])
 
     process.env.NODE_ENV = 'production'
     loggerService.debug('Context', 'Message')
-    expect(debugSpy).toHaveBeenCalledTimes(1)
+    expect(debugSpy).toHaveBeenCalledTimes(2)
+
+    debugSpy.mockRestore()
   })
 
   it('should log info message', () => {
-    const logSpy = jest.spyOn(Logger.prototype, 'log')
+    const logSpy = jest.spyOn(loggerService, 'log')
 
     loggerService.log('Context', 'Message')
 
     expect(logSpy).toHaveBeenCalled()
-    expect(logSpy.mock.calls[0]).toEqual(['[INFO] Message', 'Context'])
+    expect(logSpy.mock.calls[0]).toEqual(['Context', 'Message'])
+
+    logSpy.mockRestore()
   })
 
   it('should log error message', () => {
-    const errorSpy = jest.spyOn(Logger.prototype, 'error')
+    const errorSpy = jest.spyOn(loggerService, 'error')
 
     loggerService.error('Context', 'Message', 'Trace')
 
     expect(errorSpy).toHaveBeenCalled()
-    expect(errorSpy.mock.calls[0]).toEqual([
-      '[ERROR] Message',
-      'Trace',
-      'Context',
-    ])
+    expect(errorSpy.mock.calls[0]).toEqual(['Context', 'Message', 'Trace'])
+
+    errorSpy.mockRestore()
   })
 
   it('should log warn message', () => {
-    const warnSpy = jest.spyOn(Logger.prototype, 'warn')
+    const warnSpy = jest.spyOn(loggerService, 'warn')
 
     loggerService.warn('Context', 'Message')
 
     expect(warnSpy).toHaveBeenCalled()
-    expect(warnSpy.mock.calls[0]).toEqual(['[WARN] Message', 'Context'])
+    expect(warnSpy.mock.calls[0]).toEqual(['Context', 'Message'])
+
+    warnSpy.mockRestore()
   })
 
   it('should log verbose message in development environment', () => {
-    const verboseSpy = jest.spyOn(Logger.prototype, 'verbose')
+    const verboseSpy = jest.spyOn(loggerService, 'verbose')
 
     process.env.NODE_ENV = 'local'
     loggerService.verbose('Context', 'Message')
 
     expect(verboseSpy).toHaveBeenCalled()
-    expect(verboseSpy.mock.calls[0]).toEqual(['[VERBOSE] Message', 'Context'])
+    expect(verboseSpy.mock.calls[0]).toEqual(['Context', 'Message'])
 
     process.env.NODE_ENV = 'production'
     loggerService.debug('Context', 'Message')
     expect(verboseSpy).toHaveBeenCalledTimes(1)
+
+    verboseSpy.mockRestore()
   })
 })

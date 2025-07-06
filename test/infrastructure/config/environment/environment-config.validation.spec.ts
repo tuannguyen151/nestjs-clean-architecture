@@ -17,6 +17,10 @@ const config: { [key: string]: unknown } = {
   AWS_COGNITO_AUTHORITY_URL:
     'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_1X2X3X4X5X6',
   AWS_REGION: 'us-east-1',
+  JWT_SECRET: 'test-secret',
+  JWT_EXPIRATION_TIME: '1h',
+  JWT_REFRESH_SECRET: 'test-refresh-secret',
+  JWT_REFRESH_EXPIRATION_TIME: '7d',
 }
 
 describe('EnvironmentVariables validation', () => {
@@ -45,6 +49,10 @@ describe('EnvironmentVariables validation', () => {
     'AWS_COGNITO_CLIENT_ID',
     'AWS_COGNITO_AUTHORITY_URL',
     'AWS_REGION',
+    'JWT_SECRET',
+    'JWT_EXPIRATION_TIME',
+    'JWT_REFRESH_SECRET',
+    'JWT_REFRESH_EXPIRATION_TIME',
   ]
 
   keys.forEach((key) => {

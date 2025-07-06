@@ -34,7 +34,7 @@ describe('GetListTasksUseCase', () => {
 
   describe('execute', () => {
     it('should return a list of tasks', async () => {
-      const queryParams = { userId: '123' }
+      const queryParams = { userId: 123 }
       const expectedTasks: TaskEntity[] = [createTaskStub()]
 
       jest

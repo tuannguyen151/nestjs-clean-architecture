@@ -1,4 +1,4 @@
-import { Test } from '@nestjs/testing'
+import { Test, TestingModule } from '@nestjs/testing'
 
 import { TaskEntity } from '@domain/entities/task.entity'
 import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
@@ -15,14 +15,14 @@ describe('UpdateTaskUseCase', () => {
   let exceptionsService: IException
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
         UpdateTaskUseCase,
         {
           provide: TASK_REPOSITORY,
           useValue: {
-            updateTask: jest.fn(),
             findOnTask: jest.fn(),
+            updateTask: jest.fn(),
           },
         },
         {
@@ -37,13 +37,17 @@ describe('UpdateTaskUseCase', () => {
     updateTaskUseCase = moduleRef.get<UpdateTaskUseCase>(UpdateTaskUseCase)
     taskRepository = moduleRef.get<ITaskRepositoryInterface>(TASK_REPOSITORY)
     exceptionsService = moduleRef.get<IException>(EXCEPTIONS)
+    ;(exceptionsService.notFoundException as jest.Mock).mockImplementation(
+      (data: { message: string }) => {
+        throw new Error(data.message)
+      },
+    )
   })
 
   describe('execute', () => {
     it('should update the task and return true', async () => {
-      const params = { id: 1, userId: '123' }
+      const params = { id: 1, userId: 123 }
       const taskPayload: Partial<TaskEntity> = { title: 'New Title' }
-
       jest
         .spyOn(taskRepository, 'findOnTask')
         .mockResolvedValueOnce({} as TaskEntity)
@@ -51,24 +55,24 @@ describe('UpdateTaskUseCase', () => {
 
       const result = await updateTaskUseCase.execute(params, taskPayload)
 
-      expect(result).toBe(true)
       expect(taskRepository.findOnTask).toHaveBeenCalledWith(params)
       expect(taskRepository.updateTask).toHaveBeenCalledWith(
         params,
         taskPayload,
       )
+      expect(result).toBe(true)
     })
 
     it('should throw a not found exception if the task does not exist', async () => {
-      const params = { id: 1, userId: '123' }
+      const params = { id: 1, userId: 123 }
       const taskPayload: Partial<TaskEntity> = { title: 'New Title' }
 
       jest.spyOn(taskRepository, 'findOnTask').mockResolvedValueOnce(null)
       jest.spyOn(exceptionsService, 'notFoundException')
 
-      expect(
-        await updateTaskUseCase.execute(params, taskPayload),
-      ).toBeUndefined()
+      await expect(
+        updateTaskUseCase.execute(params, taskPayload),
+      ).rejects.toThrow('Task not found')
 
       expect(taskRepository.findOnTask).toHaveBeenCalledWith(params)
       expect(exceptionsService.notFoundException).toHaveBeenCalledWith({

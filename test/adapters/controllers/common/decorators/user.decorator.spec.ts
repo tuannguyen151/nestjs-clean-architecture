@@ -1,10 +1,9 @@
 import { ExecutionContext } from '@nestjs/common'
 import { HttpArgumentsHost } from '@nestjs/common/interfaces'
 
-import {
-  IUser,
-  userFactory,
-} from '@adapters/controllers/common/decorators/user.decorator'
+import { UserEntity } from '@domain/entities/user.entity'
+
+import { USER_FACTORY_DATA } from '@adapters/controllers/common/decorators/user.decorator'
 
 describe('userFactory', () => {
   let mockExecutionContext: jest.Mocked<ExecutionContext>
@@ -31,14 +30,14 @@ describe('userFactory', () => {
   })
 
   const executeFactory = (
-    data: keyof IUser | undefined,
+    data: keyof UserEntity | undefined,
     context: ExecutionContext,
   ) => {
-    return userFactory(data, context)
+    return USER_FACTORY_DATA(data, context)
   }
 
   it('should return the user object from the request', () => {
-    const mockUser = { userId: '12345' }
+    const mockUser = { id: 12345, username: 'testuser' }
     mockHttp.getRequest.mockReturnValue({ user: mockUser })
 
     const result = executeFactory(undefined, mockExecutionContext)
@@ -46,11 +45,14 @@ describe('userFactory', () => {
   })
 
   it('should return a specific property of the user object from the request', () => {
-    const mockUser: IUser = { userId: '12345' }
+    const mockUser: UserEntity = {
+      id: 12345,
+      username: 'testuser',
+    } as UserEntity
     mockHttp.getRequest.mockReturnValue({ user: mockUser })
 
-    const result = executeFactory('userId', mockExecutionContext)
-    expect(result).toBe(mockUser.userId)
+    const result = executeFactory('id', mockExecutionContext)
+    expect(result).toBe(mockUser.id)
   })
 
   it('should return undefined if the user object is not present in the request', () => {
@@ -61,11 +63,14 @@ describe('userFactory', () => {
   })
 
   it('should return undefined if a specific property of the user object is not present', () => {
-    const mockUser: IUser = { userId: '12345' }
+    const mockUser: UserEntity = {
+      id: 12345,
+      username: 'testuser',
+    } as UserEntity
     mockHttp.getRequest.mockReturnValue({ user: mockUser })
 
     const result = executeFactory(
-      'nonexistentProperty' as keyof IUser,
+      'lastLogin' as keyof UserEntity,
       mockExecutionContext,
     )
     expect(result).toBeUndefined()

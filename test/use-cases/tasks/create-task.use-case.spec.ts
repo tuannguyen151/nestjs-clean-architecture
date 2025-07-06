@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 
 import { createTaskStub } from 'test/stubs/task.stub'
 
+import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
 import {
   ITaskRepositoryInterface,
   TASK_REPOSITORY,
@@ -31,14 +32,17 @@ describe('CreateTaskUseCase', () => {
   })
 
   it('should create a task', async () => {
-    const task = { title: 'Task 1' }
+    const taskPayload = { title: 'Task 1' }
     const createdTask = createTaskStub()
 
     jest.spyOn(taskRepository, 'createTask').mockResolvedValueOnce(createdTask)
 
-    const result = await useCase.execute(task)
+    const result = await useCase.execute(taskPayload)
 
-    expect(taskRepository.createTask).toHaveBeenCalledWith(task)
+    expect(taskRepository.createTask).toHaveBeenCalledWith({
+      ...taskPayload,
+      priority: TaskPriorityEnum.Medium, // Default priority
+    })
     expect(result).toEqual(createdTask)
   })
 })
