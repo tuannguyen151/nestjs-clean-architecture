@@ -3,10 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm'
 
 import { In, Repository } from 'typeorm'
 
+import { TaskEntity } from '@domain/entities/task.entity'
 import {
   ICountTasksParams,
   ISearchTasksParams,
-  ITaskRepositoryInterface,
+  ITaskRepository,
 } from '@domain/repositories/task.repository.interface'
 
 import { Task } from '../entities/task.entity'
@@ -26,8 +27,14 @@ interface ITaskWhereCondition {
   priority?: Task['priority'] | ReturnType<typeof In>
 }
 
+interface IWhereConditionParams {
+  userId: number
+  status?: Task['status']
+  priority?: Task['priority'] | Task['priority'][]
+}
+
 @Injectable()
-export class TaskRepository implements ITaskRepositoryInterface {
+export class TaskRepository implements ITaskRepository {
   constructor(
     @InjectRepository(Task)
     private readonly taskRepository: Repository<Task>,
@@ -38,56 +45,35 @@ export class TaskRepository implements ITaskRepositoryInterface {
     status,
     priority,
     userId,
-  }: ISearchTasksParams & { userId: number }): Promise<Task[]> {
-    const whereCondition: ITaskWhereCondition = {
-      userId: userId,
-    }
-
-    if (status !== undefined) {
-      whereCondition.status = status
-    }
-
-    if (priority !== undefined) {
-      // Handle both single priority value and array of priorities
-      if (Array.isArray(priority)) {
-        whereCondition.priority = In(priority)
-      } else {
-        whereCondition.priority = priority
-      }
-    }
-
+  }: ISearchTasksParams & { userId: number }): Promise<TaskEntity[]> {
     const tasks = await this.taskRepository.find({
-      where: whereCondition,
+      where: this.buildWhereCondition({ userId, status, priority }),
       select: DEFAULT_SELECT_FIELDS,
       take: size,
-      order: {
-        id: 'DESC',
-      },
+      order: { id: 'DESC' },
     })
 
-    return tasks
+    return tasks.map((task) => this.toEntity(task))
   }
 
-  async createTask(task: Partial<Task>): Promise<Task> {
+  async createTask(task: Partial<TaskEntity>): Promise<TaskEntity> {
     const newTask = this.taskRepository.create(task)
-    await this.taskRepository.save(newTask)
-
-    return newTask
+    const taskCreated = await this.taskRepository.save(newTask)
+    return this.toEntity(taskCreated)
   }
 
-  async findOnTask({
+  async findOneTask({
     id,
     userId,
   }: {
     id: number
     userId: number
-  }): Promise<Task | null> {
-    return await this.taskRepository.findOne({
-      where: {
-        id: id,
-        userId: userId,
-      },
+  }): Promise<TaskEntity | null> {
+    const task = await this.taskRepository.findOne({
+      where: { id, userId },
     })
+    if (!task) return null
+    return this.toEntity(task)
   }
 
   async updateTask(
@@ -98,7 +84,7 @@ export class TaskRepository implements ITaskRepositoryInterface {
       id: number
       userId: number
     },
-    task: Partial<Task>,
+    task: Partial<TaskEntity>,
   ): Promise<boolean> {
     const updatedTask = await this.taskRepository.update(
       {
@@ -118,25 +104,42 @@ export class TaskRepository implements ITaskRepositoryInterface {
     status,
     priority,
   }: ICountTasksParams & { userId: number }): Promise<number> {
-    const whereCondition: ITaskWhereCondition = {
-      userId: userId,
-    }
+    return await this.taskRepository.count({
+      where: this.buildWhereCondition({ userId, status, priority }),
+    })
+  }
+
+  private toEntity(task: Task): TaskEntity {
+    return new TaskEntity(
+      task.id,
+      task.userId,
+      task.title,
+      task.status,
+      task.priority,
+      task.createdAt,
+      task.updatedAt,
+      task.description,
+      task.dueDate,
+    )
+  }
+
+  private buildWhereCondition({
+    userId,
+    status,
+    priority,
+  }: IWhereConditionParams): ITaskWhereCondition {
+    const whereCondition: ITaskWhereCondition = { userId }
 
     if (status !== undefined) {
       whereCondition.status = status
     }
 
     if (priority !== undefined) {
-      // Handle both single priority value and array of priorities
-      if (Array.isArray(priority)) {
-        whereCondition.priority = In(priority)
-      } else {
-        whereCondition.priority = priority
-      }
+      whereCondition.priority = Array.isArray(priority)
+        ? In(priority)
+        : priority
     }
 
-    return await this.taskRepository.count({
-      where: whereCondition,
-    })
+    return whereCondition
   }
 }

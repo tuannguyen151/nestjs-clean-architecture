@@ -7,7 +7,7 @@ export class CountTasksPresenter {
   })
   count: number
 
-  constructor({ count }: CountTasksPresenter) {
+  constructor(count: number) {
     this.count = count
   }
 }

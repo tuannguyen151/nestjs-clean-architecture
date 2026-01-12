@@ -7,12 +7,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-import { TaskEntity, TaskStatusEnum } from '@domain/entities/task.entity'
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { TaskPriorityEnum, TaskStatusEnum } from '@domain/entities/task.entity'
 
 @Entity('tasks')
 @Index('IDX_tasks_user_id', ['userId'])
-export class Task implements TaskEntity {
+export class Task {
   @PrimaryGeneratedColumn({
     type: 'bigint',
     primaryKeyConstraintName: 'PK_tasks_id',

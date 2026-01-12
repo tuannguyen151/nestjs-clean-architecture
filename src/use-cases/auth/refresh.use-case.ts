@@ -1,17 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common'
 
-import {
-  BCRYPT_SERVICE,
-  IBcryptService,
-} from '@domain/services/bcrypt.interface'
-import { IJwtService, JWT_SERVICE } from '@domain/services/jwt.interface'
+import { IJwtService } from '@domain/services/jwt.interface'
 
 @Injectable()
 export class RefreshUseCase {
   constructor(
-    @Inject(BCRYPT_SERVICE)
-    private readonly bcryptService: IBcryptService,
-    @Inject(JWT_SERVICE)
+    @Inject(IJwtService)
     private readonly jwtService: IJwtService,
   ) {}
 

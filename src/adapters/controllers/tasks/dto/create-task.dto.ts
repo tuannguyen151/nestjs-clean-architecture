@@ -9,7 +9,7 @@ import {
   MaxLength,
 } from 'class-validator'
 
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { TaskPriorityEnum } from '@domain/entities/task.entity'
 
 export class CreateTaskDto {
   @ApiProperty({

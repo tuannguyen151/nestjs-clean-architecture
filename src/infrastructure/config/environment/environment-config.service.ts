@@ -3,9 +3,12 @@ import { ConfigService } from '@nestjs/config'
 
 import { IDatabaseConfig } from '@domain/config/database.interface'
 import { IJwtConfig } from '@domain/config/jwt.interface'
+import { IMaintenanceConfig } from '@domain/config/maintenance.interface'
 
 @Injectable()
-export class EnvironmentConfigService implements IDatabaseConfig, IJwtConfig {
+export class EnvironmentConfigService
+  implements IDatabaseConfig, IJwtConfig, IMaintenanceConfig
+{
   constructor(private readonly configService: ConfigService) {}
 
   getNodeEnv(): string {
@@ -58,5 +61,16 @@ export class EnvironmentConfigService implements IDatabaseConfig, IJwtConfig {
 
   getJwtRefreshExpirationTime(): string {
     return this.configService.get<string>('JWT_REFRESH_EXPIRATION_TIME') || ''
+  }
+
+  isMaintenanceMode(): boolean {
+    return this.configService.get<string>('MAINTENANCE_MODE') === 'true'
+  }
+
+  getMaintenanceMessage(): string {
+    return (
+      this.configService.get<string>('MAINTENANCE_MESSAGE') ??
+      'Service Unavailable'
+    )
   }
 }

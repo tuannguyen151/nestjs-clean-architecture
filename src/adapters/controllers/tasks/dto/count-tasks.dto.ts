@@ -1,12 +1,15 @@
-import { BadRequestException } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
 
 import { Transform } from 'class-transformer'
 import { IsEnum, IsOptional } from 'class-validator'
 
-import { TaskStatusEnum } from '@domain/entities/task.entity'
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { TaskPriorityEnum, TaskStatusEnum } from '@domain/entities/task.entity'
 import { ICountTasksParams } from '@domain/repositories/task.repository.interface'
+
+import {
+  IsValidPriorityList,
+  parsePriorityList,
+} from './validators/priority-list.validator'
 
 export class CountTasksDto implements ICountTasksParams {
   @ApiProperty({
@@ -14,7 +17,9 @@ export class CountTasksDto implements ICountTasksParams {
     enum: TaskStatusEnum,
     description: '2: Completed, 3: OnGoing, empty: All',
   })
-  @Transform(({ value }: { value: string }) => parseInt(value))
+  @Transform(({ value }: { value?: string }) =>
+    value ? Number.parseInt(value, 10) : undefined,
+  )
   @IsEnum(TaskStatusEnum)
   @IsOptional()
   status?: TaskStatusEnum
@@ -27,26 +32,7 @@ export class CountTasksDto implements ICountTasksParams {
     example: 'Medium,High',
   })
   @IsOptional()
-  @Transform(({ value }: { value: string }) => {
-    if (!value) return undefined
-
-    const values = value
-      .toString()
-      .split(',')
-      .map((v) => parseInt(v.trim()))
-
-    // Validate each value is a valid priority
-    const validPriorities = Object.values(TaskPriorityEnum)
-    for (const val of values) {
-      if (!validPriorities.includes(val)) {
-        throw new BadRequestException({
-          type: 'InvalidPriorityException',
-          message: `Invalid priority value: ${val}. Valid values are: ${validPriorities.join(', ')}`,
-        })
-      }
-    }
-
-    return values.length === 1 ? values[0] : values
-  })
+  @Transform(({ value }: { value?: string }) => parsePriorityList(value))
+  @IsValidPriorityList()
   priority?: TaskPriorityEnum | TaskPriorityEnum[]
 }

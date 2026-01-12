@@ -1,5 +1,14 @@
-import { TAction, TSubject } from '@domain/entities/permission.entity'
 import { UserEntity } from '@domain/entities/user.entity'
+
+/**
+ * Available actions that can be performed on resources
+ */
+type TAction = 'manage' | 'create' | 'read' | 'update' | 'delete'
+
+/**
+ * Available subjects (resources) in the system
+ */
+type TSubject = 'all' | 'Task'
 
 export interface IPolicyHandler {
   action: TAction
@@ -7,8 +16,8 @@ export interface IPolicyHandler {
   field?: string
 }
 
-export const ABILITY_FACTORY = 'ABILITY_FACTORY_INTERFACE'
-export interface IAbilityFactory {
-  createForUser(user: UserEntity): unknown
-  can(ability: unknown, policyHandler: IPolicyHandler): boolean
+export const IAbilityFactory = Symbol('IAbilityFactory')
+export interface IAbilityFactory<TAbility = unknown> {
+  createForUser(user: UserEntity): TAbility
+  can(ability: TAbility, policyHandler: IPolicyHandler): boolean
 }

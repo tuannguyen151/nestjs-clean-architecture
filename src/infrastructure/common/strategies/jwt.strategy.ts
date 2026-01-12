@@ -1,27 +1,30 @@
-import { Injectable } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 
 import { ExtractJwt, Strategy } from 'passport-jwt'
 
-import { IJwtServicePayload } from '@domain/services/jwt.interface'
-
-import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
-import { UserRepository } from '@infrastructure/databases/postgressql/repositories/user.repository'
-import { ExceptionsService } from '@infrastructure/exceptions/exceptions.service'
-import { LoggerService } from '@infrastructure/logger/logger.service'
+import { IJwtConfig } from '@domain/config/jwt.interface'
+import { IException } from '@domain/exceptions/exceptions.interface'
+import { ILogger } from '@domain/logger/logger.interface'
+import { IUserRepository } from '@domain/repositories/user.repository.interface'
+import type { IJwtServicePayload } from '@domain/services/jwt.interface'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private readonly logger: LoggerService,
-    private readonly exceptionService: ExceptionsService,
-    private readonly environmentConfigService: EnvironmentConfigService,
-    private readonly userRepository: UserRepository,
+    @Inject(ILogger)
+    private readonly logger: ILogger,
+    @Inject(IException)
+    private readonly exceptionService: IException,
+    @Inject(IJwtConfig)
+    private readonly jwtConfig: IJwtConfig,
+    @Inject(IUserRepository)
+    private readonly userRepository: IUserRepository,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: environmentConfigService.getJwtSecret(),
+      secretOrKey: jwtConfig.getJwtSecret(),
     })
   }
 

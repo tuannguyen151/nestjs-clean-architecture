@@ -1,25 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common'
 
-import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
-import {
-  ITaskRepositoryInterface,
-  TASK_REPOSITORY,
-} from '@domain/repositories/task.repository.interface'
+import { IException } from '@domain/exceptions/exceptions.interface'
+import { ITaskRepository } from '@domain/repositories/task.repository.interface'
 
 @Injectable()
 export class GetDetailTaskUseCase {
   constructor(
-    @Inject(TASK_REPOSITORY)
-    private readonly taskRepository: ITaskRepositoryInterface,
-    @Inject(EXCEPTIONS)
+    @Inject(ITaskRepository)
+    private readonly taskRepository: ITaskRepository,
+    @Inject(IException)
     private readonly exceptionsService: IException,
   ) {}
 
   async execute(payload: { id: number; userId: number }) {
-    const task = await this.taskRepository.findOnTask(payload)
+    const task = await this.taskRepository.findOneTask(payload)
 
     if (!task) {
-      throw this.exceptionsService.notFoundException({
+      this.exceptionsService.notFoundException({
         type: 'TaskNotFoundException',
         message: 'Task not found',
       })

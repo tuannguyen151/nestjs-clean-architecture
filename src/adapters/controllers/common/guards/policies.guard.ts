@@ -8,7 +8,6 @@ import { Reflector } from '@nestjs/core'
 
 import { UserEntity } from '@domain/entities/user.entity'
 import {
-  ABILITY_FACTORY,
   IAbilityFactory,
   IPolicyHandler,
 } from '@domain/services/ability.interface'
@@ -20,7 +19,7 @@ export class PoliciesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
 
-    @Inject(ABILITY_FACTORY)
+    @Inject(IAbilityFactory)
     private readonly caslAbilityFactory: IAbilityFactory,
   ) {}
 

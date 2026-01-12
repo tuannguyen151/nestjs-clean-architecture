@@ -1,3 +1,4 @@
+export const IDatabaseConfig = Symbol('IDatabaseConfig')
 export interface IDatabaseConfig {
   getDatabaseEngine(): string
   getDatabaseHost(): string

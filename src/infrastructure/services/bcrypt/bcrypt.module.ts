@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common'
 
-import { BCRYPT_SERVICE } from '@domain/services/bcrypt.interface'
+import { IBcryptService } from '@domain/services/bcrypt.interface'
 
 import { BcryptService } from './bcrypt.service'
 
 @Module({
   providers: [
     {
-      provide: BCRYPT_SERVICE,
+      provide: IBcryptService,
       useClass: BcryptService,
     },
   ],
-  exports: [BCRYPT_SERVICE],
+  exports: [IBcryptService],
 })
 export class BcryptModule {}

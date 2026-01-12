@@ -2,18 +2,18 @@ import { Injectable } from '@nestjs/common'
 
 import { AbilityBuilder, PureAbility } from '@casl/ability'
 
-import { TAction, TSubject } from '@domain/entities/permission.entity'
-import { RoleEnum } from '@domain/entities/role.entity'
-import { UserEntity } from '@domain/entities/user.entity'
+import { RoleEnum, UserEntity } from '@domain/entities/user.entity'
 import {
   IAbilityFactory,
   IPolicyHandler,
 } from '@domain/services/ability.interface'
 
-type TAppAbility = PureAbility<[TAction, TSubject]>
+type TAppAbility = PureAbility<
+  [IPolicyHandler['action'], IPolicyHandler['subject']]
+>
 
 @Injectable()
-export class CaslAbilityFactory implements IAbilityFactory {
+export class CaslAbilityFactory implements IAbilityFactory<TAppAbility> {
   createForUser(user: UserEntity) {
     const { can, build } = new AbilityBuilder<TAppAbility>(PureAbility)
 

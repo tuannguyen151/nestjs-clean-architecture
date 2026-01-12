@@ -1,8 +1,8 @@
-export const LOGGER = 'LOGGER_INTERFACE'
+export const ILogger = Symbol('ILogger')
 export interface ILogger {
-  debug(context: string, message: string): void
-  log(context: string, message: string): void
-  error(context: string, message: string, trace?: string): void
-  warn(context: string, message: string): void
-  verbose(context: string, message: string): void
+  debug(context: string, message: unknown): void
+  log(context: string, message: unknown): void
+  error(context: string, message: unknown, trace?: string): void
+  warn(context: string, message: unknown): void
+  verbose(context: string, message: unknown): void
 }

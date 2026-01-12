@@ -1,44 +1,38 @@
 import { Inject, Injectable } from '@nestjs/common'
 
-import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
-import {
-  IUserRepository,
-  USER_REPOSITORY,
-} from '@domain/repositories/user.repository.interface'
-import {
-  BCRYPT_SERVICE,
-  IBcryptService,
-} from '@domain/services/bcrypt.interface'
-import { IJwtService, JWT_SERVICE } from '@domain/services/jwt.interface'
+import { IException } from '@domain/exceptions/exceptions.interface'
+import { IUserRepository } from '@domain/repositories/user.repository.interface'
+import { IBcryptService } from '@domain/services/bcrypt.interface'
+import { IJwtService } from '@domain/services/jwt.interface'
 
 @Injectable()
 export class LoginUseCase {
   constructor(
-    @Inject(BCRYPT_SERVICE)
+    @Inject(IBcryptService)
     private readonly bcryptService: IBcryptService,
-    @Inject(JWT_SERVICE)
+    @Inject(IJwtService)
     private readonly jwtService: IJwtService,
-    @Inject(USER_REPOSITORY)
+    @Inject(IUserRepository)
     private readonly userRepository: IUserRepository,
-    @Inject(EXCEPTIONS)
+    @Inject(IException)
     private readonly exceptionsService: IException,
   ) {}
 
   async execute(payload: { username: string; password: string }) {
     const user = await this.userRepository.getUserByUsername(payload.username)
     if (!user)
-      throw this.exceptionsService.badRequestException({
+      this.exceptionsService.badRequestException({
         type: 'BadRequest',
         message: 'User not found',
       })
 
     const passwordMatches = await this.bcryptService.compare(
       payload.password,
-      user.password,
+      user.hashedPassword,
     )
 
     if (!passwordMatches)
-      throw this.exceptionsService.badRequestException({
+      this.exceptionsService.badRequestException({
         type: 'BadRequest',
         message: 'Password is incorrect',
       })

@@ -19,31 +19,39 @@ class ResponseFormat<T> {
   data!: T
 }
 
+const buildResponseSchema = <TModel extends Type>(
+  model: TModel,
+  isArray: boolean,
+) => ({
+  isArray: isArray,
+  schema: {
+    allOf: [
+      { $ref: getSchemaPath(ResponseFormat) },
+      {
+        properties: {
+          data: isArray
+            ? {
+                type: 'array',
+                items: { $ref: getSchemaPath(model) },
+              }
+            : {
+                $ref: getSchemaPath(model),
+              },
+          isArray: {
+            type: 'boolean',
+            default: isArray,
+          },
+        },
+      },
+    ],
+  },
+})
+
 export const ApiResponseType = <TModel extends Type>(
   model: TModel,
   isArray: boolean,
 ) => {
-  return applyDecorators(
-    ApiOkResponse({
-      isArray: isArray,
-      schema: {
-        allOf: [
-          { $ref: getSchemaPath(ResponseFormat) },
-          {
-            properties: {
-              data: {
-                $ref: getSchemaPath(model),
-              },
-              isArray: {
-                type: 'boolean',
-                default: isArray,
-              },
-            },
-          },
-        ],
-      },
-    }),
-  )
+  return applyDecorators(ApiOkResponse(buildResponseSchema(model, isArray)))
 }
 
 export const ApiCreatedResponseType = <TModel extends Type>(
@@ -51,24 +59,6 @@ export const ApiCreatedResponseType = <TModel extends Type>(
   isArray: boolean,
 ) => {
   return applyDecorators(
-    ApiCreatedResponse({
-      isArray: isArray,
-      schema: {
-        allOf: [
-          { $ref: getSchemaPath(ResponseFormat) },
-          {
-            properties: {
-              data: {
-                $ref: getSchemaPath(model),
-              },
-              isArray: {
-                type: 'boolean',
-                default: isArray,
-              },
-            },
-          },
-        ],
-      },
-    }),
+    ApiCreatedResponse(buildResponseSchema(model, isArray)),
   )
 }

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { EXCEPTIONS } from '@domain/exceptions/exceptions.interface'
+import { IException } from '@domain/exceptions/exceptions.interface'
 
 import { ExceptionsService } from './exceptions.service'
 
@@ -8,10 +8,10 @@ import { ExceptionsService } from './exceptions.service'
   providers: [
     ExceptionsService,
     {
-      provide: EXCEPTIONS,
+      provide: IException,
       useClass: ExceptionsService,
     },
   ],
-  exports: [EXCEPTIONS, ExceptionsService],
+  exports: [IException, ExceptionsService],
 })
 export class ExceptionsModule {}

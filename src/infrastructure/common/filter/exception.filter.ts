@@ -12,12 +12,11 @@ import {
   IFormatExceptionMessage,
   IFormatExceptionResponse,
 } from '@domain/exceptions/exceptions.interface'
-
-import { LoggerService } from '@infrastructure/logger/logger.service'
+import { ILogger } from '@domain/logger/logger.interface'
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  constructor(private readonly logger: LoggerService) {}
+  constructor(private readonly logger: ILogger) {}
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()

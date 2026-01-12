@@ -2,7 +2,7 @@ export interface IJwtServicePayload {
   id: number
 }
 
-export const JWT_SERVICE = 'JWT_SERVICE_INTERFACE'
+export const IJwtService = Symbol('IJwtService')
 export interface IJwtService {
   checkToken(token: string): Promise<IJwtServicePayload>
   createToken(

@@ -13,11 +13,11 @@ export interface IFormatExceptionResponse {
   }
 }
 
-export const EXCEPTIONS = 'IException'
+export const IException = Symbol('IException')
 export interface IException {
-  badRequestException(data: IFormatExceptionMessage): Error
-  internalServerErrorException(data?: IFormatExceptionMessage): Error
-  forbiddenException(data?: IFormatExceptionMessage): Error
-  unauthorizedException(data?: IFormatExceptionMessage): Error
-  notFoundException(data?: IFormatExceptionMessage): Error
+  badRequestException(data: IFormatExceptionMessage): never
+  internalServerErrorException(data?: IFormatExceptionMessage): never
+  forbiddenException(data?: IFormatExceptionMessage): never
+  unauthorizedException(data?: IFormatExceptionMessage): never
+  notFoundException(data?: IFormatExceptionMessage): never
 }

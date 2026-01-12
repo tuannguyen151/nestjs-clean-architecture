@@ -1,23 +1,26 @@
-import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common'
+import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common'
 
 import { NextFunction, Request, Response } from 'express'
 
+import { IMaintenanceConfig } from '@domain/config/maintenance.interface'
 import { IFormatExceptionResponse } from '@domain/exceptions/exceptions.interface'
 
 @Injectable()
 export class MaintenanceMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const isMaintenanceMode =
-      process.env.MAINTENANCE_MODE?.toString() === 'true'
+  constructor(
+    @Inject(IMaintenanceConfig)
+    private readonly maintenanceConfig: IMaintenanceConfig,
+  ) {}
 
-    if (isMaintenanceMode) {
+  use(req: Request, res: Response, next: NextFunction) {
+    if (this.maintenanceConfig.isMaintenanceMode()) {
       const responseData: IFormatExceptionResponse = {
         statusCode: HttpStatus.SERVICE_UNAVAILABLE,
         timestamp: new Date().toISOString(),
         path: req.url,
         error: {
           type: 'MAINTENANCE_MODE',
-          message: process.env.MAINTENANCE_MESSAGE ?? 'Service Unavailable',
+          message: this.maintenanceConfig.getMaintenanceMessage(),
         },
       }
 

@@ -1,5 +1,8 @@
-import { TaskEntity, TaskStatusEnum } from '../entities/task.entity'
-import { TaskPriorityEnum } from '../enums/task-priority.enum'
+import {
+  TaskEntity,
+  TaskPriorityEnum,
+  TaskStatusEnum,
+} from '../entities/task.entity'
 
 export interface ISearchTasksParams {
   status?: TaskStatusEnum
@@ -12,13 +15,13 @@ export interface ICountTasksParams {
   priority?: TaskPriorityEnum | TaskPriorityEnum[]
 }
 
-export const TASK_REPOSITORY = 'TASK_REPOSITORY_INTERFACE'
-export interface ITaskRepositoryInterface {
+export const ITaskRepository = Symbol('ITaskRepository')
+export interface ITaskRepository {
   findTasks(
     payload: ISearchTasksParams & { userId: number },
   ): Promise<TaskEntity[]>
   createTask(task: Partial<TaskEntity>): Promise<TaskEntity>
-  findOnTask(payload: {
+  findOneTask(payload: {
     id: number
     userId: number
   }): Promise<TaskEntity | null>

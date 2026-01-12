@@ -74,7 +74,7 @@ export default tseslint.config(
         {
           selector: 'variable',
           modifiers: ['const'],
-          format: ['UPPER_CASE', 'camelCase'],
+          format: ['UPPER_CASE', 'camelCase', 'PascalCase'],
         },
         {
           selector: ['class'],
@@ -94,7 +94,7 @@ export default tseslint.config(
           selector: 'memberLike',
           modifiers: ['private'],
           format: ['camelCase'],
-          leadingUnderscore: 'forbid',
+          leadingUnderscore: 'allow',
         },
       ],
 

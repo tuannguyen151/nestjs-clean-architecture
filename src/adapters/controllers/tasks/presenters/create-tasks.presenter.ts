@@ -1,3 +1,3 @@
-import { GetListTasksPresenter } from './get-list-tasks.presenter'
+import { GetDetailTaskPresenter } from './get-detail-task.presenter'
 
-export class CreateTaskPresenter extends GetListTasksPresenter {}
+export class CreateTaskPresenter extends GetDetailTaskPresenter {}

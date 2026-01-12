@@ -50,7 +50,6 @@ import { GetListTasksPresenter } from './presenters/get-list-tasks.presenter'
 })
 @ApiResponse({ status: 500, description: 'Internal error' })
 @ApiResponse({ status: 403, description: 'Forbidden access' })
-@ApiExtraModels(GetListTasksPresenter)
 @UseGuards(JwtAuthGuard, PoliciesGuard)
 export class TasksController {
   constructor(
@@ -76,10 +75,11 @@ export class TasksController {
       ...countTaskDto,
     })
 
-    return new CountTasksPresenter({ count })
+    return new CountTasksPresenter(count)
   }
 
   @Get()
+  @ApiExtraModels(GetListTasksPresenter)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List', description: 'List tasks' })
   @ApiResponseType(GetListTasksPresenter, true)
@@ -93,7 +93,7 @@ export class TasksController {
       userId: userId,
     })
 
-    return tasks.map((task) => new GetListTasksPresenter(task))
+    return GetListTasksPresenter.fromList(tasks)
   }
 
   @Post()
@@ -110,10 +110,15 @@ export class TasksController {
     @Body() createTaskDto: CreateTaskDto,
     @User('id') userId: number,
   ) {
-    const task = await this.createTaskUseCase.execute({
-      ...createTaskDto,
-      userId: userId,
-    })
+    const task = await this.createTaskUseCase.execute(
+      {
+        title: createTaskDto.title,
+        description: createTaskDto.description,
+        dueDate: createTaskDto.dueDate,
+        priority: createTaskDto.priority,
+      },
+      userId,
+    )
 
     return new CreateTaskPresenter(task)
   }
@@ -153,7 +158,13 @@ export class TasksController {
         id: id,
         userId: userId,
       },
-      updateTaskDto,
+      {
+        title: updateTaskDto.title,
+        description: updateTaskDto.description,
+        dueDate: updateTaskDto.dueDate,
+        priority: updateTaskDto.priority,
+        status: updateTaskDto.status,
+      },
     )
 
     return isUpdated

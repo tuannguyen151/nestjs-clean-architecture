@@ -2,31 +2,30 @@ import { Test, TestingModule } from '@nestjs/testing'
 
 import { environmentConfigServiceMock } from 'test/mocks/services/environment-config-service.mock'
 
-import { RoleEnum } from '@domain/entities/role.entity'
-import { UserEntity } from '@domain/entities/user.entity'
-import { IJwtServicePayload } from '@domain/services/jwt.interface'
+import { IJwtConfig } from '@domain/config/jwt.interface'
+import { RoleEnum, UserEntity } from '@domain/entities/user.entity'
+import { IException } from '@domain/exceptions/exceptions.interface'
+import { ILogger } from '@domain/logger/logger.interface'
+import { IUserRepository } from '@domain/repositories/user.repository.interface'
+import type { IJwtServicePayload } from '@domain/services/jwt.interface'
 
 import { JwtStrategy } from '@infrastructure/common/strategies/jwt.strategy'
-import { EnvironmentConfigService } from '@infrastructure/config/environment/environment-config.service'
-import { UserRepository } from '@infrastructure/databases/postgressql/repositories/user.repository'
-import { ExceptionsService } from '@infrastructure/exceptions/exceptions.service'
-import { LoggerService } from '@infrastructure/logger/logger.service'
 
 describe('JwtStrategy', () => {
   let jwtStrategy: JwtStrategy
-  let userRepository: UserRepository
-  let exceptionsService: ExceptionsService
+  let userRepository: IUserRepository
+  let exceptionsService: { unauthorizedException: jest.Mock }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         JwtStrategy,
         {
-          provide: LoggerService,
+          provide: ILogger,
           useValue: { warn: jest.fn() },
         },
         {
-          provide: ExceptionsService,
+          provide: IException,
           useValue: {
             unauthorizedException: jest.fn(() => {
               throw new Error('Unauthorized')
@@ -34,19 +33,19 @@ describe('JwtStrategy', () => {
           },
         },
         {
-          provide: EnvironmentConfigService,
+          provide: IJwtConfig,
           useValue: environmentConfigServiceMock,
         },
         {
-          provide: UserRepository,
+          provide: IUserRepository,
           useValue: { getUserById: jest.fn() },
         },
       ],
     }).compile()
 
     jwtStrategy = module.get<JwtStrategy>(JwtStrategy)
-    userRepository = module.get<UserRepository>(UserRepository)
-    exceptionsService = module.get<ExceptionsService>(ExceptionsService)
+    userRepository = module.get<IUserRepository>(IUserRepository)
+    exceptionsService = module.get(IException)
   })
 
   it('should be defined', () => {

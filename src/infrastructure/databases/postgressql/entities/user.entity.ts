@@ -7,12 +7,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-import { RoleEnum } from '@domain/entities/role.entity'
-import { UserEntity } from '@domain/entities/user.entity'
+import { RoleEnum } from '@domain/entities/user.entity'
 
 @Entity('users')
 @Index('IDX_users_username', ['username'], { unique: true })
-export class User implements UserEntity {
+export class User {
   @PrimaryGeneratedColumn({
     type: 'bigint',
     primaryKeyConstraintName: 'PK_users_id',

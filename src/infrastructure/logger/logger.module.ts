@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { LOGGER } from '@domain/logger/logger.interface'
+import { ILogger } from '@domain/logger/logger.interface'
 
 import { LoggerService } from './logger.service'
 
@@ -8,10 +8,10 @@ import { LoggerService } from './logger.service'
   providers: [
     LoggerService,
     {
-      provide: LOGGER,
+      provide: ILogger,
       useExisting: LoggerService,
     },
   ],
-  exports: [LoggerService, LOGGER],
+  exports: [LoggerService, ILogger],
 })
 export class LoggerModule {}

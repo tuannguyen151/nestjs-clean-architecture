@@ -37,12 +37,15 @@ Current Package Structure and Future Ideal Structure
 │   │
 │   ├── infrastructure - This layer contains implementations of the interfaces defined in the domain layer, such as repositories and loggers, as well as other infrastructure concerns.
 │   │   ├── databases - Implementations of the data access layer for specific databases.
-│   │   │   └── postgresql - PostgreSQL database implementations.
+│   │   │   └── postgressql - PostgreSQL database implementations.
 │   │   │       ├── entities - TypeORM entities that map the application's domain entities to database tables.
 │   │   │       ├── repositories - Implementations of the repository interfaces for PostgreSQL using TypeORM.
 │   │   │       ├── typeorm.config.ts - TypeORM configuration file.
 │   │   │       └── typeorm.module.ts - TypeORM module setup.
-│   │   ├── services - Implementations of infrastructure services, such as email services or external API clients.
+│   │   ├── services - Implementations of infrastructure services (bcrypt, casl, jwt).
+│   │   │   ├── bcrypt - Bcrypt password hashing service.
+│   │   │   ├── casl - CASL ability factory for attribute-based access control.
+│   │   │   └── jwt - JWT token service.
 │   │   ├── common - Common infrastructure utilities and helpers.
 │   │   │   ├── filter - Exception filters for handling and transforming exceptions into HTTP responses.
 │   │   │   ├── guards - Security guards for protecting routes and enforcing authorization.
@@ -51,6 +54,7 @@ Current Package Structure and Future Ideal Structure
 │   │   │   ├── middlewares - Middleware functions that process requests before they reach the route handler (applicable globally, e.g., maintenance mode).
 │   │   │   └── strategies - Authentication strategies for implementing various authentication mechanisms.
 │   │   ├── config - Implementations of configuration services, for managing application settings.
+│   │   │   └── environment - Environment variable configuration and validation.
 │   │   ├── exceptions - Implementations of exception handling mechanisms.
 │   │   └── logger - Implementations of the logging interface, providing concrete logging capabilities.
 │   │
@@ -59,13 +63,26 @@ Current Package Structure and Future Ideal Structure
 │   ├── modules - Organizational units that group related code together. Each module is dedicated to a specific area of functionality within the application.
 │   │
 │   ├── app.module.ts - The root module of the application. It ties all the modules together.
+│   ├── serverless.ts - Serverless entry point for AWS Lambda deployment.
 │   │
 │   └── main.ts - The entry point of the application. It sets up the NestJS application and starts the server.
 |
 ├── database - Contains database-related files, such as migrations, seeders, and scripts.
+│   └── migrations - Database migration files managed by TypeORM.
 |
 ├── test - Contains testing-related files, including unit and integration tests.
-│   └── stubs - Contains reusable mock data and stub objects for testing purposes.
+│   ├── adapters - Tests for the adapters layer.
+│   │   └── controllers - Tests for controllers and their DTOs.
+│   ├── infrastructure - Tests for the infrastructure layer.
+│   │   ├── common - Tests for filters, interceptors, pipes, and strategies.
+│   │   ├── config - Tests for configuration services and validation.
+│   │   ├── databases - Tests for database repository implementations.
+│   │   ├── exceptions - Tests for exception handling services.
+│   │   ├── logger - Tests for logger service.
+│   │   └── services - Tests for infrastructure services (bcrypt, casl).
+│   ├── mocks - Reusable mock objects for dependency injection in tests.
+│   ├── stubs - Reusable stub data for testing purposes.
+│   └── use-cases - Tests for use case business logic.
 |
 ├── docker-compose.yml - A Docker Compose configuration file for defining and running multi-container Docker applications.
 ├── Dockerfile - Contains instructions for Docker to build an image of the application.

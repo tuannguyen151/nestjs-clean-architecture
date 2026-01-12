@@ -1,24 +1,15 @@
 import { Controller, Get } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import {
-  HealthCheck,
-  HealthCheckService,
-  MemoryHealthIndicator,
-} from '@nestjs/terminus'
+
+import { CheckHealthUseCase } from '@use-cases/health/check-health.use-case'
 
 @Controller('health')
 @ApiTags('Health')
 export class HealthController {
-  constructor(
-    private readonly health: HealthCheckService,
-    private readonly memory: MemoryHealthIndicator,
-  ) {}
+  constructor(private readonly checkHealthUseCase: CheckHealthUseCase) {}
 
   @Get()
-  @HealthCheck()
-  check() {
-    return this.health.check([
-      () => this.memory.checkHeap('memory_heap', 150 * 1024 * 1024),
-    ])
+  async check() {
+    return this.checkHealthUseCase.execute()
   }
 }
