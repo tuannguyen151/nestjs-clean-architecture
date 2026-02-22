@@ -1,8 +1,17 @@
 /* eslint-disable no-console */
 import dotenv from 'dotenv'
+// eslint-disable-next-line import/no-unresolved
+import { SeederOptions } from 'node_modules/typeorm-extension/dist/seeder'
 import { DataSource } from 'typeorm'
 
 dotenv.config({ path: '.env' })
+
+const seederOptions: SeederOptions = {
+  seeds: [__dirname + '/../../../../database/seeds/main{.ts,.js}'],
+  factories: [
+    __dirname + '/../../../../database/seeds/factories/**/*{.ts,.js}',
+  ],
+}
 
 const dataSource = new DataSource({
   type: process.env.DATABASE_ENGINE as 'postgres',
@@ -17,6 +26,7 @@ const dataSource = new DataSource({
   migrationsRun: false,
   migrations: [__dirname + '/../../../../database/migrations/**/*{.ts,.js}'],
   subscribers: [__dirname + '/subscribers/**/*{.ts,.js}'],
+  ...(process.env.NODE_ENV === 'production' ? {} : seederOptions),
 })
 
 dataSource
