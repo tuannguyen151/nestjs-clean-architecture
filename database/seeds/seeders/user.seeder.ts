@@ -3,7 +3,7 @@ import type { Seeder, SeederFactoryManager } from 'typeorm-extension'
 
 import { RoleEnum } from '@domain/entities/user.entity'
 
-import { User } from '@infrastructure/databases/postgressql/entities/user.entity'
+import { User } from '@infrastructure/databases/postgresql/entities/user.entity'
 import { BcryptService } from '@infrastructure/services/bcrypt/bcrypt.service'
 
 const DEFAULT_ADMIN_USERNAME = 'admin'

@@ -42,7 +42,7 @@ Current Package Structure and Future Ideal Structure
 │   │
 │   ├── infrastructure - This layer contains implementations of the interfaces defined in the domain layer, such as repositories and loggers, as well as other infrastructure concerns.
 │   │   ├── databases - Implementations of the data access layer for specific databases.
-│   │   │   └── postgressql - PostgreSQL database implementations.
+│   │   │   └── postgresql - PostgreSQL database implementations.
 │   │   │       ├── entities - TypeORM entities that map the application's domain entities to database tables.
 │   │   │       ├── repositories - Implementations of the repository interfaces for PostgreSQL using TypeORM.
 │   │   │       ├── typeorm.config.ts - TypeORM configuration file.

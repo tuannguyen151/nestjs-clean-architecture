@@ -2,7 +2,7 @@ import { setSeederFactory } from 'typeorm-extension'
 
 import { TaskPriorityEnum, TaskStatusEnum } from '@domain/entities/task.entity'
 
-import { Task } from '@infrastructure/databases/postgressql/entities/task.entity'
+import { Task } from '@infrastructure/databases/postgresql/entities/task.entity'
 
 export default setSeederFactory(Task, (faker) => {
   const task = new Task()

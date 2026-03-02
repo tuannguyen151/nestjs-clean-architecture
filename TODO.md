@@ -9,7 +9,8 @@
 7. [x] edit comment in main.ts & serverless.ts
 8. [x] docker for production
 9. [x] remove everything related to AWS cognito for authentication and replace with JWT
-10. [ ] Fix typing from postgressql to postgresql
+10. [x] Fix typing from postgressql to postgresql
 11. [ ] fix unit tests
 12. [ ] add authorization: https://docs.nestjs.com/security/authorization#integrating-casl - **WIP**
 13. [ ] create branch only server (remove serverless)
+14. [ ] modify AI rule. Add copilot instructions (rule), hooks, skills

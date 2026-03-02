@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm'
 import type { Seeder, SeederFactoryManager } from 'typeorm-extension'
 
-import { Task } from '@infrastructure/databases/postgressql/entities/task.entity'
-import { User } from '@infrastructure/databases/postgressql/entities/user.entity'
+import { Task } from '@infrastructure/databases/postgresql/entities/task.entity'
+import { User } from '@infrastructure/databases/postgresql/entities/user.entity'
 
 const SEED_TASKS_PER_USER = 5
 

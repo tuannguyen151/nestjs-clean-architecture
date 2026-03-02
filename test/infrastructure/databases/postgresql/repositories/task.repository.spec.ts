@@ -6,8 +6,8 @@ import { Repository, UpdateResult } from 'typeorm'
 
 import { TaskStatusEnum } from '@domain/entities/task.entity'
 
-import { Task } from '@infrastructure/databases/postgressql/entities/task.entity'
-import { TaskRepository } from '@infrastructure/databases/postgressql/repositories/task.repository'
+import { Task } from '@infrastructure/databases/postgresql/entities/task.entity'
+import { TaskRepository } from '@infrastructure/databases/postgresql/repositories/task.repository'
 
 describe('TaskRepository', () => {
   let taskRepository: TaskRepository

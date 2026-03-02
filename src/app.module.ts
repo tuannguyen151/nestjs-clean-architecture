@@ -3,7 +3,7 @@ import { PassportModule } from '@nestjs/passport'
 
 import { MaintenanceMiddleware } from './infrastructure/common/middlewares/maintenance.middleware'
 import { EnvironmentConfigModule } from './infrastructure/config/environment/environment-config.module'
-import { TypeOrmConfigModule } from './infrastructure/databases/postgressql/typeorm.module'
+import { TypeOrmConfigModule } from './infrastructure/databases/postgresql/typeorm.module'
 import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
 import { LoggerModule } from './infrastructure/logger/logger.module'
 import { AuthModule } from './modules/auth.module'
