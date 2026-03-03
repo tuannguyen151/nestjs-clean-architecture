@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": ".github/hooks/scripts/format-changed-files.sh",
+        "cwd": ".",
+        "timeout": 30
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "skills": {
+    "architecture-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "67711f2580e7196ad1730ca61513783f31943fb56fa5e308373f2dfd38ee15f4"
+    },
+    "claude-rules": {
+      "source": "outfitter-dev/agents",
+      "sourceType": "github",
+      "computedHash": "bf4768450391b8d4c799a8ece805d439a78971f053bc24bd3ad27f1ae20fec12"
+    },
+    "copilot-hooks": {
+      "source": "local",
+      "sourceType": "local"
+    },
+    "git-commit": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "computedHash": "2607fc60629b82b257136dd2a7a373f0a4466c0b49df7746d845d59313c99b21"
+    },
+    "nestjs-clean-architecture": {
+      "source": "local",
+      "sourceType": "local"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "9b03bb78ec5c81c4e0546dbb78cfc970368c72dcae5482e8c59690175abbc8e7"
+    }
+  }
+}

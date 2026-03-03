@@ -13,4 +13,4 @@
 11. [ ] fix unit tests
 12. [ ] add authorization: https://docs.nestjs.com/security/authorization#integrating-casl - **WIP**
 13. [ ] create branch only server (remove serverless)
-14. [ ] modify AI rule. Add copilot instructions (rule), hooks, skills
+14. [x] modify AI rule. Add copilot instructions (rule), hooks, skills

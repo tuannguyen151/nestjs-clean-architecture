@@ -47,9 +47,10 @@ Current Package Structure and Future Ideal Structure
 │   │   │       ├── repositories - Implementations of the repository interfaces for PostgreSQL using TypeORM.
 │   │   │       ├── typeorm.config.ts - TypeORM configuration file.
 │   │   │       └── typeorm.module.ts - TypeORM module setup.
-│   │   ├── services - Implementations of infrastructure services (bcrypt, casl, jwt).
+│   │   ├── services - Implementations of infrastructure services (bcrypt, casl, health, jwt).
 │   │   │   ├── bcrypt - Bcrypt password hashing service.
 │   │   │   ├── casl - CASL ability factory for attribute-based access control.
+│   │   │   ├── health - Health check service implementation.
 │   │   │   └── jwt - JWT token service.
 │   │   ├── common - Common infrastructure utilities and helpers.
 │   │   │   ├── filter - Exception filters for handling and transforming exceptions into HTTP responses.
@@ -72,8 +73,12 @@ Current Package Structure and Future Ideal Structure
 │   │
 │   └── main.ts - The entry point of the application. It sets up the NestJS application and starts the server.
 |
-├── database - Contains database-related files, such as migrations, seeders, and scripts.
-│   └── migrations - Database migration files managed by TypeORM.
+├── database - Contains database-related files, such as migrations, seeds, and scripts.
+│   ├── migrations - Database migration files managed by TypeORM.
+│   └── seeds - Database seed files for populating initial data.
+│       ├── main.ts - Entry point for running all seeders.
+│       ├── factories - Data factories for generating seed data.
+│       └── seeders - Seeder classes for each entity.
 |
 ├── test - Contains testing-related files, including unit and integration tests.
 │   ├── adapters - Tests for the adapters layer.
