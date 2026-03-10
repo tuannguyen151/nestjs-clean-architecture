@@ -47,6 +47,7 @@ async function bootstrap() {
   if (env !== 'production') {
     const config = new DocumentBuilder()
       .addBearerAuth()
+      .addCookieAuth('access_token')
       .setVersion('1.0')
       .build()
     const document = SwaggerModule.createDocument(app, config, {

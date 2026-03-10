@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { IException } from '@domain/exceptions/exceptions.interface'
 import { IUserRepository } from '@domain/repositories/user.repository.interface'
 import { IBcryptService } from '@domain/services/bcrypt.interface'
-import { IJwtService } from '@domain/services/jwt.interface'
+import { IAuthTokensResult, IJwtService } from '@domain/services/jwt.interface'
 
 @Injectable()
 export class LoginUseCase {
@@ -18,7 +18,10 @@ export class LoginUseCase {
     private readonly exceptionsService: IException,
   ) {}
 
-  async execute(payload: { username: string; password: string }) {
+  async execute(payload: {
+    username: string
+    password: string
+  }): Promise<IAuthTokensResult> {
     const user = await this.userRepository.getUserByUsername(payload.username)
     if (!user)
       this.exceptionsService.badRequestException({
@@ -49,25 +52,17 @@ export class LoginUseCase {
     await this.userRepository.updateLastLogin(userId)
   }
 
-  private async createTokens(userId: number) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.createToken(
-        {
-          id: userId,
-        },
-        'access',
-      ),
-      this.jwtService.createToken(
-        {
-          id: userId,
-        },
-        'refresh',
-      ),
+  private async createTokens(userId: number): Promise<IAuthTokensResult> {
+    const [access, refresh] = await Promise.all([
+      this.jwtService.createToken({ id: userId }, 'access'),
+      this.jwtService.createToken({ id: userId }, 'refresh'),
     ])
 
     return {
-      accessToken,
-      refreshToken,
+      accessToken: access.token,
+      accessExpiresAt: access.expiresAt,
+      refreshToken: refresh.token,
+      refreshExpiresAt: refresh.expiresAt,
     }
   }
 }

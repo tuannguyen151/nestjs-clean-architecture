@@ -26,17 +26,17 @@ export class JwtRefreshStrategy extends PassportStrategy(
     private readonly userRepository: IUserRepository,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        (request: Request) =>
+          (request?.cookies?.['refresh_token'] as string) ?? null,
+      ]),
       secretOrKey: jwtConfig.getJwtRefreshSecret(),
       passReqToCallback: true,
     })
   }
 
-  async validate(request: Request, payload: IJwtServicePayload) {
-    const refreshToken = request.headers['authorization']
-      ?.replace('Bearer', '')
-      .trim()
-
+  async validate(payload: IJwtServicePayload) {
     const user = await this.userRepository.getUserById(payload.id)
     if (!user) {
       this.logger.warn('JwtRefreshStrategy', 'User not found')
@@ -46,6 +46,6 @@ export class JwtRefreshStrategy extends PassportStrategy(
       })
     }
 
-    return { ...user, refreshToken }
+    return user
   }
 }

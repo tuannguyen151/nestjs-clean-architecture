@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 
-import { IJwtService } from '@domain/services/jwt.interface'
+import { IAuthTokensResult, IJwtService } from '@domain/services/jwt.interface'
 
 @Injectable()
 export class RefreshUseCase {
@@ -9,31 +9,17 @@ export class RefreshUseCase {
     private readonly jwtService: IJwtService,
   ) {}
 
-  async execute(payload: { userId: number }) {
-    const tokens = await this.createTokens(payload.userId)
-
-    return tokens
-  }
-
-  private async createTokens(userId: number) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.createToken(
-        {
-          id: userId,
-        },
-        'access',
-      ),
-      this.jwtService.createToken(
-        {
-          id: userId,
-        },
-        'refresh',
-      ),
+  async execute(payload: { userId: number }): Promise<IAuthTokensResult> {
+    const [access, refresh] = await Promise.all([
+      this.jwtService.createToken({ id: payload.userId }, 'access'),
+      this.jwtService.createToken({ id: payload.userId }, 'refresh'),
     ])
 
     return {
-      accessToken,
-      refreshToken,
+      accessToken: access.token,
+      accessExpiresAt: access.expiresAt,
+      refreshToken: refresh.token,
+      refreshExpiresAt: refresh.expiresAt,
     }
   }
 }
