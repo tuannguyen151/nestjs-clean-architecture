@@ -22,13 +22,13 @@ const DEFAULT_SELECT_FIELDS: (keyof Task)[] = [
 ]
 
 interface ITaskWhereCondition {
-  userId: number
+  userId?: number
   status?: Task['status']
   priority?: Task['priority'] | ReturnType<typeof In>
 }
 
 interface IWhereConditionParams {
-  userId: number
+  userId?: number
   status?: Task['status']
   priority?: Task['priority'] | Task['priority'][]
 }
@@ -45,7 +45,7 @@ export class TaskRepository implements ITaskRepository {
     status,
     priority,
     userId,
-  }: ISearchTasksParams & { userId: number }): Promise<TaskEntity[]> {
+  }: ISearchTasksParams & { userId?: number }): Promise<TaskEntity[]> {
     const tasks = await this.taskRepository.find({
       where: this.buildWhereCondition({ userId, status, priority }),
       select: DEFAULT_SELECT_FIELDS,
@@ -103,7 +103,7 @@ export class TaskRepository implements ITaskRepository {
     userId,
     status,
     priority,
-  }: ICountTasksParams & { userId: number }): Promise<number> {
+  }: ICountTasksParams & { userId?: number }): Promise<number> {
     return await this.taskRepository.count({
       where: this.buildWhereCondition({ userId, status, priority }),
     })
@@ -128,7 +128,11 @@ export class TaskRepository implements ITaskRepository {
     status,
     priority,
   }: IWhereConditionParams): ITaskWhereCondition {
-    const whereCondition: ITaskWhereCondition = { userId }
+    const whereCondition: ITaskWhereCondition = {}
+
+    if (userId !== undefined) {
+      whereCondition.userId = userId
+    }
 
     if (status !== undefined) {
       whereCondition.status = status

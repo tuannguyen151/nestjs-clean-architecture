@@ -18,7 +18,7 @@ export interface ICountTasksParams {
 export const ITaskRepository = Symbol('ITaskRepository')
 export interface ITaskRepository {
   findTasks(
-    payload: ISearchTasksParams & { userId: number },
+    payload: ISearchTasksParams & { userId?: number },
   ): Promise<TaskEntity[]>
   createTask(task: Partial<TaskEntity>): Promise<TaskEntity>
   findOneTask(payload: {
@@ -32,5 +32,5 @@ export interface ITaskRepository {
     },
     task: Partial<TaskEntity>,
   ): Promise<boolean>
-  countTasks(params: ICountTasksParams & { userId: number }): Promise<number>
+  countTasks(params: ICountTasksParams & { userId?: number }): Promise<number>
 }

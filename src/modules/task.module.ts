@@ -13,12 +13,13 @@ import { TaskRepository } from '@infrastructure/databases/postgresql/repositorie
 import { ExceptionsModule } from '@infrastructure/exceptions/exceptions.module'
 import { CaslModule } from '@infrastructure/services/casl/casl.module'
 
+import { PublicTasksController } from '../adapters/controllers/tasks/public-tasks.controller'
 import { TasksController } from '../adapters/controllers/tasks/tasks.controller'
 import { Task } from '../infrastructure/databases/postgresql/entities/task.entity'
 
 @Module({
   imports: [TypeOrmModule.forFeature([Task]), CaslModule, ExceptionsModule],
-  controllers: [TasksController],
+  controllers: [TasksController, PublicTasksController],
   providers: [
     {
       provide: ITaskRepository,
