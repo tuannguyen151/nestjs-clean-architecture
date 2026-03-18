@@ -19,6 +19,19 @@ async function bootstrap() {
   const env = process.env.NODE_ENV
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
+  const corsOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3001')
+    .split(',')
+    .map((origin) => origin.trim())
+
+  app.enableCors({
+    origin: corsOrigins.length === 1 ? corsOrigins[0] : corsOrigins,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Set-Cookie'],
+    credentials: true,
+    maxAge: 86400, // cache preflight 24h
+  })
+
   app.use(cookieParser())
 
   // Register global exception filter
