@@ -32,7 +32,8 @@ describe('TaskRepository', () => {
 
   describe('findTasks', () => {
     it('should return an array of tasks', async () => {
-      const mockTasks: Task[] = [createTaskStub()]
+      const stub = createTaskStub()
+      const mockTasks = [stub] as unknown as Task[]
       const mockParams = {
         size: 10,
         status: TaskStatusEnum.Completed,
@@ -43,7 +44,7 @@ describe('TaskRepository', () => {
 
       const result = await taskRepository.findTasks(mockParams)
 
-      expect(result).toEqual(mockTasks)
+      expect(result).toEqual([stub])
       expect(taskEntityRepository.find).toHaveBeenCalledWith({
         where: {
           userId: mockParams.userId,
@@ -60,32 +61,30 @@ describe('TaskRepository', () => {
 
   describe('createTask', () => {
     it('should create a new task', async () => {
+      const stub = createTaskStub()
       const mockTask: Partial<Task> = {
         title: 'Task title',
-      }
-      const mockNewTask: Task = {
-        ...createTaskStub(),
-        ...mockTask,
       }
 
       jest
         .spyOn(taskEntityRepository, 'create')
-        .mockReturnValueOnce(mockNewTask)
+        .mockReturnValueOnce(stub as unknown as Task)
       jest
         .spyOn(taskEntityRepository, 'save')
-        .mockResolvedValueOnce(mockNewTask)
+        .mockResolvedValueOnce(stub as unknown as Task)
 
       const result = await taskRepository.createTask(mockTask)
 
-      expect(result).toEqual(mockNewTask)
+      expect(result).toEqual(stub)
       expect(taskEntityRepository.create).toHaveBeenCalledWith(mockTask)
-      expect(taskEntityRepository.save).toHaveBeenCalledWith(mockNewTask)
+      expect(taskEntityRepository.save).toHaveBeenCalledWith(stub)
     })
   })
 
-  describe('findOnTask', () => {
+  describe('findOneTask', () => {
     it('should return a task', async () => {
-      const mockTask: Task = createTaskStub()
+      const stub = createTaskStub()
+      const mockTask = stub as unknown as Task
       const mockParams = {
         id: 1,
         userId: 123,
@@ -95,9 +94,9 @@ describe('TaskRepository', () => {
         .spyOn(taskEntityRepository, 'findOne')
         .mockResolvedValueOnce(mockTask)
 
-      const result = await taskRepository.findOnTask(mockParams)
+      const result = await taskRepository.findOneTask(mockParams)
 
-      expect(result).toEqual(mockTask)
+      expect(result).toEqual(stub)
       expect(taskEntityRepository.findOne).toHaveBeenCalledWith({
         where: {
           id: mockParams.id,

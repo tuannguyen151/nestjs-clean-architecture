@@ -1,8 +1,7 @@
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
 
-import { TaskStatusEnum } from '@domain/entities/task.entity'
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { TaskPriorityEnum, TaskStatusEnum } from '@domain/entities/task.entity'
 
 import { CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
 
@@ -86,13 +85,13 @@ describe('CountTasksDto', () => {
       ])
     })
 
-    it('should throw BadRequestException for invalid priority value', () => {
-      expect(() => {
-        plainToClass(CountTasksDto, {
-          ...dto,
-          priority: '999',
-        })
-      }).toThrow()
+    it('should fail validation for invalid priority value', async () => {
+      const dtoTransform = plainToClass(CountTasksDto, {
+        ...dto,
+        priority: '999',
+      })
+      const validationErrors = await validate(dtoTransform)
+      expect(validationErrors.length).toBeGreaterThan(0)
     })
 
     it('should handle empty string priority as undefined', async () => {

@@ -98,7 +98,7 @@ describe('TasksController', () => {
         userId: userId,
         ...countTasksDto,
       })
-      expect(result).toEqual(new CountTasksPresenter({ count }))
+      expect(result).toEqual(new CountTasksPresenter(count))
     })
   })
 
@@ -137,10 +137,15 @@ describe('TasksController', () => {
 
       const result = await controller.create(createTaskDto, userId)
 
-      expect(createTaskUseCase.execute).toHaveBeenCalledWith({
-        ...createTaskDto,
-        userId: userId,
-      })
+      expect(createTaskUseCase.execute).toHaveBeenCalledWith(
+        {
+          title: createTaskDto.title,
+          description: createTaskDto.description,
+          dueDate: createTaskDto.dueDate,
+          priority: createTaskDto.priority,
+        },
+        userId,
+      )
 
       expect(result).toEqual(new CreateTaskPresenter(task))
     })

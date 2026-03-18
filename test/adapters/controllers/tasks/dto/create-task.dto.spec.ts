@@ -1,6 +1,6 @@
 import { validate } from 'class-validator'
 
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { TaskPriorityEnum } from '@domain/entities/task.entity'
 
 import { CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
 

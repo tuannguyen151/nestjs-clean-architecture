@@ -1,22 +1,19 @@
 import { Test } from '@nestjs/testing'
 
-import {
-  ITaskRepositoryInterface,
-  TASK_REPOSITORY,
-} from '@domain/repositories/task.repository.interface'
+import { ITaskRepository } from '@domain/repositories/task.repository.interface'
 
 import { CountTasksUseCase } from '@use-cases/tasks/count-tasks.use-case'
 
 describe('CountTasksUseCase', () => {
   let countTasksUseCase: CountTasksUseCase
-  let taskRepository: ITaskRepositoryInterface
+  let taskRepository: ITaskRepository
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         CountTasksUseCase,
         {
-          provide: TASK_REPOSITORY,
+          provide: ITaskRepository,
           useValue: {
             countTasks: jest.fn(),
           },
@@ -25,7 +22,7 @@ describe('CountTasksUseCase', () => {
     }).compile()
 
     countTasksUseCase = moduleRef.get<CountTasksUseCase>(CountTasksUseCase)
-    taskRepository = moduleRef.get<ITaskRepositoryInterface>(TASK_REPOSITORY)
+    taskRepository = moduleRef.get<ITaskRepository>(ITaskRepository)
   })
 
   describe('execute', () => {

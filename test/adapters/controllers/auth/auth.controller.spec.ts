@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
-import { RoleEnum } from '@domain/entities/role.entity'
-import { UserEntity } from '@domain/entities/user.entity'
-import { IException } from '@domain/exceptions/exceptions.interface'
+import type { Response } from 'express'
+
+import { RoleEnum, UserEntity } from '@domain/entities/user.entity'
 
 import { LoginUseCase } from '@use-cases/auth/login.use-case'
 import { RefreshUseCase } from '@use-cases/auth/refresh.use-case'
@@ -45,14 +45,18 @@ describe('AuthController', () => {
     expect(controller).toBeDefined()
   })
 
-  const mockUser: UserEntity = {
+  const mockUser = {
     id: 1,
     username: 'testuser',
-    password: 'hashedpassword',
+    hashedPassword: 'hashedpassword',
     role: RoleEnum.User,
     createdAt: new Date(),
     updatedAt: new Date(),
-  }
+  } as unknown as UserEntity
+
+  const mockRes = {
+    cookie: jest.fn(),
+  } as unknown as Response
 
   describe('login', () => {
     it('should return a LoginPresenter', async () => {
@@ -60,17 +64,18 @@ describe('AuthController', () => {
         username: 'user@example.com',
         password: 'password',
       }
+      const accessExpiresAt = new Date()
+      const refreshExpiresAt = new Date()
       const tokens = {
         accessToken: 'mockAccessToken',
+        accessExpiresAt,
         refreshToken: 'mockRefreshToken',
+        refreshExpiresAt,
       }
-      const loginPresenter = new LoginPresenter({
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      })
+      const loginPresenter = new LoginPresenter(tokens)
       jest.spyOn(loginUseCase, 'execute').mockResolvedValue(tokens)
 
-      const result = await controller.login(loginDto)
+      const result = await controller.login(loginDto, mockRes)
 
       expect(result).toEqual(loginPresenter)
       expect(loginUseCase.execute).toHaveBeenCalledWith(loginDto)
@@ -85,24 +90,25 @@ describe('AuthController', () => {
         throw new Error('Test error')
       })
 
-      await expect(controller.login(loginDto)).rejects.toThrow(Error)
+      await expect(controller.login(loginDto, mockRes)).rejects.toThrow(Error)
     })
   })
 
   describe('refresh', () => {
     it('should return a RefreshPresenter', async () => {
       const userId = mockUser.id
+      const accessExpiresAt = new Date()
+      const refreshExpiresAt = new Date()
       const tokens = {
         accessToken: 'mockNewAccessToken',
+        accessExpiresAt,
         refreshToken: 'mockNewRefreshToken',
+        refreshExpiresAt,
       }
-      const refreshPresenter = new RefreshPresenter({
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-      })
+      const refreshPresenter = new RefreshPresenter(tokens)
       jest.spyOn(refreshUseCase, 'execute').mockResolvedValue(tokens)
 
-      const result = await controller.refresh(userId)
+      const result = await controller.refresh(userId, mockRes)
 
       expect(result).toEqual(refreshPresenter)
       expect(refreshUseCase.execute).toHaveBeenCalledWith({
@@ -116,7 +122,7 @@ describe('AuthController', () => {
         throw new Error('Test error')
       })
 
-      await expect(controller.refresh(userId)).rejects.toThrow(Error)
+      await expect(controller.refresh(userId, mockRes)).rejects.toThrow(Error)
     })
   })
 })

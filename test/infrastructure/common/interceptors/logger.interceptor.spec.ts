@@ -1,33 +1,27 @@
 import { CallHandler, ExecutionContext } from '@nestjs/common'
-import { Test, TestingModule } from '@nestjs/testing'
 
 import { Request } from 'express'
 import { of } from 'rxjs'
 import { tap } from 'rxjs/operators'
 
+import { ILogger } from '@domain/logger/logger.interface'
+
 import { LoggingInterceptor } from '@infrastructure/common/interceptors/logger.interceptor'
-import { LoggerService } from '@infrastructure/logger/logger.service'
 
 describe('LoggingInterceptor', () => {
   let interceptor: LoggingInterceptor
-  let loggerService: LoggerService
+  let loggerService: ILogger
   let next: CallHandler
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        LoggingInterceptor,
-        {
-          provide: LoggerService,
-          useValue: {
-            log: jest.fn(),
-          },
-        },
-      ],
-    }).compile()
-
-    interceptor = module.get<LoggingInterceptor>(LoggingInterceptor)
-    loggerService = module.get<LoggerService>(LoggerService)
+  beforeEach(() => {
+    loggerService = {
+      log: jest.fn(),
+      error: jest.fn(),
+      warn: jest.fn(),
+      debug: jest.fn(),
+      verbose: jest.fn(),
+    }
+    interceptor = new LoggingInterceptor(loggerService)
     next = {
       handle: jest.fn(() => of(null).pipe(tap(() => {}))),
     } as CallHandler

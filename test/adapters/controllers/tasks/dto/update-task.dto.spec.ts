@@ -1,8 +1,7 @@
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
 
-import { TaskStatusEnum } from '@domain/entities/task.entity'
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { TaskPriorityEnum, TaskStatusEnum } from '@domain/entities/task.entity'
 
 import { UpdateTaskDto } from '@adapters/controllers/tasks/dto/update-task.dto'
 

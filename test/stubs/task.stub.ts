@@ -1,16 +1,20 @@
-import { TaskEntity, TaskStatusEnum } from '@domain/entities/task.entity'
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import {
+  TaskEntity,
+  TaskPriorityEnum,
+  TaskStatusEnum,
+} from '@domain/entities/task.entity'
 
 export const createTaskStub = (): TaskEntity => {
-  return {
-    id: 1,
-    title: 'Task 1',
-    description: 'Description 1',
-    status: TaskStatusEnum.Completed,
-    priority: TaskPriorityEnum.Medium,
-    userId: 1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    dueDate: new Date(),
-  }
+  const now = new Date()
+  return new TaskEntity(
+    1,
+    1,
+    'Task 1',
+    TaskStatusEnum.Completed,
+    TaskPriorityEnum.Medium,
+    now,
+    now,
+    'Description 1',
+    now,
+  )
 }

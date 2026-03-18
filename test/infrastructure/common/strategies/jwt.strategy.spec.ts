@@ -54,14 +54,14 @@ describe('JwtStrategy', () => {
 
   it('should validate payload and return user if user exists', async () => {
     const payload: IJwtServicePayload = { id: 1 }
-    const mockUser: UserEntity = {
-      id: 1,
-      username: 'test',
-      password: 'pwd',
-      role: RoleEnum.User,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
+    const mockUser = new UserEntity(
+      1,
+      'test',
+      'pwd',
+      RoleEnum.User,
+      new Date(),
+      new Date(),
+    )
     jest.spyOn(userRepository, 'getUserById').mockResolvedValue(mockUser)
 
     const result = await jwtStrategy.validate(payload)

@@ -3,23 +3,20 @@ import { Test } from '@nestjs/testing'
 import { createTaskStub } from 'test/stubs/task.stub'
 
 import { TaskEntity } from '@domain/entities/task.entity'
-import {
-  ITaskRepositoryInterface,
-  TASK_REPOSITORY,
-} from '@domain/repositories/task.repository.interface'
+import { ITaskRepository } from '@domain/repositories/task.repository.interface'
 
 import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
 
 describe('GetListTasksUseCase', () => {
   let getListTasksUseCase: GetListTasksUseCase
-  let taskRepository: ITaskRepositoryInterface
+  let taskRepository: ITaskRepository
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         GetListTasksUseCase,
         {
-          provide: TASK_REPOSITORY,
+          provide: ITaskRepository,
           useValue: {
             findTasks: jest.fn(),
           },
@@ -29,7 +26,7 @@ describe('GetListTasksUseCase', () => {
 
     getListTasksUseCase =
       moduleRef.get<GetListTasksUseCase>(GetListTasksUseCase)
-    taskRepository = moduleRef.get<ITaskRepositoryInterface>(TASK_REPOSITORY)
+    taskRepository = moduleRef.get<ITaskRepository>(ITaskRepository)
   })
 
   describe('execute', () => {

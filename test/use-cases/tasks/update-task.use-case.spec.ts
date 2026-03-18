@@ -1,17 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
 import { TaskEntity } from '@domain/entities/task.entity'
-import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
-import {
-  ITaskRepositoryInterface,
-  TASK_REPOSITORY,
-} from '@domain/repositories/task.repository.interface'
+import { IException } from '@domain/exceptions/exceptions.interface'
+import { ITaskRepository } from '@domain/repositories/task.repository.interface'
 
 import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
 
 describe('UpdateTaskUseCase', () => {
   let updateTaskUseCase: UpdateTaskUseCase
-  let taskRepository: ITaskRepositoryInterface
+  let taskRepository: ITaskRepository
   let exceptionsService: IException
 
   beforeEach(async () => {
@@ -19,14 +16,14 @@ describe('UpdateTaskUseCase', () => {
       providers: [
         UpdateTaskUseCase,
         {
-          provide: TASK_REPOSITORY,
+          provide: ITaskRepository,
           useValue: {
-            findOnTask: jest.fn(),
+            findOneTask: jest.fn(),
             updateTask: jest.fn(),
           },
         },
         {
-          provide: EXCEPTIONS,
+          provide: IException,
           useValue: {
             notFoundException: jest.fn(),
           },
@@ -35,13 +32,13 @@ describe('UpdateTaskUseCase', () => {
     }).compile()
 
     updateTaskUseCase = moduleRef.get<UpdateTaskUseCase>(UpdateTaskUseCase)
-    taskRepository = moduleRef.get<ITaskRepositoryInterface>(TASK_REPOSITORY)
-    exceptionsService = moduleRef.get<IException>(EXCEPTIONS)
-    ;(exceptionsService.notFoundException as jest.Mock).mockImplementation(
-      (data: { message: string }) => {
-        throw new Error(data.message)
-      },
-    )
+    taskRepository = moduleRef.get<ITaskRepository>(ITaskRepository)
+    exceptionsService = moduleRef.get<IException>(IException)
+    ;(
+      exceptionsService.notFoundException as unknown as jest.Mock
+    ).mockImplementation((data: { message: string }) => {
+      throw new Error(data.message)
+    })
   })
 
   describe('execute', () => {
@@ -49,13 +46,13 @@ describe('UpdateTaskUseCase', () => {
       const params = { id: 1, userId: 123 }
       const taskPayload: Partial<TaskEntity> = { title: 'New Title' }
       jest
-        .spyOn(taskRepository, 'findOnTask')
+        .spyOn(taskRepository, 'findOneTask')
         .mockResolvedValueOnce({} as TaskEntity)
       jest.spyOn(taskRepository, 'updateTask').mockResolvedValueOnce(true)
 
       const result = await updateTaskUseCase.execute(params, taskPayload)
 
-      expect(taskRepository.findOnTask).toHaveBeenCalledWith(params)
+      expect(taskRepository.findOneTask).toHaveBeenCalledWith(params)
       expect(taskRepository.updateTask).toHaveBeenCalledWith(
         params,
         taskPayload,
@@ -67,14 +64,14 @@ describe('UpdateTaskUseCase', () => {
       const params = { id: 1, userId: 123 }
       const taskPayload: Partial<TaskEntity> = { title: 'New Title' }
 
-      jest.spyOn(taskRepository, 'findOnTask').mockResolvedValueOnce(null)
+      jest.spyOn(taskRepository, 'findOneTask').mockResolvedValueOnce(null)
       jest.spyOn(exceptionsService, 'notFoundException')
 
       await expect(
         updateTaskUseCase.execute(params, taskPayload),
       ).rejects.toThrow('Task not found')
 
-      expect(taskRepository.findOnTask).toHaveBeenCalledWith(params)
+      expect(taskRepository.findOneTask).toHaveBeenCalledWith(params)
       expect(exceptionsService.notFoundException).toHaveBeenCalledWith({
         type: 'TaskNotFoundException',
         message: 'Task not found',

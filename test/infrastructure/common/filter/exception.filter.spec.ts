@@ -1,29 +1,22 @@
 import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common'
-import { Test, TestingModule } from '@nestjs/testing'
+
+import { ILogger } from '@domain/logger/logger.interface'
 
 import { AllExceptionFilter } from '@infrastructure/common/filter/exception.filter'
-import { LoggerService } from '@infrastructure/logger/logger.service'
 
 describe('AllExceptionFilter', () => {
   let filter: AllExceptionFilter
-  let loggerService: LoggerService
+  let loggerService: ILogger
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        AllExceptionFilter,
-        {
-          provide: LoggerService,
-          useValue: {
-            error: jest.fn(),
-            warn: jest.fn(),
-          },
-        },
-      ],
-    }).compile()
-
-    filter = module.get<AllExceptionFilter>(AllExceptionFilter)
-    loggerService = module.get<LoggerService>(LoggerService)
+  beforeEach(() => {
+    loggerService = {
+      error: jest.fn(),
+      warn: jest.fn(),
+      log: jest.fn(),
+      debug: jest.fn(),
+      verbose: jest.fn(),
+    }
+    filter = new AllExceptionFilter(loggerService)
   })
 
   it('should be defined', () => {
@@ -71,8 +64,13 @@ describe('AllExceptionFilter', () => {
       expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN)
       expect(mockResponse.json).toHaveBeenCalledWith(expectedResponseData)
       expect(loggerService.warn).toHaveBeenCalledWith(
-        `End Request for ${mockRequest.url}`,
-        `method=${mockRequest.method} status=${HttpStatus.FORBIDDEN} type=${mockHttpException.name} message=${mockHttpException.message}`,
+        `End Request for ${mockRequest.path}`,
+        {
+          method: mockRequest.method,
+          ip: expect.any(String),
+          status: HttpStatus.FORBIDDEN,
+          error: { type: 'HttpException', message: 'Forbidden' },
+        },
       )
     })
 
@@ -112,8 +110,13 @@ describe('AllExceptionFilter', () => {
       )
       expect(mockResponse.json).toHaveBeenCalledWith(expectedResponseData)
       expect(loggerService.error).toHaveBeenCalledWith(
-        `End Request for ${mockRequest.url}`,
-        `method=${mockRequest.method} status=${HttpStatus.INTERNAL_SERVER_ERROR} type=${mockError.name} message=${mockError.message}`,
+        `End Request for ${mockRequest.path}`,
+        {
+          method: mockRequest.method,
+          ip: expect.any(String),
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: { type: 'Error', message: 'Internal Server Error' },
+        },
         expect.any(String),
       )
     })

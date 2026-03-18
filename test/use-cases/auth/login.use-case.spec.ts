@@ -1,17 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing'
 
-import { RoleEnum } from '@domain/entities/role.entity'
-import { UserEntity } from '@domain/entities/user.entity'
-import { EXCEPTIONS, IException } from '@domain/exceptions/exceptions.interface'
-import {
-  IUserRepository,
-  USER_REPOSITORY,
-} from '@domain/repositories/user.repository.interface'
-import {
-  BCRYPT_SERVICE,
-  IBcryptService,
-} from '@domain/services/bcrypt.interface'
-import { IJwtService, JWT_SERVICE } from '@domain/services/jwt.interface'
+import { RoleEnum, UserEntity } from '@domain/entities/user.entity'
+import { IException } from '@domain/exceptions/exceptions.interface'
+import { IUserRepository } from '@domain/repositories/user.repository.interface'
+import { IBcryptService } from '@domain/services/bcrypt.interface'
+import { IJwtService } from '@domain/services/jwt.interface'
 
 import { LoginUseCase } from '@use-cases/auth/login.use-case'
 
@@ -22,40 +15,40 @@ describe('LoginUseCase', () => {
   let jwtService: IJwtService
   let exceptionsService: IException
 
-  const mockUser: UserEntity = {
+  const mockUser = {
     id: 1,
     username: 'testuser',
-    password: 'hashedpassword',
+    hashedPassword: 'hashedpassword',
     role: RoleEnum.User,
     createdAt: new Date(),
     updatedAt: new Date(),
-  }
+  } as unknown as UserEntity
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         LoginUseCase,
         {
-          provide: USER_REPOSITORY,
+          provide: IUserRepository,
           useValue: {
             getUserByUsername: jest.fn(),
             updateLastLogin: jest.fn(),
           },
         },
         {
-          provide: BCRYPT_SERVICE,
+          provide: IBcryptService,
           useValue: {
             compare: jest.fn(),
           },
         },
         {
-          provide: JWT_SERVICE,
+          provide: IJwtService,
           useValue: {
             createToken: jest.fn(),
           },
         },
         {
-          provide: EXCEPTIONS,
+          provide: IException,
           useValue: {
             badRequestException: jest.fn((err: { message: string }) => {
               throw new Error(err.message)
@@ -66,10 +59,10 @@ describe('LoginUseCase', () => {
     }).compile()
 
     useCase = module.get<LoginUseCase>(LoginUseCase)
-    userRepository = module.get<IUserRepository>(USER_REPOSITORY)
-    bcryptService = module.get<IBcryptService>(BCRYPT_SERVICE)
-    jwtService = module.get<IJwtService>(JWT_SERVICE)
-    exceptionsService = module.get<IException>(EXCEPTIONS)
+    userRepository = module.get<IUserRepository>(IUserRepository)
+    bcryptService = module.get<IBcryptService>(IBcryptService)
+    jwtService = module.get<IJwtService>(IJwtService)
+    exceptionsService = module.get<IException>(IException)
   })
 
   it('should successfully login a user and return tokens', async () => {
@@ -77,12 +70,21 @@ describe('LoginUseCase', () => {
       username: 'testuser',
       password: 'Password123!',
     }
+    const accessExpiresAt = new Date()
+    const refreshExpiresAt = new Date()
+
     jest.spyOn(userRepository, 'getUserByUsername').mockResolvedValue(mockUser)
     jest.spyOn(bcryptService, 'compare').mockResolvedValue(true)
     jest
       .spyOn(jwtService, 'createToken')
-      .mockResolvedValueOnce('mockAccessToken')
-      .mockResolvedValueOnce('mockRefreshToken')
+      .mockResolvedValueOnce({
+        token: 'mockAccessToken',
+        expiresAt: accessExpiresAt,
+      })
+      .mockResolvedValueOnce({
+        token: 'mockRefreshToken',
+        expiresAt: refreshExpiresAt,
+      })
     jest.spyOn(userRepository, 'updateLastLogin').mockResolvedValue(undefined)
 
     const result = await useCase.execute(payload)
@@ -92,13 +94,15 @@ describe('LoginUseCase', () => {
     )
     expect(bcryptService.compare).toHaveBeenCalledWith(
       payload.password,
-      mockUser.password,
+      mockUser.hashedPassword,
     )
     expect(jwtService.createToken).toHaveBeenCalledTimes(2)
     expect(userRepository.updateLastLogin).toHaveBeenCalledWith(mockUser.id)
     expect(result).toEqual({
       accessToken: 'mockAccessToken',
+      accessExpiresAt,
       refreshToken: 'mockRefreshToken',
+      refreshExpiresAt,
     })
   })
 

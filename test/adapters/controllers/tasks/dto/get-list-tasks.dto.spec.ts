@@ -1,8 +1,7 @@
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
 
-import { TaskStatusEnum } from '@domain/entities/task.entity'
-import { TaskPriorityEnum } from '@domain/enums/task-priority.enum'
+import { TaskPriorityEnum, TaskStatusEnum } from '@domain/entities/task.entity'
 
 import { GetListTasksDto } from '@adapters/controllers/tasks/dto/get-list-tasks.dto'
 
@@ -123,22 +122,22 @@ describe('GetListTasksDto', () => {
       ])
     })
 
-    it('should throw BadRequestException for invalid priority value', () => {
-      expect(() => {
-        plainToClass(GetListTasksDto, {
-          ...dto,
-          priority: '999',
-        })
-      }).toThrow()
+    it('should fail validation for invalid priority value', async () => {
+      const dtoTransform = plainToClass(GetListTasksDto, {
+        ...dto,
+        priority: '999',
+      })
+      const validationErrors = await validate(dtoTransform)
+      expect(validationErrors.length).toBeGreaterThan(0)
     })
 
-    it('should throw BadRequestException for mixed valid and invalid priority values', () => {
-      expect(() => {
-        plainToClass(GetListTasksDto, {
-          ...dto,
-          priority: `${TaskPriorityEnum.Low},999`,
-        })
-      }).toThrow()
+    it('should fail validation for mixed valid and invalid priority values', async () => {
+      const dtoTransform = plainToClass(GetListTasksDto, {
+        ...dto,
+        priority: `${TaskPriorityEnum.Low},999`,
+      })
+      const validationErrors = await validate(dtoTransform)
+      expect(validationErrors.length).toBeGreaterThan(0)
     })
 
     it('should handle empty string priority as undefined', async () => {
