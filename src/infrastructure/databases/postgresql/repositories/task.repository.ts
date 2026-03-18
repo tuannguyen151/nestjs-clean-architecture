@@ -104,7 +104,7 @@ export class TaskRepository implements ITaskRepository {
     status,
     priority,
   }: ICountTasksParams & { userId?: number }): Promise<number> {
-    return await this.taskRepository.count({
+    return this.taskRepository.count({
       where: this.buildWhereCondition({ userId, status, priority }),
     })
   }

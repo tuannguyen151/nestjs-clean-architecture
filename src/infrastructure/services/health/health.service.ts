@@ -16,7 +16,7 @@ export class HealthService implements IHealthService {
   ) {}
 
   async checkMemoryHeap(): Promise<IHealthCheckResult> {
-    return await this.health.check([
+    return this.health.check([
       () => this.memory.checkHeap('memory_heap', MEMORY_HEAP_THRESHOLD_BYTES),
     ])
   }

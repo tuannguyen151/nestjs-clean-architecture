@@ -1,6 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { Test, type TestingModule } from '@nestjs/testing'
 
-import { TaskEntity } from '@domain/entities/task.entity'
+import { type TaskEntity } from '@domain/entities/task.entity'
 import { IException } from '@domain/exceptions/exceptions.interface'
 import { ITaskRepository } from '@domain/repositories/task.repository.interface'
 

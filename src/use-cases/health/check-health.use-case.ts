@@ -13,6 +13,6 @@ export class CheckHealthUseCase {
   ) {}
 
   async execute(): Promise<IHealthCheckResult> {
-    return await this.healthService.checkMemoryHeap()
+    return this.healthService.checkMemoryHeap()
   }
 }

@@ -15,7 +15,9 @@ class IsValidPriorityListConstraint implements ValidatorConstraintInterface {
   validate(value: unknown): boolean {
     if (value === undefined || value === null) return true
     const items = Array.isArray(value) ? value : [value]
-    return items.every((v) => VALID_PRIORITIES.includes(v as number))
+    return items.every(
+      (v) => typeof v === 'number' && VALID_PRIORITIES.includes(v),
+    )
   }
 
   defaultMessage(args: ValidationArguments): string {

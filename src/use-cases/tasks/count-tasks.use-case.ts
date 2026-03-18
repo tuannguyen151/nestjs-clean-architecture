@@ -15,6 +15,6 @@ export class CountTasksUseCase {
   async execute(
     params: ICountTasksParams & { userId?: number },
   ): Promise<number> {
-    return await this.taskRepository.countTasks(params)
+    return this.taskRepository.countTasks(params)
   }
 }

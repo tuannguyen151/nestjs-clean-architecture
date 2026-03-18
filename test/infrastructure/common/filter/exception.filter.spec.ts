@@ -1,6 +1,6 @@
-import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common'
+import { type ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common'
 
-import { ILogger } from '@domain/logger/logger.interface'
+import { type ILogger } from '@domain/logger/logger.interface'
 
 import { AllExceptionFilter } from '@infrastructure/common/filter/exception.filter'
 

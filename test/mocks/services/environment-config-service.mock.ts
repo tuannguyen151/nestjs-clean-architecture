@@ -1,4 +1,4 @@
-import { IJwtConfig } from '@domain/config/jwt.interface'
+import { type IJwtConfig } from '@domain/config/jwt.interface'
 
 export const environmentConfigServiceMock: Partial<IJwtConfig> = {
   getJwtSecret: () => 'test-secret',

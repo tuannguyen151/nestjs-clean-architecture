@@ -1,10 +1,10 @@
-import { CallHandler, ExecutionContext } from '@nestjs/common'
-import { Test, TestingModule } from '@nestjs/testing'
+import { type CallHandler, type ExecutionContext } from '@nestjs/common'
+import { Test, type TestingModule } from '@nestjs/testing'
 
 import { of } from 'rxjs'
 
 import {
-  ResponseFormat,
+  type ResponseFormat,
   ResponseInterceptor,
 } from '@infrastructure/common/interceptors/response.interceptor'
 

@@ -24,7 +24,7 @@ export class UpdateTaskUseCase {
   ): Promise<boolean> {
     await this.checkTaskExistence(params)
 
-    return await this.taskRepository.updateTask(params, dto)
+    return this.taskRepository.updateTask(params, dto)
   }
 
   private async checkTaskExistence(params: {

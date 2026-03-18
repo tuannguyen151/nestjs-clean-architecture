@@ -1,6 +1,6 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common'
+import { type ExecutionContext, createParamDecorator } from '@nestjs/common'
 
-import { UserEntity } from '@domain/entities/user.entity'
+import { type UserEntity } from '@domain/entities/user.entity'
 
 export const USER_FACTORY_DATA = (
   data: keyof UserEntity | undefined,

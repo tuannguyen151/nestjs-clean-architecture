@@ -1,4 +1,4 @@
-import { UserEntity } from '@domain/entities/user.entity'
+import { type UserEntity } from '@domain/entities/user.entity'
 
 /**
  * Available actions that can be performed on resources

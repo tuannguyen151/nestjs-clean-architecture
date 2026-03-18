@@ -1,6 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { Test, type TestingModule } from '@nestjs/testing'
 
-import { RoleEnum, UserEntity } from '@domain/entities/user.entity'
+import { RoleEnum, type UserEntity } from '@domain/entities/user.entity'
 import { IException } from '@domain/exceptions/exceptions.interface'
 import { IUserRepository } from '@domain/repositories/user.repository.interface'
 import { IBcryptService } from '@domain/services/bcrypt.interface'

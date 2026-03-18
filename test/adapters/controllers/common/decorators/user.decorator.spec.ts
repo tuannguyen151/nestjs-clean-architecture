@@ -1,7 +1,7 @@
-import { ExecutionContext } from '@nestjs/common'
-import { HttpArgumentsHost } from '@nestjs/common/interfaces'
+import { type ExecutionContext } from '@nestjs/common'
+import { type HttpArgumentsHost } from '@nestjs/common/interfaces'
 
-import { UserEntity } from '@domain/entities/user.entity'
+import { type UserEntity } from '@domain/entities/user.entity'
 
 import { USER_FACTORY_DATA } from '@adapters/controllers/common/decorators/user.decorator'
 

@@ -1,12 +1,12 @@
 import { VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { NestExpressApplication } from '@nestjs/platform-express'
+import { type NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 import serverlessExpress from '@codegenie/serverless-express'
-import { Callback, Context, Handler } from 'aws-lambda'
+import { type Callback, type Context, type Handler } from 'aws-lambda'
 import cookieParser from 'cookie-parser'
-import { RequestListener } from 'http'
+import { type RequestListener } from 'http'
 
 import { AppModule } from './app.module'
 import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter'
@@ -21,7 +21,7 @@ import { LoggerService } from './infrastructure/logger/logger.service'
 let server: Handler | undefined
 
 async function bootstrap() {
-  const env = process.env.NODE_ENV
+  const env = process.env['NODE_ENV']
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
   app.use(cookieParser())

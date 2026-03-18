@@ -20,13 +20,13 @@ describe('LoggerService', () => {
   it('should log debug message in development environment', () => {
     const debugSpy = jest.spyOn(loggerService, 'debug')
 
-    process.env.NODE_ENV = 'local'
+    process.env['NODE_ENV'] = 'local'
     loggerService.debug('Context', 'Message')
 
     expect(debugSpy).toHaveBeenCalled()
     expect(debugSpy.mock.calls[0]).toEqual(['Context', 'Message'])
 
-    process.env.NODE_ENV = 'production'
+    process.env['NODE_ENV'] = 'production'
     loggerService.debug('Context', 'Message')
     expect(debugSpy).toHaveBeenCalledTimes(2)
 
@@ -69,13 +69,13 @@ describe('LoggerService', () => {
   it('should log verbose message in development environment', () => {
     const verboseSpy = jest.spyOn(loggerService, 'verbose')
 
-    process.env.NODE_ENV = 'local'
+    process.env['NODE_ENV'] = 'local'
     loggerService.verbose('Context', 'Message')
 
     expect(verboseSpy).toHaveBeenCalled()
     expect(verboseSpy.mock.calls[0]).toEqual(['Context', 'Message'])
 
-    process.env.NODE_ENV = 'production'
+    process.env['NODE_ENV'] = 'production'
     loggerService.debug('Context', 'Message')
     expect(verboseSpy).toHaveBeenCalledTimes(1)
 

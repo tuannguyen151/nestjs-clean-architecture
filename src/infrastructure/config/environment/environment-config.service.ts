@@ -24,7 +24,7 @@ export class EnvironmentConfigService
   }
 
   getDatabasePort(): number {
-    return this.configService.get<number>('DATABASE_PORT') || 0
+    return this.configService.get<number>('DATABASE_PORT') ?? 0
   }
 
   getDatabaseUser(): string {
@@ -44,7 +44,7 @@ export class EnvironmentConfigService
   }
 
   getDatabaseSync(): boolean {
-    return this.configService.get<boolean>('DATABASE_SYNCHRONIZE') || false
+    return this.configService.get<boolean>('DATABASE_SYNCHRONIZE') ?? false
   }
 
   getJwtSecret(): string {

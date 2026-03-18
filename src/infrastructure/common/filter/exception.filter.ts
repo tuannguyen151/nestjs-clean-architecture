@@ -14,6 +14,17 @@ import {
 } from '@domain/exceptions/exceptions.interface'
 import { ILogger } from '@domain/logger/logger.interface'
 
+function isFormatExceptionMessage(
+  value: unknown,
+): value is IFormatExceptionMessage {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'type' in value &&
+    'message' in value
+  )
+}
+
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: ILogger) {}
@@ -26,13 +37,14 @@ export class AllExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR
-    const error =
-      exception instanceof HttpException
-        ? (exception.getResponse() as IFormatExceptionMessage)
-        : {
-            type: (exception as Error).name,
-            message: (exception as Error).message,
-          }
+    const rawResponse =
+      exception instanceof HttpException ? exception.getResponse() : null
+    const error: IFormatExceptionMessage = isFormatExceptionMessage(rawResponse)
+      ? rawResponse
+      : {
+          type: exception.name,
+          message: exception.message,
+        }
 
     const responseData: IFormatExceptionResponse = {
       statusCode: status,

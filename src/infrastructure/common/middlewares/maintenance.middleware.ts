@@ -12,7 +12,7 @@ export class MaintenanceMiddleware implements NestMiddleware {
     private readonly maintenanceConfig: IMaintenanceConfig,
   ) {}
 
-  use(req: Request, res: Response, next: NextFunction) {
+  use(req: Request, res: Response, next: NextFunction): void {
     if (this.maintenanceConfig.isMaintenanceMode()) {
       const responseData: IFormatExceptionResponse = {
         statusCode: HttpStatus.SERVICE_UNAVAILABLE,
@@ -24,7 +24,8 @@ export class MaintenanceMiddleware implements NestMiddleware {
         },
       }
 
-      return res.status(HttpStatus.SERVICE_UNAVAILABLE).json(responseData)
+      res.status(HttpStatus.SERVICE_UNAVAILABLE).json(responseData)
+      return
     }
 
     next()

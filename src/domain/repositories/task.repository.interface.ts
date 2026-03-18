@@ -1,7 +1,7 @@
 import {
-  TaskEntity,
-  TaskPriorityEnum,
-  TaskStatusEnum,
+  type TaskEntity,
+  type TaskPriorityEnum,
+  type TaskStatusEnum,
 } from '../entities/task.entity'
 
 export interface ISearchTasksParams {

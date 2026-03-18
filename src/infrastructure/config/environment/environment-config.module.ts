@@ -13,7 +13,8 @@ import { validate } from './environment-config.validation'
     ConfigModule.forRoot({
       envFilePath: '.env',
       ignoreEnvFile:
-        process.env.NODE_ENV !== 'local' && process.env.NODE_ENV !== 'test',
+        process.env['NODE_ENV'] !== 'local' &&
+        process.env['NODE_ENV'] !== 'test',
       isGlobal: true,
       validate,
     }),

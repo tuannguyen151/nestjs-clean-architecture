@@ -1,10 +1,10 @@
-import { CallHandler, ExecutionContext } from '@nestjs/common'
+import { type CallHandler, type ExecutionContext } from '@nestjs/common'
 
-import { Request } from 'express'
+import { type Request } from 'express'
 import { of } from 'rxjs'
 import { tap } from 'rxjs/operators'
 
-import { ILogger } from '@domain/logger/logger.interface'
+import { type ILogger } from '@domain/logger/logger.interface'
 
 import { LoggingInterceptor } from '@infrastructure/common/interceptors/logger.interceptor'
 

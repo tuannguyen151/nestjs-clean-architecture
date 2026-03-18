@@ -16,6 +16,6 @@ export class GetListTasksUseCase {
   async execute(
     queryParams: ISearchTasksParams & { userId?: number },
   ): Promise<TaskEntity[]> {
-    return await this.taskRepository.findTasks(queryParams)
+    return this.taskRepository.findTasks(queryParams)
   }
 }

@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { Test, type TestingModule } from '@nestjs/testing'
 
 import { createUserStub } from 'test/stubs/user.stub'
 

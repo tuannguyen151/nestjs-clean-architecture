@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { Test, type TestingModule } from '@nestjs/testing'
 
 import { createTaskStub } from 'test/stubs/task.stub'
 
@@ -11,10 +11,10 @@ import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
 import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
 
 import { PoliciesGuard } from '@adapters/controllers/common/guards/policies.guard'
-import { CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
-import { CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
-import { GetListTasksDto } from '@adapters/controllers/tasks/dto/get-list-tasks.dto'
-import { UpdateTaskDto } from '@adapters/controllers/tasks/dto/update-task.dto'
+import { type CountTasksDto } from '@adapters/controllers/tasks/dto/count-tasks.dto'
+import { type CreateTaskDto } from '@adapters/controllers/tasks/dto/create-task.dto'
+import { type GetListTasksDto } from '@adapters/controllers/tasks/dto/get-list-tasks.dto'
+import { type UpdateTaskDto } from '@adapters/controllers/tasks/dto/update-task.dto'
 import { CountTasksPresenter } from '@adapters/controllers/tasks/presenters/count-tasks.presenter'
 import { CreateTaskPresenter } from '@adapters/controllers/tasks/presenters/create-tasks.presenter'
 import { GetDetailTaskPresenter } from '@adapters/controllers/tasks/presenters/get-detail-task.presenter'

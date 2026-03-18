@@ -1,14 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { Test, type TestingModule } from '@nestjs/testing'
 
 import type { Response } from 'express'
 
-import { RoleEnum, UserEntity } from '@domain/entities/user.entity'
+import { RoleEnum, type UserEntity } from '@domain/entities/user.entity'
 
 import { LoginUseCase } from '@use-cases/auth/login.use-case'
 import { RefreshUseCase } from '@use-cases/auth/refresh.use-case'
 
 import { AuthController } from '@adapters/controllers/auth/auth.controller'
-import { LoginDto } from '@adapters/controllers/auth/dto/login.dto'
+import { type LoginDto } from '@adapters/controllers/auth/dto/login.dto'
 import { LoginPresenter } from '@adapters/controllers/auth/presenters/login.presenter'
 import { RefreshPresenter } from '@adapters/controllers/auth/presenters/refresh.presenter'
 

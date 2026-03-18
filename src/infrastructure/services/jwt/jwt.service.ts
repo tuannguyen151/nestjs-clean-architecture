@@ -33,17 +33,20 @@ export class JwtService implements IJwtService {
       expirationTime = this.jwtConfig.getJwtRefreshExpirationTime()
       jwtSignOptions = {
         secret: this.jwtConfig.getJwtRefreshSecret(),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         expiresIn: expirationTime as StringValue,
       }
     } else {
       expirationTime = this.jwtConfig.getJwtExpirationTime()
       jwtSignOptions = {
         secret: this.jwtConfig.getJwtSecret(),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         expiresIn: expirationTime as StringValue,
       }
     }
 
     const token = await this.jwtServiceBase.signAsync(payload, jwtSignOptions)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     const expiresAt = new Date(Date.now() + ms(expirationTime as StringValue))
 
     return { token, expiresAt }

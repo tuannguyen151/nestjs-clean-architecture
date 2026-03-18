@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing'
 
 import { createTaskStub } from 'test/stubs/task.stub'
 
-import { TaskEntity } from '@domain/entities/task.entity'
+import { type TaskEntity } from '@domain/entities/task.entity'
 import { ITaskRepository } from '@domain/repositories/task.repository.interface'
 
 import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'

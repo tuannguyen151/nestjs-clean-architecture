@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing'
 import { getRepositoryToken } from '@nestjs/typeorm'
 
 import { createTaskStub } from 'test/stubs/task.stub'
-import { Repository, UpdateResult } from 'typeorm'
+import { Repository, type UpdateResult } from 'typeorm'
 
 import { TaskStatusEnum } from '@domain/entities/task.entity'
 

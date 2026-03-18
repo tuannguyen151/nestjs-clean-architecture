@@ -1,6 +1,6 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { NestExpressApplication } from '@nestjs/platform-express'
+import { type NestExpressApplication } from '@nestjs/platform-express'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 import cookieParser from 'cookie-parser'
@@ -16,10 +16,10 @@ import { ValidationPipe as CustomValidationPipe } from './infrastructure/common/
 import { LoggerService } from './infrastructure/logger/logger.service'
 
 async function bootstrap() {
-  const env = process.env.NODE_ENV
+  const env = process.env['NODE_ENV']
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
 
-  const corsOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3001')
+  const corsOrigins = (process.env['CORS_ORIGIN'] ?? 'http://localhost:3001')
     .split(',')
     .map((origin) => origin.trim())
 
