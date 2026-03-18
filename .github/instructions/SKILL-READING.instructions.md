@@ -1,7 +1,6 @@
 ---
 description: Rules for reading SKILL.md files to ensure full skill is always loaded.
-paths:
-  - '**'
+applyTo: '**'
 ---
 
 # Skill File Reading
