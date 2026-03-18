@@ -9,13 +9,13 @@ import { GetDetailTaskUseCase } from '@use-cases/tasks/get-detail-task.use-case'
 import { GetListTasksUseCase } from '@use-cases/tasks/get-list-tasks.use-case'
 import { UpdateTaskUseCase } from '@use-cases/tasks/update-task.use-case'
 
+import { PublicTasksController } from '@adapters/controllers/tasks/public-tasks.controller'
+import { TasksController } from '@adapters/controllers/tasks/tasks.controller'
+
+import { Task } from '@infrastructure/databases/postgresql/entities/task.entity'
 import { TaskRepository } from '@infrastructure/databases/postgresql/repositories/task.repository'
 import { ExceptionsModule } from '@infrastructure/exceptions/exceptions.module'
 import { CaslModule } from '@infrastructure/services/casl/casl.module'
-
-import { PublicTasksController } from '../adapters/controllers/tasks/public-tasks.controller'
-import { TasksController } from '../adapters/controllers/tasks/tasks.controller'
-import { Task } from '../infrastructure/databases/postgresql/entities/task.entity'
 
 @Module({
   imports: [TypeOrmModule.forFeature([Task]), CaslModule, ExceptionsModule],

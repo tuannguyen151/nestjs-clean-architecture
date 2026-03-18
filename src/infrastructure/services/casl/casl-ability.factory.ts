@@ -1,50 +1,36 @@
 import { Injectable } from '@nestjs/common'
 
-import { AbilityBuilder, PureAbility } from '@casl/ability'
+import {
+  AbilityBuilder,
+  type MongoAbility,
+  createMongoAbility,
+} from '@casl/ability'
 
 import { RoleEnum, UserEntity } from '@domain/entities/user.entity'
 import {
   IAbilityFactory,
   IPolicyHandler,
+  TAction,
+  TSubject,
 } from '@domain/services/ability.interface'
 
-type TAppAbility = PureAbility<
-  [IPolicyHandler['action'], IPolicyHandler['subject']]
->
+export type TAppAbility = MongoAbility<[TAction, TSubject]>
 
 @Injectable()
 export class CaslAbilityFactory implements IAbilityFactory<TAppAbility> {
-  createForUser(user: UserEntity) {
-    const { can, build } = new AbilityBuilder<TAppAbility>(PureAbility)
+  createForUser(user: UserEntity): TAppAbility {
+    const { can, build } = new AbilityBuilder<TAppAbility>(createMongoAbility)
 
     if (user.role === RoleEnum.Admin) {
-      // Admin can manage all resources
       can('manage', 'all')
     } else {
-      // Regular user permissions
-      can('read', 'Task', ['id'], {
-        userId: user.id,
-      })
-      can(['create', 'update'], 'Task', {
-        userId: user.id,
-      })
+      // Regular user can read/create/update Tasks.
+      // Ownership (userId filtering) is enforced at the use-case/repository layer.
+      can('read', 'Task')
+      can(['create', 'update'], 'Task')
     }
 
-    return build({
-      // TODO: handle conditions by https://casl.js.org/v6/en/advanced/ability-to-database-query
-      conditionsMatcher: (conditions) => {
-        // console.log(
-        //   '🚀 ~ CaslAbilityFactory ~ createForUser ~ conditions:',
-        //   conditions,
-        // )
-
-        return (object) => false
-      },
-      // TODO: handle fields by https://casl.js.org/v6/en/guide/restricting-fields. May be used DB query
-      fieldMatcher: (fields) => {
-        return (accessibleField) => fields.includes(accessibleField)
-      },
-    })
+    return build()
   }
 
   can(

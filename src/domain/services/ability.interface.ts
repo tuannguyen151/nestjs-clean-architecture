@@ -3,12 +3,12 @@ import { UserEntity } from '@domain/entities/user.entity'
 /**
  * Available actions that can be performed on resources
  */
-type TAction = 'manage' | 'create' | 'read' | 'update' | 'delete'
+export type TAction = 'manage' | 'create' | 'read' | 'update' | 'delete'
 
 /**
  * Available subjects (resources) in the system
  */
-type TSubject = 'all' | 'Task'
+export type TSubject = 'all' | 'Task'
 
 export interface IPolicyHandler {
   action: TAction

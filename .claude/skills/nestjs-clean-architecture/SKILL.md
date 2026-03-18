@@ -184,6 +184,21 @@ When adding a new resource (e.g., `Comment`), create files in this order:
 6. **Presenter for output**: Never return domain entities directly from controllers — always wrap with a presenter
 7. **@CheckPolicies**: Every endpoint requiring authorization must use this decorator
 
+---
+
+## CASL Authorization Pattern
+
+> For full implementation details, code examples, and anti-patterns, read **`references/casl-authorization.md`**.
+
+| Layer                    | Responsibility                                                                        |
+| ------------------------ | ------------------------------------------------------------------------------------- |
+| **CASL / PoliciesGuard** | Role-based coarse check: _"is this role allowed to perform this action?"_             |
+| **UseCase / Repository** | Ownership enforcement: _"only access your own resources"_ — filter `WHERE userId = ?` |
+
+**CASL does not enforce ownership** — that is the responsibility of the use-case/repository layer.
+
+---
+
 ## Common Pitfalls
 
 - **Injecting TypeORM repository directly into use case** → wrong architecture; must go through repository interface
@@ -192,3 +207,4 @@ When adding a new resource (e.g., `Comment`), create files in this order:
 - **Importing infrastructure from domain** → violates dependency rule
 - **Using `any` type** → use `unknown` or declare a proper type
 - **Functions over 20 lines** → extract to helper/private methods
+- **Stubs defined inline in spec files** → always place in `test/stubs/*.stub.ts` and import
