@@ -118,9 +118,3 @@ src/
 - **After creating migration:** update TypeORM entity at `src/infrastructure/databases/postgresql/entities/`
 - **Commit message:** follow Conventional Commits (commitlint enforced)
 - **Pre-commit hook:** auto-runs prettier, eslint, tsc — fix errors before committing
-
-## Serverless Deployment
-
-```bash
-docker exec -it app-api sh serverless_zip.sh
-```

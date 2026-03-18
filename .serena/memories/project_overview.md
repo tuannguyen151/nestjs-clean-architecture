@@ -11,7 +11,7 @@ NestJS Clean Architecture - A backend API application built with NestJS followin
 - **Database**: PostgreSQL with TypeORM
 - **Auth**: JWT + bcrypt
 - **Authorization**: CASL (attribute-based access control)
-- **Deployment**: Docker, Serverless (AWS Lambda)
+- **Deployment**: Docker
 - **Testing**: Jest
 - **Linting**: ESLint + Prettier
 - **Git hooks**: Husky + lint-staged + commitlint (Conventional Commits)

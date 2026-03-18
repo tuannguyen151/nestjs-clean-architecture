@@ -4,9 +4,6 @@ FROM node:24.12.0 AS development
 # Set the working directory
 WORKDIR /home
 
-# Install rsync and zip (only needed for building serverless applications)
-RUN apt-get update && apt-get install -y rsync zip && rm -rf /var/lib/apt/lists/*
-
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 

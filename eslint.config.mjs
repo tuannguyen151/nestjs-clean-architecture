@@ -11,7 +11,6 @@ export default defineConfig([
     'node_modules',
     'dist',
     'coverage',
-    '.serverless',
     'eslint.config.*',
     'eslint.config.mjs',
   ]),

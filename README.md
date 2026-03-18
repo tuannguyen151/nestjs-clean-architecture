@@ -69,8 +69,6 @@ Current Package Structure and Future Ideal Structure
 │   ├── modules - Organizational units that group related code together. Each module is dedicated to a specific area of functionality within the application.
 │   │
 │   ├── app.module.ts - The root module of the application. It ties all the modules together.
-│   ├── serverless.ts - Serverless entry point for AWS Lambda deployment.
-│   │
 │   └── main.ts - The entry point of the application. It sets up the NestJS application and starts the server.
 |
 ├── database - Contains database-related files, such as migrations, seeds, and scripts.
@@ -97,8 +95,7 @@ Current Package Structure and Future Ideal Structure
 ├── docker-compose.yml - A Docker Compose configuration file for defining and running multi-container Docker applications.
 ├── Dockerfile - Contains instructions for Docker to build an image of the application.
 |
-├── serverless.yml - Configuration file for deploying the application using the Serverless Framework and running it on offline mode.
-└── serverless_zip.sh - Shell script to create a ZIP file for deploying a Serverless application.
+└── .env.example - Example environment variables.
 ```
 
 ## Get started
@@ -194,12 +191,4 @@ docker exec -it app-api npm run migration:generate --name=<migration-name>
 
 # Create migration
 docker exec -it app-api npm run migration:create --name=<migration-name>
-```
-
-## Serverless
-
-Zip the application:
-
-```console
-docker exec -it app-api sh serverless_zip.sh
 ```
