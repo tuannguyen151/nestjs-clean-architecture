@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "bf4768450391b8d4c799a8ece805d439a78971f053bc24bd3ad27f1ae20fec12"
     },
+    "context7-mcp": {
+      "source": "upstash/context7",
+      "sourceType": "github",
+      "computedHash": "6b02383f86f87e81a722b3b6c6d6e06efa5c72f23bc87bb02599e3d499ca2c58"
+    },
     "copilot-hooks": {
       "source": "local",
       "sourceType": "local"
