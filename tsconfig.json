@@ -24,11 +24,10 @@
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true
   },
   "include": ["src/**/*.ts", "database/**/*.ts", "test/**/*.ts"],
   "exclude": ["node_modules", "dist"]
