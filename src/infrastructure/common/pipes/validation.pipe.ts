@@ -8,13 +8,7 @@ import {
 import { plainToClass } from 'class-transformer'
 import { ValidationError, validate } from 'class-validator'
 
-interface IValidationError {
-  property: string
-  errors: string[]
-  constraints?: {
-    [type: string]: string
-  }
-}
+import { IValidationError } from '@domain/exceptions/exceptions.interface'
 
 /**
  * Validation Pipe.

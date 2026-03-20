@@ -8,19 +8,17 @@ import {
 
 import { Request, Response } from 'express'
 
-import {
-  IFormatExceptionMessage,
-  IFormatExceptionResponse,
-} from '@domain/exceptions/exceptions.interface'
+import { IFormatExceptionResponse } from '@domain/exceptions/exceptions.interface'
 import { ILogger } from '@domain/logger/logger.interface'
 
 function isFormatExceptionMessage(
   value: unknown,
-): value is IFormatExceptionMessage {
+): value is IFormatExceptionResponse['error'] {
   return (
     typeof value === 'object' &&
     value !== null &&
-    'type' in value &&
+    'error' in value &&
+    'statusCode' in value &&
     'message' in value
   )
 }
@@ -39,7 +37,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR
     const rawResponse =
       exception instanceof HttpException ? exception.getResponse() : null
-    const error: IFormatExceptionMessage = isFormatExceptionMessage(rawResponse)
+    const error = isFormatExceptionMessage(rawResponse)
       ? rawResponse
       : {
           type: exception.name,
@@ -60,7 +58,7 @@ export class AllExceptionFilter implements ExceptionFilter {
 
   private logMessage(
     request: Request,
-    error: IFormatExceptionMessage,
+    error: IFormatExceptionResponse['error'],
     status: number,
     exception: HttpException,
   ) {
