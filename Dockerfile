@@ -2,19 +2,13 @@
 FROM node:24.12.0 AS development
 
 # Set the working directory
-WORKDIR /home
+WORKDIR /home/app
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
-
-# Set the working directory for the application
-WORKDIR /home/app
-
-# Create a symbolic link to the node_modules directory
-RUN ln -s /home/node_modules node_modules
 
 # Copy the rest of the application code to the container
 COPY . .
