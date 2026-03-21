@@ -80,11 +80,35 @@ src/
 
 ## Tests
 
+### Unit Tests
+
 - Test files: `test/**/*.spec.ts` (not inside `src/`)
 - Structure mirrors `src/`: `src/use-cases/tasks/` → `test/use-cases/tasks/`
 - Mocks: `test/mocks/`, Stubs: `test/stubs/`
 - Pattern: **Arrange → Act → Assert**; variable naming: `inputX`, `mockX`, `actualX`, `expectedX`
 - Run tests inside the Docker container
+
+### E2E Tests
+
+- Test files: `test/e2e/<feature>/*.e2e-spec.ts` (organized by feature, not by layer)
+- Shared setup: `test/e2e/setup/` — `app.factory.ts`, `db.helper.ts`, `env.setup.ts`
+- Uses a **separate** PostgreSQL database (`postgres_test`) via Docker profile `e2e`
+- Runs migrations + seeds test data in `beforeAll`, cleans up in `afterAll`
+- `seedUser(app, username, password)` helper available in `db.helper.ts`
+
+```bash
+# 1. Start test DB (first time or after docker down)
+docker compose --profile e2e up db-test -d
+
+# 2. Run E2E tests
+docker exec -it app-api npm run test:e2e
+```
+
+**Key gotchas for E2E:**
+
+- DI tokens: use `app.get<IBcryptService>(IBcryptService)` — NOT `app.get(BcryptService)` (registered via Symbol)
+- `@Post()` returns `201` by default in NestJS — not `200`
+- `set-cookie` header type needs `as unknown as string[]` cast
 
 ## Naming Conventions
 
@@ -110,6 +134,7 @@ src/
 8. Module → `src/modules/comment.module.ts`
 9. Migration → `database/migrations/` (run `migration:generate`)
 10. Tests → `test/use-cases/comments/`, `test/adapters/controllers/comments/`, `test/infrastructure/` (nếu có repo impl)
+11. E2E tests → `test/e2e/comments/comments.e2e-spec.ts`
 
 ## Key Gotchas
 

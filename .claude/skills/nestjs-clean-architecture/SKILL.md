@@ -79,6 +79,10 @@ database/
 
 test/
 ├── adapters/controllers/
+├── e2e/                           # E2E tests — organized by feature (NOT by layer)
+│   ├── setup/                     # Shared: app.factory.ts, db.helper.ts, env.setup.ts
+│   ├── auth/                      # auth.e2e-spec.ts
+│   └── tasks/                     # tasks.e2e-spec.ts
 ├── infrastructure/                # filter, interceptors, pipes, strategies, config, databases, exceptions, logger, services
 ├── mocks/                         # Reusable mock objects for dependency injection
 ├── stubs/                         # Reusable stub data
@@ -130,11 +134,25 @@ Wires dependency injection. **No logic**. Binds `ITaskRepository` Symbol → `Ta
 
 > See **`references/layer-examples.md`** (section 10) for a full test example.
 
+### Unit Tests
+
 - Pattern: **Arrange → Act → Assert**
 - Tests mirror `src/` structure under `test/` (e.g. `src/use-cases/tasks/` → `test/use-cases/tasks/`)
 - Variable naming: `inputX`, `mockX`, `actualX`, `expectedX`
 - Mock repositories with `jest.fn()` in `providers`
 - Use stubs from `test/stubs/` for reusable data; put reusable mock provider objects in `test/mocks/`
+
+### E2E Tests
+
+- Live in `test/e2e/<feature>/*.e2e-spec.ts` — organized by **feature**, not by architectural layer
+- Use `createE2EApp()` from `test/e2e/setup/app.factory.ts` to bootstrap the full NestJS app
+- Use `runMigrations()`, `clearDatabase()`, `seedUser()` from `test/e2e/setup/db.helper.ts`
+- Require `db-test` container running: `docker compose --profile e2e up db-test -d`
+- Run with: `docker exec -it app-api npm run test:e2e`
+- **Key gotchas:**
+  - Get DI tokens via Symbol: `app.get<IBcryptService>(IBcryptService)` — not the class
+  - `@Post()` returns `201` by default — not `200`
+  - `set-cookie` header: cast via `as unknown as string[]`
 
 ---
 
@@ -170,7 +188,8 @@ When adding a new resource (e.g., `Comment`), create files in this order:
 9. **Module** → `src/modules/comment.module.ts`
 10. **Database migration** → `database/migrations/`
 11. **Database seeds** (optional) → `database/seeds/factories/`, `database/seeds/seeders/`
-12. **Tests** → `test/use-cases/comments/`, `test/adapters/controllers/comments/`
+12. **Tests** → `test/use-cases/comments/`, `test/adapters/controllers/comments/`, `test/infrastructure/` (if repo impl)
+13. **E2E tests** → `test/e2e/comments/comments.e2e-spec.ts`
 
 ---
 

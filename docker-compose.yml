@@ -12,6 +12,18 @@ services:
     ports:
       - '5432:5432'
 
+  db-test:
+    image: postgres:18.1
+    container_name: app-database-test
+    profiles:
+      - e2e
+    env_file:
+      - .env.e2e
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - '5433:5432'
+
   app:
     build:
       context: .

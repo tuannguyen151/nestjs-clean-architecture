@@ -24,4 +24,5 @@ Ensure all layers are implemented:
 5. DTOs + Presenters + Controller
 6. Module wiring
 7. Migration
-8. Tests
+8. Unit tests (`test/use-cases/`, `test/adapters/controllers/`, `test/infrastructure/`)
+9. E2E tests (`test/e2e/<feature>/<feature>.e2e-spec.ts`)

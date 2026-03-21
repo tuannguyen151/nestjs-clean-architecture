@@ -78,9 +78,13 @@ Current Package Structure and Future Ideal Structure
 │       ├── factories - Data factories for generating seed data.
 │       └── seeders - Seeder classes for each entity.
 |
-├── test - Contains testing-related files, including unit and integration tests.
+├── test - Contains testing-related files, including unit and E2E tests.
 │   ├── adapters - Tests for the adapters layer.
 │   │   └── controllers - Tests for controllers and their DTOs.
+│   ├── e2e - End-to-end tests organized by feature.
+│   │   ├── setup - Shared E2E utilities (app factory, db helpers, env setup).
+│   │   ├── auth - E2E tests for authentication endpoints.
+│   │   └── tasks - E2E tests for task endpoints.
 │   ├── infrastructure - Tests for the infrastructure layer.
 │   │   ├── common - Tests for filters, interceptors, pipes, and strategies.
 │   │   ├── config - Tests for configuration services and validation.
@@ -174,6 +178,22 @@ docker exec -it app-api npm run test
 # Run test watch with debug
 docker exec -it app-api npm run test:watch <test-file>
 ```
+
+### Run E2E tests
+
+E2E tests require a separate test database. Start it first with:
+
+```console
+docker compose --profile e2e up db-test -d
+```
+
+Then run:
+
+```console
+docker exec -it app-api npm run test:e2e
+```
+
+> **Note:** Copy `.env.e2e.example` to `.env.e2e` if the file doesn't exist.
 
 ## Database Migration
 

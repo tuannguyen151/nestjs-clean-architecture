@@ -17,7 +17,13 @@ docker exec -it app-api npm run build     # Build
 docker exec -it app-api npm run test          # Run all tests
 docker exec -it app-api npm run test:cov      # Coverage report
 docker exec -it app-api npm run test:watch <test-file>  # Watch mode
-docker exec -it app-api npm run test:e2e      # E2E tests
+```
+
+### E2E Tests (requires separate DB)
+
+```bash
+docker compose --profile e2e up db-test -d   # Start test DB first (one-time or after down)
+docker exec -it app-api npm run test:e2e     # Run E2E tests
 ```
 
 ## Lint & Format

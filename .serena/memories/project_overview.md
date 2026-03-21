@@ -44,3 +44,25 @@ Clean Architecture with dependency inversion: `infrastructure` → `domain` ← 
 - Presenters: always wrap domain entities before returning
 - Repository implementations: private `toEntity()` method, never expose TypeORM entities
 - Tests: placed in `test/` directory (mirrors `src/` structure)
+
+## Testing
+
+### Unit Tests
+
+- Files: `test/**/*.spec.ts`
+- Structure mirrors `src/`: `src/use-cases/tasks/` → `test/use-cases/tasks/`
+- Mocks: `test/mocks/`, Stubs: `test/stubs/`
+
+### E2E Tests
+
+- Files: `test/e2e/<feature>/*.e2e-spec.ts` — organized by **feature**, NOT by layer
+- Require separate `db-test` container: `docker compose --profile e2e up db-test -d`
+- Run: `docker exec -it app-api npm run test:e2e`
+- Config: `jest-e2e.json`
+- Env: `.env.e2e` (loaded via `test/e2e/setup/env.setup.ts` as Jest `setupFiles`)
+- Shared helpers: `test/e2e/setup/app.factory.ts`, `test/e2e/setup/db.helper.ts`
+- Key gotchas:
+  - Get DI tokens via Symbol: `app.get<IBcryptService>(IBcryptService)` — not the class
+  - `@Post()` returns `201` by default — not `200`
+  - `set-cookie` header: cast via `as unknown as string[]`
+  - `db-test` connects on port `5432` internally (not host-mapped `5433`)

@@ -19,6 +19,7 @@ lerna-debug.log*
 /coverage
 /.nyc_output
 __snapshots__
+/coverage-e2e
 
 # IDEs and editors
 /.idea
@@ -39,6 +40,7 @@ __snapshots__
 
 # dotenv environment variable files
 .env
+.env.e2e
 .env.development.local
 .env.test.local
 .env.production.local
